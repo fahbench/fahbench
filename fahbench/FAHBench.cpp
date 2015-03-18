@@ -15,19 +15,6 @@
 
 #include "FAHBenchVersion.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#define CL_CHECK(_expr)                                                         \
-   do {                                                                         \
-     cl_int _err = _expr;                                                       \
-     if (_err == CL_SUCCESS)                                                    \
-       break;                                                                   \
-     fprintf(stderr, "OpenCL Error: '%s' returned %d!\n", #_expr, (int)_err);   \
-     abort();                                                                   \
-   } while (0)
-
 using namespace OpenMM;
 using namespace std;
 

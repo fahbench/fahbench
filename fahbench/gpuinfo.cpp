@@ -22,7 +22,7 @@ using namespace std;
 string formatRawChar(char *badForm, int size) {
     string foo;
     bool found = false;
-    for(int i=0;i<size;i++) {
+    for(int i=0; i<size; i++) {
         if(found == false) {
             if(badForm[i] == ' ') {
                 i++;
@@ -76,7 +76,7 @@ map<string, int> GPUInfo::getCUDADevices() {
     SetErrorMode(oldErrorMode); // Restore previous error mode.
     if (handle == NULL) {
         throw std::runtime_error("CUDA ERROR: cannot find or load nvcuda.dll");
-    } 
+    }
 
     CUresult errorMsg;
 
@@ -89,7 +89,7 @@ map<string, int> GPUInfo::getCUDADevices() {
         throw std::runtime_error("CUDA ERROR: cannot GetProcAddress cuInit");
     if(cuDeviceGetCount == NULL)
         throw std::runtime_error("CUDA ERROR: cannot GetProcAddress cuDeviceGetCount");
-    if(cuDeviceGet == NULL) 
+    if(cuDeviceGet == NULL)
         throw std::runtime_error("CUDA ERROR: cannot GetProcAddress cuDeviceGet");
     if(cuDeviceGetName == NULL)
         throw std::runtime_error("CUDA ERROR: cannot GetProcAddress cuDeviceGetName");
@@ -104,7 +104,7 @@ map<string, int> GPUInfo::getCUDADevices() {
         throw std::runtime_error("CUDA ERROR: cannot get number of devices.");
 
     map<string, int> deviceMap;
-    for(int i=0; i<numDevices;i++) {
+    for(int i=0; i<numDevices; i++) {
         CUdevice device;
         cuDeviceGet(&device, i);
         char name[500];

@@ -32,7 +32,7 @@ static bool fexists(const char *filename) {
 SimulationWorker::~SimulationWorker() {
 }
 
-SimulationWorker::SimulationWorker(QObject *parent) : 
+SimulationWorker::SimulationWorker(QObject *parent) :
     QObject(parent),
     OpenCLLoaded_(false),
     CUDALoaded_(false),
@@ -60,13 +60,13 @@ double SimulationWorker::benchmark(Context &context, int numSteps) {
     double stepSize = context.getIntegrator().getStepSize();
     clock_t startClock = clock();
     const int interval = 50;
-	// This step call ensures everything has been JIT compiled
-	context.getIntegrator().step(1);
-    for(int i=0;i<numSteps;i++) {
+    // This step call ensures everything has been JIT compiled
+    context.getIntegrator().step(1);
+    for(int i=0; i<numSteps; i++) {
         stringstream ss;
         ss.precision(4);
         ss << "benchmarking....";
-        if(i % max((numSteps/interval),1) == 0 && i > 0) { 
+        if(i % max((numSteps/interval),1) == 0 && i > 0) {
             double estimateClock = clock();
             double estimateTimeInSec = (double) (estimateClock-startClock) / (double) CLOCKS_PER_SEC;
             double estimateNsPerDay = (86400.0 / estimateTimeInSec)	* i * stepSize / 1000.0;
@@ -75,14 +75,14 @@ double SimulationWorker::benchmark(Context &context, int numSteps) {
                << " estimate: ~" << estimateNsPerDay << " ns/day";
             updateProgress(ss.str());
         }
-        if(i % 50000 == 0) 
+        if(i % 50000 == 0)
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));
         context.getIntegrator().step(1);
     }
-	// last getState makes sure everything in the queue has been flushed.
-	State finalState = context.getState(State::Positions | State::Velocities | State::Forces | State::Energy);
+    // last getState makes sure everything in the queue has been flushed.
+    State finalState = context.getState(State::Positions | State::Velocities | State::Forces | State::Energy);
     clock_t endClock = clock();
-    double timeInSec = (double) (endClock-startClock) / (double) CLOCKS_PER_SEC;	
+    double timeInSec = (double) (endClock-startClock) / (double) CLOCKS_PER_SEC;
     double nsPerDay = (86400.0 / timeInSec)	* numSteps * stepSize / 1000.0;
     StateTests::checkForNans(finalState);
     StateTests::checkForDiscrepancies(finalState);
@@ -95,7 +95,7 @@ void SimulationWorker::startSimulation(Simulation simulation) {
         window_ = simulation.window;
         connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
     }
-    try{
+    try {
         char buffer[10000];
         getcwd(buffer, sizeof(buffer));
         string s_cwd = buffer;
@@ -115,7 +115,7 @@ void SimulationWorker::startSimulation(Simulation simulation) {
             cout << it->first << " " << it->second << endl;
         }
         */
-        stringstream logFile;        
+        stringstream logFile;
         updateProgress("deserializing system...");
         System *sys = loadObject<System>(simulation.sysFile);
         updateProgress("deserializing state...");
@@ -137,7 +137,7 @@ void SimulationWorker::startSimulation(Simulation simulation) {
             updateProgress("comparing forces and energy...");
             StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy), context.getState(State::Forces | State::Energy));
         }
-        
+
         delete state;
 
         updateProgress("benchmarking...");
@@ -150,10 +150,10 @@ void SimulationWorker::startSimulation(Simulation simulation) {
         } else {
             cout << score << endl;
         }
-        
-        if(simulation.window != NULL) 
+
+        if(simulation.window != NULL)
             disconnect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
-        
+
         emit simulationComplete();
     } catch(std::exception &e) {
         if(simulation.window != NULL) {

@@ -20,8 +20,8 @@ void checkForNans(const OpenMM::State& a);
 void checkForDiscrepancies(const OpenMM::State &a);
 void compareEnergies(const OpenMM::State& a, const OpenMM::State& b, double tolerance = DEFAULT_ENERGY_TOL_KJ_PER_MOL);
 void compareForces(const OpenMM::State& a, const OpenMM::State& b, double tolerance = DEFAULT_FORCE_TOL_KJ_PER_MOL_PER_NM);
-void compareForcesAndEnergies(const OpenMM::State& a, const OpenMM::State &b, 
-    double forceTolerance = DEFAULT_FORCE_TOL_KJ_PER_MOL_PER_NM, double energyTolerance = DEFAULT_ENERGY_TOL_KJ_PER_MOL);
+void compareForcesAndEnergies(const OpenMM::State& a, const OpenMM::State &b,
+                              double forceTolerance = DEFAULT_FORCE_TOL_KJ_PER_MOL_PER_NM, double energyTolerance = DEFAULT_ENERGY_TOL_KJ_PER_MOL);
 
 }
 

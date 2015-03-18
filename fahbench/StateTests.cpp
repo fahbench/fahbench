@@ -20,8 +20,8 @@ void StateTests::checkForNans(const State& state) {
     const vector<Vec3> &positions = state.getPositions();
     const vector<Vec3> &velocities = state.getVelocities();
     const vector<Vec3> &forces = state.getForces();
-    for(unsigned i=0;i<positions.size();i++) {
-        for(int j=0;j<3;j++) {
+    for(unsigned i=0; i<positions.size(); i++) {
+        for(int j=0; j<3; j++) {
             if(isnan(positions[i][j])) {
                 stringstream ss;
                 ss << i << " " << j << "\n";
@@ -29,8 +29,8 @@ void StateTests::checkForNans(const State& state) {
             }
         }
     }
-    for(unsigned i=0;i<velocities.size();i++) {
-        for(int j=0;j<3;j++) {
+    for(unsigned i=0; i<velocities.size(); i++) {
+        for(int j=0; j<3; j++) {
             if(isnan(velocities[i][j])) {
                 stringstream ss;
                 ss << i << " " << j << "\n";
@@ -38,8 +38,8 @@ void StateTests::checkForNans(const State& state) {
             }
         }
     }
-    for(unsigned i=0;i<forces.size();i++) {
-        for(int j=0;j<3;j++) {
+    for(unsigned i=0; i<forces.size(); i++) {
+        for(int j=0; j<3; j++) {
             if(isnan(forces[i][j])) {
                 stringstream ss;
                 ss << i << " " << j << "\n";
@@ -50,7 +50,7 @@ void StateTests::checkForNans(const State& state) {
 }
 
 void StateTests::checkForDiscrepancies(const State &state) {
-   const vector<Vec3> &positions = state.getPositions();
+    const vector<Vec3> &positions = state.getPositions();
     const vector<Vec3> &velocities = state.getVelocities();
     const vector<Vec3> &forces = state.getForces();
     Vec3 a,b,c;
@@ -72,22 +72,22 @@ void StateTests::checkForDiscrepancies(const State &state) {
     */
     int zeroVelocityCount = 0;
 
-    // velocities in a Boltzmann-Maxwell distribution has standard deviation 
+    // velocities in a Boltzmann-Maxwell distribution has standard deviation
     // equal to roughly sqrt(0.00831451121 * temperature / mass)
     // so if temperature is around 370 Kelvin, mass is 1.008 (for H, the lightest atom)
     // we have a Gaussian distribution with a standard deviation of 1.747
     // a 10 sigma events,
     // ie. 10*1.747=17.47, which should occur once in 390.68 billion times
-    
-    for(unsigned i=0;i<velocities.size();i++) {
-        for(int j=0;j<3;j++) {
+
+    for(unsigned i=0; i<velocities.size(); i++) {
+        for(int j=0; j<3; j++) {
             if(fabs(velocities[i][j]) > 17.47) {
                 stringstream ss;
                 ss << i << " " << j << " " << velocities[i][j] << "\n";
                 throw(std::runtime_error("Discrepancy: Velocities are blowing up!" + ss.str()));
             }
         }
-        for(int j=0;j<3;j++) {
+        for(int j=0; j<3; j++) {
             if(velocities[i][j] == 0) {
                 zeroVelocityCount++;
             }
@@ -96,8 +96,8 @@ void StateTests::checkForDiscrepancies(const State &state) {
     if(zeroVelocityCount > (3*velocities.size()/2) ) {
         throw(std::runtime_error("Discrepancy: More than half of all velocities set exactly to zero!"));
     }
-    for(unsigned i=0;i<forces.size();i++) {
-        for(int j=0;j<3;j++) {
+    for(unsigned i=0; i<forces.size(); i++) {
+        for(int j=0; j<3; j++) {
             if(fabs(forces[i][j]) > 50000) {
                 stringstream ss;
                 ss << i << " " << j << "\n";
@@ -116,7 +116,7 @@ void StateTests::compareEnergies(const State& first, const State& b, double tole
     if(diff > tolerance) {
         stringstream ss;
         ss << "Potential energy error of " << diff << ", threshold of " << tolerance << endl;
-        ss << "Reference Potential Energy: " << potentialEnergyA << " | Given Potential Energy: " << potentialEnergyB << endl; 
+        ss << "Reference Potential Energy: " << potentialEnergyA << " | Given Potential Energy: " << potentialEnergyB << endl;
         throw(std::runtime_error( ss.str()));
     }
     double kineticEnergyA = first.getKineticEnergy();
@@ -125,7 +125,7 @@ void StateTests::compareEnergies(const State& first, const State& b, double tole
     if(diff > tolerance) {
         stringstream ss;
         ss << "Kinetic energy error of " << diff << ", threshold of " << tolerance << endl;
-        ss << "Reference Kinetic Energy: " << kineticEnergyA << " | Given Kinetic Energy: " << kineticEnergyB << endl; 
+        ss << "Reference Kinetic Energy: " << kineticEnergyA << " | Given Kinetic Energy: " << kineticEnergyB << endl;
         throw(std::runtime_error( ss.str()));
     }
 }

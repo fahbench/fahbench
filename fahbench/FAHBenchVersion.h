@@ -9,9 +9,9 @@
 #define FAHBench_VERSION_REVIS 1
 
 inline std::string getVersion() {
-	std::stringstream ss;
-	ss << "v" << FAHBench_VERSION_MAJOR << "." << FAHBench_VERSION_MINOR << "." << FAHBench_VERSION_REVIS;
-	return ss.str();
+    std::stringstream ss;
+    ss << "v" << FAHBench_VERSION_MAJOR << "." << FAHBench_VERSION_MINOR << "." << FAHBench_VERSION_REVIS;
+    return ss.str();
 }
 
 #endif

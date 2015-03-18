@@ -11,7 +11,7 @@
 #ifdef _WIN32
 #include <direct.h>
 #define getcwd _getcwd // stupid MSFT "deprecation" warning
-#elif
+#else
 #include <unistd.h>
 #endif
 
@@ -24,7 +24,7 @@
 
 struct Simulation {
 
-    Simulation() : platform(), verifyAccuracy(true), properties(), numSteps(0), 
+    Simulation() : platform(), verifyAccuracy(true), properties(), numSteps(0),
         stateFile(NULL), sysFile(NULL), integratorFile(NULL), window(NULL) {};
 
     // same across all runs
@@ -32,7 +32,7 @@ struct Simulation {
     bool verifyAccuracy;
     std::map<std::string, std::string> properties;
     int numSteps;
-    
+
     // varying per run.
     char *stateFile;
     char *sysFile;
@@ -43,15 +43,15 @@ struct Simulation {
 class SimulationWorker : public QObject {
 
     Q_OBJECT
-           
+
 public:
-    
+
     SimulationWorker(QObject *parent = 0);
     ~SimulationWorker();
-    
-    template<class T> 
+
+    template<class T>
     T* loadObject(const char *fname) const;
-    
+
     double benchmark(OpenMM::Context &context, int numSteps);
 
 public slots:
@@ -70,4 +70,4 @@ private:
     QLineEdit *window_;
 };
 
-#endif 
+#endif
