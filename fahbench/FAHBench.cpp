@@ -13,10 +13,13 @@
 #include "window/window.h"
 //#include "gpuinfo.h"
 
+#include <boost/program_options.hpp>
+
 #include "FAHBenchVersion.h"
 
 using namespace OpenMM;
 using namespace std;
+namespace po = boost::program_options;
 
 /*
 void displayCardInfo() {
@@ -41,11 +44,67 @@ void displayCardInfo() {
     }
 }*/
 
+int main(int argc, char **argv) {
+    Simulation simulation;
+
+    po::options_description desc("FAHBench options");
+    desc.add_options()
+    ("help", "produce help message")
+    ("device-id", po::value<int>()->default_value(0), "GPU Device index")
+    ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (OpenCL or CUDA)")
+    ("platform-id", po::value<int>()->default_value(0), "Platform index (OpenCL only)")
+    ("precision", po::value<string>(&simulation.precision)->default_value("single"), "Precision (single or double)")
+    //("system", po::value<string>(), "System path")
+    ("steps", po::value<int>(&simulation.numSteps)->default_value(9000), "Number of steps to take")
+    ("solvent", po::value<string>()->default_value("explicit"), "Use explicit or implicit solvent")
+    ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        cout << desc << "\n";
+        return 1;
+    }
+
+    try {
+        SimulationWorker sWorker;
+        if(simulation.sysFile != "" && simulation.stateFile != "") {
+            cout << "Custom run: " << endl;
+            cout << simulation.sysFile << " " << simulation.stateFile << endl;
+            sWorker.startSimulation(simulation);
+        } else {
+            if(vm["solvent"].as<string>() == "explicit") {
+                cout << "Explicit: " << endl;
+                cout << simulation.numSteps << " steps" << endl;
+                simulation.sysFile = "../../openmm_data/DHFR_SYSTEM_EXPLICIT.xml";
+                simulation.stateFile = "../../openmm_data/DHFR_STATE_EXPLICIT.xml";
+                simulation.integratorFile = "../../openmm_data/DHFR_INTEGRATOR_EXPLICIT.xml";
+                sWorker.startSimulation(simulation);
+            }
+            if(vm["solvent"].as<string>() == "implicit") {
+                cout << "Implicit: " << endl;
+                simulation.numSteps = NUMSTEPSIMPLICIT; // TODO: move this logic
+                simulation.sysFile = "../../openmm_data/DHFR_SYSTEM_IMPLICIT.xml";
+                simulation.stateFile = "../../openmm_data/DHFR_STATE_IMPLICIT.xml";
+                simulation.integratorFile = "../../openmm_data/DHFR_INTEGRATOR_IMPLICIT.xml";
+                sWorker.startSimulation(simulation);
+
+            }
+        }
+    } catch (const std::exception &e) {
+        cout << e.what();
+    }
+
+
+}
+
 void writeSpoiler() {
     cout << "OpenMM " << Platform::getOpenMMVersion() << std::endl;
 }
 
-int main(int argc, char **argv) {
+int old_main(int argc, char **argv) {
 
     // no arguments starts the GUI
     if(argc == 1) {
@@ -151,46 +210,6 @@ int main(int argc, char **argv) {
 
     simulation.window = NULL;
 
-    map<string,string> properties;
-    if(simulation.platform.compare("CUDA") == 0) {
-        simulation.properties["CudaPrecision"]=precision;
-        simulation.properties["CudaDeviceIndex"]=deviceId;
-    } else if(simulation.platform.compare("OpenCL") == 0) {
-        simulation.properties["OpenCLPrecision"]=precision;
-        simulation.properties["OpenCLDeviceIndex"]=deviceId;
-        simulation.properties["OpenCLPlatformIndex"]=platformId;
-    }
 
-    try {
-        SimulationWorker sWorker;
-        if(simulation.sysFile != NULL && simulation.stateFile != NULL) {
-            cout << "Custom run: " << endl;
-            cout << simulation.sysFile << " " << simulation.stateFile << endl;
-            sWorker.startSimulation(simulation);
-        } else {
-            if(doExplicit) {
-                cout << "Explicit: " << endl;
-                simulation.sysFile = "./scratch/DHFR_SYSTEM_EXPLICIT.xml";
-                simulation.stateFile = "./scratch/DHFR_STATE_EXPLICIT.xml";
-                simulation.integratorFile = "./scratch/DHFR_INTEGRATOR_EXPLICIT.xml";
-                sWorker.startSimulation(simulation);
-            }
-            if(doImplicit) {
-                if(deviceId.find(",")==string::npos) {
-                    cout << "Implicit: " << endl;
-                    simulation.numSteps = NUMSTEPSIMPLICIT;
-                    simulation.sysFile = "./scratch/DHFR_SYSTEM_IMPLICIT.xml";
-                    simulation.stateFile = "./scratch/DHFR_STATE_IMPLICIT.xml";
-                    simulation.integratorFile = "./scratch/DHFR_INTEGRATOR_IMPLICIT.xml";
-                    sWorker.startSimulation(simulation);
-                } else {
-                    cout << "Implicit not supported on multiple devices." << endl;
-                }
-            }
-        }
-
-    } catch (const std::exception &e) {
-        cout << e.what();
-    }
 
 }

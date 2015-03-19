@@ -20,24 +20,33 @@
 #define NUMSTEPSEXPLICIT 1.5e4;
 #define NUMSTEPSIMPLICIT 1e5;
 
-// To Do: abstract out QLineEdit into a generic string slot
+using std::string;
+using std::map;
 
-struct Simulation {
+class Simulation {
 
-    Simulation() : platform(), verifyAccuracy(true), properties(), numSteps(0),
-        stateFile(NULL), sysFile(NULL), integratorFile(NULL), window(NULL) {};
+public:
+    Simulation() : stateFile(""), sysFile(""), integratorFile(""), window(nullptr) {};
 
     // same across all runs
-    QString platform;
+    std::string platform;
+    std::string precision;
+    
+    int deviceId;
+    int platformId;
+    
     bool verifyAccuracy;
     std::map<std::string, std::string> properties;
     int numSteps;
 
     // varying per run.
-    char *stateFile;
-    char *sysFile;
-    char *integratorFile;
-    QLineEdit* window;
+    string stateFile;
+    string sysFile;
+    string integratorFile;
+    
+    QLineEdit * window;
+    
+    map<string, string> getPropertiesMap() const;
 };
 
 class SimulationWorker : public QObject {
@@ -50,12 +59,12 @@ public:
     ~SimulationWorker();
 
     template<class T>
-    T* loadObject(const char *fname) const;
+    T* loadObject(const string & fname) const;
 
     double benchmark(OpenMM::Context &context, int numSteps);
 
 public slots:
-    void startSimulation(Simulation simulation);
+    void startSimulation(const Simulation & simulation);
 
 signals:
     void emitProgress(QString stateString) const;

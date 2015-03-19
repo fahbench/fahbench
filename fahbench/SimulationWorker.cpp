@@ -16,6 +16,9 @@
 using namespace std;
 using namespace OpenMM;
 
+using std::string;
+using std::map;
+
 static string doubleToString(double value) {
     stringstream ss;
     ss << value;
@@ -26,6 +29,22 @@ static bool fexists(const char *filename) {
     ifstream ifile(filename);
     return ifile;
 }
+
+map< string, string > Simulation::getPropertiesMap() const
+{
+    map<string,string> properties;
+    if(platform == "CUDA") {
+        properties["CudaPrecision"]=precision;
+        properties["CudaDeviceIndex"]=std::to_string(deviceId);
+    } else if(platform == "OpenCL") {
+        properties["OpenCLPrecision"]=precision;
+        properties["OpenCLDeviceIndex"]=std::to_string(deviceId);
+        properties["OpenCLPlatformIndex"]=std::to_string(platformId);
+    }
+    return properties;
+}
+
+
 
 #ifdef WIN32
 #include <float.h>
@@ -47,16 +66,16 @@ void SimulationWorker::updateProgress(const string &text) const {
     if(window_ != NULL) {
         emit emitProgress(QString(text.c_str()));
     } else {
-        // debug?
-        // cout << text << endl;
+        cout << text << endl;
     }
 }
 
 template<class T>
-T* SimulationWorker::loadObject(const char *fname) const {
-    if(!fexists(fname))
-        throw std::runtime_error(boost::str(boost::format("cannot open %1%") % fname));
+T* SimulationWorker::loadObject(const string& fname) const {
     ifstream f(fname);
+    if(!f) {
+        throw std::runtime_error(boost::str(boost::format("cannot open %1%") % fname));
+    }
     istream & s = f;
     return XmlSerializer::deserialize<T>(s);
 }
@@ -94,13 +113,18 @@ double SimulationWorker::benchmark(Context &context, int numSteps) {
     return nsPerDay;
 }
 
-void SimulationWorker::startSimulation(Simulation simulation) {
+void SimulationWorker::startSimulation(const Simulation & simulation) {
 
     if(simulation.window != NULL) {
         window_ = simulation.window;
         connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
     }
-    try {
+    try {      
+      cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
+      Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
+      cout << "Number of registered plugins " << Platform::getNumPlatforms() << std::endl;
+      Platform & platform = Platform::getPlatformByName(simulation.platform);
+      /*
         char buffer[10000];
         getcwd(buffer, sizeof(buffer));
         string s_cwd = buffer;
@@ -115,6 +139,7 @@ void SimulationWorker::startSimulation(Simulation simulation) {
                 CUDALoaded_ = true;
             }
         }
+        */
         /*
         for(auto it = simulation.properties.begin(); it!=simulation.properties.end(); it++) {
             cout << it->first << " " << it->second << endl;
@@ -122,14 +147,14 @@ void SimulationWorker::startSimulation(Simulation simulation) {
         */
         stringstream logFile;
         updateProgress("deserializing system...");
-        System *sys = loadObject<System>(simulation.sysFile);
+        System * sys = loadObject<System>(simulation.sysFile);
         updateProgress("deserializing state...");
-        State* state = loadObject<State>(simulation.stateFile);
+        State * state = loadObject<State>(simulation.stateFile);
 
         updateProgress("deserializing integrator...");
-        Integrator* intg = loadObject<Integrator>(simulation.integratorFile);
+        Integrator * intg = loadObject<Integrator>(simulation.integratorFile);
         updateProgress("creating context...");
-        Context context = Context(*sys, *intg, Platform::getPlatformByName(simulation.platform.toStdString().c_str()), simulation.properties);
+        Context context = Context(*sys, *intg, platform, simulation.getPropertiesMap());
         context.setState(*state);
 
         if(simulation.verifyAccuracy) {

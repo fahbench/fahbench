@@ -1,6 +1,6 @@
 
 find_package(Qt5Widgets)
-find_package(Boost)
+find_package(Boost COMPONENTS program_options)
 
 # Find openmm
 find_path(OPENMM_INCLUDE_PATH OpenMM.h HINTS ENV OPENMM_INCLUDE_PATH)
@@ -18,11 +18,11 @@ configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
 add_subdirectory(cuda)
 
-include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH})
+include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH} ${Boost_INCLUDE_DIRS})
 add_executable(FAHBench FAHBench.cpp StateTests.cpp SimulationWorker.cpp
                window/window.cpp window/OneShotButton.cpp)
 
-target_link_libraries(FAHBench deviceQuery Qt5::Widgets ${OPENCL_LIBRARY} ${CUDA_LIBRARY} ${OPENMM_LIB})
+target_link_libraries(FAHBench deviceQuery ${Boost_LIBRARIES} Qt5::Widgets ${OPENCL_LIBRARY} ${CUDA_LIBRARY} ${OPENMM_LIB})
 #target_link_libraries(FAHBench debug OpenMM_d debug OpenMMSerialization_d)
 #target_link_libraries(FAHBench optimized OpenMM optimized OpenMMSerialization)
 
