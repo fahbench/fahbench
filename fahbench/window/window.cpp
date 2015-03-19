@@ -1,7 +1,7 @@
 
 #include "window.h"
 #include "OneShotButton.h"
-#include "../FAHBenchVersion.h"
+#include "FAHBenchVersion.h"
 #include <sstream>
 
 #include <QGridLayout>
