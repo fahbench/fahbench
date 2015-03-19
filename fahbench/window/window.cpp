@@ -1,10 +1,13 @@
-#include <QtGui>
-#include <QListWidget>
 
 #include "window.h"
 #include "OneShotButton.h"
 #include "../FAHBenchVersion.h"
 #include <sstream>
+
+#include <QGridLayout>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QThread>
 
 #include <OpenMM.h>
 
@@ -79,7 +82,7 @@ QGroupBox *Window::createOptions() {
 void Window::updateCUDADevices() {
     qLWidgetHandle_->clear();
     try{
-        cudaDeviceMap_ = GPUInfo::getCUDADevices();
+        //cudaDeviceMap_ = GPUInfo::getCUDADevices();
         if(cudaDeviceMap_.size() == 0) {
             qLWidgetHandle_->addItem("No CUDA devices found.");
             qLWidgetHandle_->setSelectionMode(QAbstractItemView::NoSelection);
@@ -98,7 +101,7 @@ void Window::updateCUDADevices() {
 }
 
 void Window::updateOpenCLDevices() {
-    openCLDeviceMap_ = GPUInfo::getOpenCLDevices();
+    //openCLDeviceMap_ = GPUInfo::getOpenCLDevices();
     qLWidgetHandle_->clear();
     for(auto it = openCLDeviceMap_.begin(); it != openCLDeviceMap_.end(); it++) {
         qLWidgetHandle_->addItem(it->first.c_str());
@@ -132,9 +135,9 @@ void Window::setupProperties(Simulation &simulation) {
         stringstream pIdstream;
         for(int i=0; i<selection.size(); i++) {
             string deviceName = selection[i]->text().toStdString();
-            dIdstream << openCLDeviceMap_[deviceName].deviceId;
+            dIdstream << openCLDeviceMap_[deviceName];
             if(i == 0) {
-                pIdstream << openCLDeviceMap_[deviceName].platformId;
+                pIdstream << openCLDeviceMap_[deviceName];
             }
             if(i != selection.size() - 1) {
                 dIdstream << ',';

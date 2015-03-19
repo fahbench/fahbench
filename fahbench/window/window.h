@@ -5,21 +5,16 @@
 
 #include <QWidget>
 #include <QListWidget>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QRadioButton>
 
 #include <queue>
 #include "OneShotButton.h"
 
 #include "../SimulationWorker.h"
-#include "../gpuinfo.h"
 
-QT_BEGIN_NAMESPACE
-class QGroupBox;
-class QCheckBox;
-class QHBoxLayout;
-class QRadioButton;
-QT_END_NAMESPACE
 
-struct OpenCLId;
 
 class Window : public QWidget {
     Q_OBJECT
@@ -82,7 +77,7 @@ private:
     QLineEdit *explicitResult_;
     QLineEdit *implicitResult_;
 
-    std::map<std::string, OpenCLId> openCLDeviceMap_;
+    std::map<std::string, int> openCLDeviceMap_;
     std::map<std::string, int> cudaDeviceMap_;
 
     QThread *simulationThread_;

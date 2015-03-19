@@ -9,6 +9,9 @@ set(FAHBench_VERSION_REVIS 0)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# Use c++11
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+
 add_subdirectory(fahbench)
 
 

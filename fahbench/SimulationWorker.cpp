@@ -3,6 +3,9 @@
 #include <fstream>
 #include <string>
 
+#include <stdexcept>
+#include <boost/format.hpp>
+
 #include <QObject>
 #include <OpenMM.h>
 #include <openmm/serialization/XmlSerializer.h>
@@ -51,9 +54,11 @@ void SimulationWorker::updateProgress(const string &text) const {
 
 template<class T>
 T* SimulationWorker::loadObject(const char *fname) const {
-    if(	!fexists(fname) )
-        throw(std::runtime_error(string("cannot open ") + fname));
-    return XmlSerializer::deserialize<T>(fstream(fname,std::ios::in));
+    if(!fexists(fname))
+        throw std::runtime_error(boost::str(boost::format("cannot open %1%") % fname));
+    ifstream f(fname);
+    istream & s = f;
+    return XmlSerializer::deserialize<T>(s);
 }
 
 double SimulationWorker::benchmark(Context &context, int numSteps) {
