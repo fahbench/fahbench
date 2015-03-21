@@ -39,7 +39,8 @@ int main(int argc, char **argv) {
 
     po::options_description desc("FAHBench options");
     desc.add_options()
-    ("help", "produce help message")
+    ("help,h", "produce help message")
+    ("version,v", "version information")
     ("device-id", po::value<int>()->default_value(0), "GPU Device index")
     ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (OpenCL or CUDA)")
     ("platform-id", po::value<int>()->default_value(0), "Platform index (OpenCL only)")
@@ -53,11 +54,23 @@ int main(int argc, char **argv) {
     ;
 
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    try {
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+    } catch (const po::error & e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+
 
     if (vm.count("help")) {
         cout << desc << "\n";
+        return 1;
+    }
+
+    if (vm.count("version")){
+        std::cout << "FAHBench version " << getVersion() << std::endl;
+        std::cout << "OpenMM version " << Platform::getOpenMMVersion() << std::endl;
         return 1;
     }
 
