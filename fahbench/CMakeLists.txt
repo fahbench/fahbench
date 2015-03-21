@@ -1,6 +1,6 @@
 
 find_package(Qt5Widgets)
-find_package(Boost COMPONENTS program_options)
+find_package(Boost REQUIRED COMPONENTS program_options)
 find_package(CUDA)
 
 # Find openmm

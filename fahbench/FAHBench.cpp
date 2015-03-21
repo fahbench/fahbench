@@ -16,27 +16,29 @@ using std::map;
 const static string openmm_data_dir = "openmm_data/";
 
 string getGpuDesc() {
-    try {
-        std::stringstream ss;
+    std::stringstream ss;
 
+    try {
         // OpenCL
         map<string, OpenCLId> opencl_devices = GPUInfo::getOpenCLDevices();
         for (auto const & kv : opencl_devices){
             ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.first % kv.second.platformId % kv.second.deviceId << std::endl;
         }
+    } catch(const std::exception & err) {
+        ss << err.what() << std::endl;
+    }
 
+    try{
         // Cuda
         map<string, int> cuda_devices = GPUInfo::getCUDADevices();
         for (auto const & kv : cuda_devices){
             ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.first % kv.second << std::endl;
         }
-
-        return ss.str();
     } catch(const std::exception & err) {
-        std::stringstream ss;
         ss << err.what() << std::endl;
-        return ss.str();
     }
+
+    return ss.str();
 }
 
 int main(int argc, char **argv) {
