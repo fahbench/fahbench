@@ -30,7 +30,7 @@ map< string, string > Simulation::getPropertiesMap() const
         properties["OpenCLPrecision"]=precision;
         properties["OpenCLDeviceIndex"]=std::to_string(deviceId);
         properties["OpenCLPlatformIndex"]=std::to_string(platformId);
-    }
+    } 
     return properties;
 }
 
@@ -70,10 +70,12 @@ T* SimulationWorker::loadObject(const string& fname) const {
 
 double SimulationWorker::benchmark(Context &context, int numSteps) {
     double stepSize = context.getIntegrator().getStepSize();
-    clock_t startClock = clock();
     const int interval = 50;
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
+
+    // Start clock after JIT-ing. This used to be before in version < 2
+    clock_t startClock = clock();
 
     for(int i=0; i<numSteps; i++) {
         stringstream ss;
@@ -107,32 +109,11 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
         connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
     }
     try {      
-      cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
-      Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
-      cout << "Number of registered plugins " << Platform::getNumPlatforms() << std::endl;
-      Platform & platform = Platform::getPlatformByName(simulation.platform);
-      /*
-        char buffer[10000];
-        getcwd(buffer, sizeof(buffer));
-        string s_cwd = buffer;
-        if(simulation.platform.compare("OpenCL") == 0) {
-            if(OpenCLLoaded_ == false) {
-                Platform::loadPluginLibrary((s_cwd+"/OpenMMOpenCL.dll").c_str());
-                OpenCLLoaded_ = true;
-            }
-        } else if(simulation.platform.compare("CUDA") == 0) {
-            if(CUDALoaded_ == false) {
-                Platform::loadPluginLibrary((s_cwd+"/OpenMMCUDA.dll").c_str());
-                CUDALoaded_ = true;
-            }
-        }
-        */
-        /*
-        for(auto it = simulation.properties.begin(); it!=simulation.properties.end(); it++) {
-            cout << it->first << " " << it->second << endl;
-        }
-        */
-        stringstream logFile;
+        cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
+        Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
+        cout << "Number of registered plugins " << Platform::getNumPlatforms() << std::endl;
+        Platform & platform = Platform::getPlatformByName(simulation.platform);
+
         updateProgress("deserializing system...");
         System * sys = loadObject<System>(simulation.sysFile);
         updateProgress("deserializing state...");
@@ -154,7 +135,6 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
             updateProgress("comparing forces and energy...");
             StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy), context.getState(State::Forces | State::Energy));
         }
-
         delete state;
 
         updateProgress("benchmarking...");

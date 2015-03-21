@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     ("help,h", "produce help message")
     ("version,v", "version information")
     ("device-id", po::value<int>()->default_value(0), "GPU Device index")
-    ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (OpenCL or CUDA)")
+    ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (CPU, OpenCL, or CUDA)")
     ("platform-id", po::value<int>()->default_value(0), "Platform index (OpenCL only)")
     ("precision", po::value<string>(&simulation.precision)->default_value("single"), "Precision (single or double)")
     ("system", po::value<string>(&simulation.sysFile)->default_value(""), "Path to system xml file")
@@ -92,8 +92,6 @@ int main(int argc, char **argv) {
     if (vm.count("disable-accuracy-check")) {
         simulation.verifyAccuracy = false;
     }
-
-
 
     SimulationWorker sWorker;
     if(simulation.sysFile != "" && simulation.stateFile != "") {
