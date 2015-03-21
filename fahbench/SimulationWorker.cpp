@@ -19,16 +19,6 @@ using namespace OpenMM;
 using std::string;
 using std::map;
 
-static string doubleToString(double value) {
-    stringstream ss;
-    ss << value;
-    return ss.str();
-};
-
-static bool fexists(const char *filename) {
-    ifstream ifile(filename);
-    return ifile;
-}
 
 map< string, string > Simulation::getPropertiesMap() const
 {
@@ -45,7 +35,6 @@ map< string, string > Simulation::getPropertiesMap() const
 }
 
 
-
 #ifdef WIN32
 #include <float.h>
 #define isnan(x) _isnan(x)
@@ -59,7 +48,6 @@ SimulationWorker::SimulationWorker(QObject *parent) :
     OpenCLLoaded_(false),
     CUDALoaded_(false),
     window_(NULL) {
-
 }
 
 void SimulationWorker::updateProgress(const string &text) const {
@@ -86,17 +74,16 @@ double SimulationWorker::benchmark(Context &context, int numSteps) {
     const int interval = 50;
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
+
     for(int i=0; i<numSteps; i++) {
         stringstream ss;
-        ss.precision(4);
-        ss << "benchmarking....";
         if(i % max((numSteps/interval),1) == 0 && i > 0) {
             double estimateClock = clock();
             double estimateTimeInSec = (double) (estimateClock-startClock) / (double) CLOCKS_PER_SEC;
             double estimateNsPerDay = (86400.0 / estimateTimeInSec)	* i * stepSize / 1000.0;
+            double estimatePercent = (1.0 * i / numSteps) * 100;
 
-            ss << doubleToString(double(i)/double(numSteps)*100) << "% done,"
-               << " estimate: ~" << estimateNsPerDay << " ns/day";
+            ss << boost::format("Progress: %1$2d%%\testimate: %2$.2f ns/day") % estimatePercent % estimateNsPerDay;
             updateProgress(ss.str());
         }
         if(i % 50000 == 0)
@@ -172,14 +159,9 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
 
         updateProgress("benchmarking...");
         double score = benchmark(context, simulation.numSteps);
-        //double score = 0;
-        // no good portable way of doing this for both CLI and GUI
-        // hacky for now, ideally we don't pass QLineEdit pointers but connect any type of string object
-        if(window_ != NULL) {
-            updateProgress(doubleToString(score) + " ns/day");
-        } else {
-            cout << score << endl;
-        }
+        stringstream ss;
+        ss << boost::format("%1$.4f ns/day") % score;
+        updateProgress(ss.str());
 
         if(simulation.window != NULL)
             disconnect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));

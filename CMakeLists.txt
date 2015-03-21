@@ -14,6 +14,10 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 add_subdirectory(fahbench)
 
+# Copy data to build directory
+file(GLOB OPENMM_DATA_FILES openmm_data/*.xml)
+file(COPY ${OPENMM_DATA_FILES} DESTINATION openmm_data/)
+
 
 
 

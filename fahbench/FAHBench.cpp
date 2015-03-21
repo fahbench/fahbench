@@ -7,9 +7,11 @@
 
 //#include "gpuinfo.h"
 
-using namespace OpenMM;
-using namespace std;
 namespace po = boost::program_options;
+namespace mm = OpenMM;
+using std::string;
+
+const static string openmm_data_dir = "openmm_data/";
 
 /*
 void displayCardInfo() {
@@ -64,13 +66,13 @@ int main(int argc, char **argv) {
 
 
     if (vm.count("help")) {
-        cout << desc << "\n";
+        std::cout << desc << "\n";
         return 1;
     }
 
     if (vm.count("version")){
         std::cout << "FAHBench version " << getVersion() << std::endl;
-        std::cout << "OpenMM version " << Platform::getOpenMMVersion() << std::endl;
+        std::cout << "OpenMM version " << mm::Platform::getOpenMMVersion() << std::endl;
         return 1;
     }
 
@@ -81,24 +83,24 @@ int main(int argc, char **argv) {
 
     SimulationWorker sWorker;
     if(simulation.sysFile != "" && simulation.stateFile != "") {
-        cout << "Custom run: " << endl;
-        cout << simulation.sysFile << " " << simulation.stateFile << endl;
+        std::cout << "Custom run: " << std::endl;
+        std::cout << simulation.sysFile << " " << simulation.stateFile << std::endl;
         sWorker.startSimulation(simulation);
     } else {
         if(vm["solvent"].as<string>() == "explicit") {
-            cout << "Explicit: " << endl;
-            cout << simulation.numSteps << " steps" << endl;
-            simulation.sysFile = "../../openmm_data/DHFR_SYSTEM_EXPLICIT.xml";
-            simulation.stateFile = "../../openmm_data/DHFR_STATE_EXPLICIT.xml";
-            simulation.integratorFile = "../../openmm_data/DHFR_INTEGRATOR_EXPLICIT.xml";
+            std::cout << "Explicit: " << std::endl; // TODO: Move logic
+            std::cout << simulation.numSteps << " steps" << std::endl;
+            simulation.sysFile = openmm_data_dir + "dhfr.system.explicit.xml";
+            simulation.stateFile = openmm_data_dir + "dhfr.state.explicit.xml";
+            simulation.integratorFile = openmm_data_dir + "dhfr.integrator.explicit.xml";
             sWorker.startSimulation(simulation);
         }
         if(vm["solvent"].as<string>() == "implicit") {
-            cout << "Implicit: " << endl;
+            std::cout << "Implicit: " << std::endl;
             simulation.numSteps = NUMSTEPSIMPLICIT; // TODO: move this logic
-            simulation.sysFile = "../../openmm_data/DHFR_SYSTEM_IMPLICIT.xml";
-            simulation.stateFile = "../../openmm_data/DHFR_STATE_IMPLICIT.xml";
-            simulation.integratorFile = "../../openmm_data/DHFR_INTEGRATOR_IMPLICIT.xml";
+            simulation.sysFile = openmm_data_dir + "dhfr.system.implicit.xml";
+            simulation.stateFile = openmm_data_dir + "dhfr.state.implicit.xml";
+            simulation.integratorFile = openmm_data_dir + "dhfr.integrator.implicit.xml";
             sWorker.startSimulation(simulation);
 
         }
