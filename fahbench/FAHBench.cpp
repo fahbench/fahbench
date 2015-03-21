@@ -1,40 +1,43 @@
 
 #include <iostream>
+#include <sstream>
 #include <boost/program_options.hpp>
+#include <boost/format.hpp>
 
 #include "FAHBenchVersion.h"
 #include "SimulationWorker.h"
-
-//#include "gpuinfo.h"
+#include "GPUInfo.h"
 
 namespace po = boost::program_options;
 namespace mm = OpenMM;
 using std::string;
+using std::map;
 
 const static string openmm_data_dir = "openmm_data/";
 
-/*
-void displayCardInfo() {
+string getGpuDesc() {
     try {
-        map<string, OpenCLId> ocldmap = GPUInfo::getOpenCLDevices();
-        if(ocldmap.size() > 0)  {
-            cout << "OpenCLDeviceName: (platformId, deviceId)" << endl;
-            for(auto it=ocldmap.begin(); it!=ocldmap.end(); it++) {
-                cout << it->first << ": (" << it->second.platformId << "," << it->second.deviceId << ")" << endl;
-            }
+        std::stringstream ss;
+
+        // OpenCL
+        map<string, OpenCLId> opencl_devices = GPUInfo::getOpenCLDevices();
+        for (auto const & kv : opencl_devices){
+            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.first % kv.second.platformId % kv.second.deviceId << std::endl;
         }
-        cout << endl;
-        map<string, int> cudamap = GPUInfo::getCUDADevices();
-        if(cudamap.size() > 0)  {
-            cout << "CUDADeviceName: deviceId" << endl;
-            for(auto it=cudamap.begin(); it!=cudamap.end(); it++) {
-                cout << it->first << ": " << it->second << endl;
-            }
+
+        // Cuda
+        map<string, int> cuda_devices = GPUInfo::getCUDADevices();
+        for (auto const & kv : cuda_devices){
+            ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.first % kv.second << std::endl;
         }
-    } catch(const std::exception &err) {
-        cout << err.what() << endl;
+
+        return ss.str();
+    } catch(const std::exception & err) {
+        std::stringstream ss;
+        ss << err.what() << std::endl;
+        return ss.str();
     }
-}*/
+}
 
 int main(int argc, char **argv) {
     Simulation simulation;
@@ -53,6 +56,7 @@ int main(int argc, char **argv) {
     ("steps", po::value<int>(&simulation.numSteps)->default_value(9000), "Number of steps to take")
     ("solvent", po::value<string>()->default_value("explicit"), "Use explicit or implicit solvent")
     ("disable-accuracy-check", "Don't check against the reference platform")
+    ("device-info,d", "List GPU device information")
     ;
 
     po::variables_map vm;
@@ -60,10 +64,10 @@ int main(int argc, char **argv) {
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
     } catch (const po::error & e) {
+        std::cerr << "Invalid command line arguments:" << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
     }
-
 
     if (vm.count("help")) {
         std::cout << desc << "\n";
@@ -76,9 +80,17 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    if (vm.count("device-info")){
+        std::cout << "Available devices" << std::endl;
+        std::cout << "-----------------" << std::endl << std::endl;
+        std::cout << getGpuDesc() << std::endl;
+        return 1;
+    }
+
     if (vm.count("disable-accuracy-check")) {
         simulation.verifyAccuracy = false;
     }
+
 
 
     SimulationWorker sWorker;
