@@ -58,6 +58,8 @@ int main(int argc, char **argv) {
     ("steps", po::value<int>(&simulation.numSteps)->default_value(9000), "Number of steps to take")
     ("solvent", po::value<string>()->default_value("explicit"), "Use explicit or implicit solvent")
     ("disable-accuracy-check", "Don't check against the reference platform")
+    ("nan-check", po::value<int>(&simulation.nan_check_freq)->default_value(0),
+                  "Frequency to perform NaN checks during benchmark. 0 - disable.")
     ("device-info,d", "List GPU device information")
     ;
 

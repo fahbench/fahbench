@@ -36,6 +36,7 @@ public:
     int platformId;
     
     bool verifyAccuracy;
+    int nan_check_freq;
     std::map<std::string, std::string> properties;
     int numSteps;
 
@@ -61,7 +62,7 @@ public:
     template<class T>
     T* loadObject(const string & fname) const;
 
-    double benchmark(OpenMM::Context &context, int numSteps);
+    double benchmark(OpenMM::Context & context, int numSteps, int nan_check_freq);
 
 public slots:
     void startSimulation(const Simulation & simulation);

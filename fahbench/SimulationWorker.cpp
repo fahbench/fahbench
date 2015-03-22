@@ -68,13 +68,13 @@ T* SimulationWorker::loadObject(const string& fname) const {
     return XmlSerializer::deserialize<T>(s);
 }
 
-double SimulationWorker::benchmark(Context &context, int numSteps) {
+double SimulationWorker::benchmark(Context &context, int numSteps, int nan_check_freq) {
     double stepSize = context.getIntegrator().getStepSize();
     const int interval = 50;
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
 
-    // Start clock after JIT-ing. This used to be before in version < 2
+    // Start clock after JIT-ing. This used to be *before* in version < 2
     clock_t startClock = clock();
 
     for(int i=0; i<numSteps; i++) {
@@ -88,7 +88,7 @@ double SimulationWorker::benchmark(Context &context, int numSteps) {
             ss << boost::format("Progress: %1$2d%%\testimate: %2$.2f ns/day") % estimatePercent % estimateNsPerDay;
             updateProgress(ss.str());
         }
-        if(i % 50000 == 0)
+        if(nan_check_freq > 0 && i % nan_check_freq == 0)
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));
         context.getIntegrator().step(1);
     }
@@ -138,7 +138,7 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
         delete state;
 
         updateProgress("benchmarking...");
-        double score = benchmark(context, simulation.numSteps);
+        double score = benchmark(context, simulation.numSteps, simulation.nan_check_freq);
         stringstream ss;
         ss << boost::format("%1$.4f ns/day") % score;
         updateProgress(ss.str());
