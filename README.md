@@ -27,6 +27,7 @@ TODO
 	  - Qt5
 	  - Cmake
 	  - CUDA SDK
+
 	These all have nice GUI installers.
 
  2. Download Boost. You actually have to extract the archive,
@@ -46,4 +47,7 @@ TODO
 	 - `CMAKE_PREFIX_PATH` to `.../Qt/5.4/msvc2013_64/`
 	 - `BOOST_ROOT` to where I compiled	Boost. 
 	 - `BOOST_LIBRARY_DIR` to `...boost/stage/lib/`
+
+ 5. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to the `bin/`
+    install directory.
 
