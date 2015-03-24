@@ -23,10 +23,10 @@ TODO
 ### Windows
 
  1. Download and install 
-	  - Visual Studio - VS Community 2013 works well.
-	  - Qt5
-	  - Cmake
-	  - CUDA SDK
+	  - Visual Studio Community 2013
+	  - Qt > 5.2
+	  - CMake > 2.8.11
+	  - CUDA SDK = 6.5
 
 	These all have nice GUI installers.
 
