@@ -36,15 +36,25 @@ Building
 ### Linux
 
  1. Get the prerequisites
- ```bash
- sudo apt-get install \
-    libboost-dev libboost-program-options-dev \
-    qt5-default \
-    nvidia-cuda-dev nvidia-opencl-dev
- ```
 
- 1. Get OpenMM: (something something something)
+    ```bash
+    sudo apt-get install \
+        libboost-dev libboost-program-options-dev \
+        qt5-default \
+        nvidia-cuda-dev nvidia-opencl-dev
+    ```
 
+ 1. Get OpenMM. TODO: Further instructions
+
+ 1. From a clean build directory
+
+    ```bash
+    ccmake [source_dir]
+    # make sure all dependencies are found
+    # type c - configure, g - generate
+    make
+    make install
+    ```
 
 ### Windows
 
@@ -60,7 +70,7 @@ Building
     from the command line. The "ProgramOptions" module is *not*
     header-only.
 
-	```
+	```batch
 	bootstrap
 	.\b2 address-model=64 # need 64 bit!
 	```
