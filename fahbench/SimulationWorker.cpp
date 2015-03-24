@@ -109,8 +109,10 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
         connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
     }
     try {      
-        cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
-        Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
+        //cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
+		cout << "Loading plugins from bin/" << std::endl;
+        //Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
+		Platform::loadPluginsFromDirectory("bin");
         cout << "Number of registered plugins " << Platform::getNumPlatforms() << std::endl;
         Platform & platform = Platform::getPlatformByName(simulation.platform);
 
