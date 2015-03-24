@@ -3,7 +3,7 @@ project(FAHBench)
 
 set(FAHBench_VERSION_MAJOR 2)
 set(FAHBench_VERSION_MINOR 0)
-set(FAHBench_VERSION_REVIS 0)
+set(FAHBench_VERSION_REVIS 1)
 
 # For QT
 set(CMAKE_AUTOMOC ON)
@@ -16,6 +16,19 @@ add_subdirectory(fahbench)
 
 # Copy data to build directory
 file(GLOB OPENMM_DATA_FILES openmm_data/*.xml)
-file(COPY ${OPENMM_DATA_FILES} DESTINATION openmm_data/)
-install(FILES ${OPENMM_DATA_FILES} DESTINATION openmm_data/)
+install(FILES ${OPENMM_DATA_FILES} DESTINATION share/openmm_data/)
+
+
+# build a CPack driven installer package
+include (InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${FAHBench_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${FAHBench_VERSION_MINOR}")
+set(CPACK_PACKAGE_NAME "fahbench")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Folding@Home GPU Benchmarking")
+set(CPACK_PACKAGE_DESCRIPTION "This package uses OpenMM to run GPU simulations of protein folding. The reported speed can be used as a benchmark for evaluating Folding@Home hardware.")
+set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
+set(CPACK_BINARY_DEB "ON")
+
+include (CPack)
 

@@ -19,6 +19,7 @@ using namespace OpenMM;
 using std::string;
 using std::map;
 
+const static string plugin_dir = "lib/plugins/";
 
 map< string, string > Simulation::getPropertiesMap() const
 {
@@ -109,10 +110,8 @@ void SimulationWorker::startSimulation(const Simulation & simulation) {
         connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
     }
     try {      
-        //cout << "Loading plugins from " << Platform::getDefaultPluginsDirectory() << std::endl;
-		cout << "Loading plugins from bin/" << std::endl;
-        //Platform::loadPluginsFromDirectory(Platform::getDefaultPluginsDirectory());
-		Platform::loadPluginsFromDirectory("bin");
+        cout << "Loading plugins from " << plugin_dir << std::endl;
+        Platform::loadPluginsFromDirectory(plugin_dir);
         cout << "Number of registered plugins " << Platform::getNumPlatforms() << std::endl;
         Platform & platform = Platform::getPlatformByName(simulation.platform);
 
