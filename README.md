@@ -35,7 +35,16 @@ Building
 
 ### Linux
 
-TODO
+ 1. Get the prerequisites
+ ```bash
+ sudo apt-get install \
+    libboost-dev libboost-program-options-dev \
+    qt5-default \
+    nvidia-cuda-dev nvidia-opencl-dev
+ ```
+
+ 1. Get OpenMM: (something something something)
+
 
 ### Windows
 
