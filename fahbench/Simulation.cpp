@@ -6,12 +6,11 @@
 #include <stdexcept>
 #include <boost/format.hpp>
 
-#include <QObject>
 #include <OpenMM.h>
 #include <openmm/serialization/XmlSerializer.h>
 
 #include "StateTests.h"
-#include "SimulationWorker.h"
+#include "Simulation.h"
 #include "Utils.h"
 
 #ifdef WIN32
@@ -27,7 +26,7 @@ using std::map;
 
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
-Simulation::Simulation() : window(nullptr)
+Simulation::Simulation()
 {
     openmm_data_dir = getExecutableDir() + "/../share/openmm_data";
     openmm_plugin_dir = getExecutableDir() + "/../lib/plugins";
@@ -190,60 +189,6 @@ T* Simulation::loadObject(const string& fname) const {
     }
     istream & s = f;
     return XmlSerializer::deserialize<T>(s);
-}
-
-
-SimulationWorker::SimulationWorker(QObject *parent) :
-    QObject(parent),
-    OpenCLLoaded_(false),
-    CUDALoaded_(false),
-    window_(NULL) {
-}
-
-void SimulationWorker::updateProgress(const string &text) const {
-    if(window_ != NULL) {
-        emit emitProgress(QString(text.c_str()));
-    } else {
-        cout << text << endl;
-    }
-}
-
-void SimulationWorker::startSimulation(const Simulation & simulation) {
-
-    if(simulation.window != NULL) {
-        window_ = simulation.window;
-        connect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
-    }
-    try {
-      simulation.run(*this);
-    } catch(std::exception &e) {
-        if(simulation.window != NULL) {
-            updateProgress(e.what());
-            disconnect(this, SIGNAL(emitProgress(QString)), window_, SLOT(setText(const QString &)));
-            emit simulationComplete();
-        } else {
-            throw;
-        }
-    }
-}
-
-void SimulationWorker::progress(int i)
-{
-    // TODO
-  std::cout << "Progress called with i = " << i << std::endl;
-}
-
-void SimulationWorker::message(std::string s)
-{
-    // TODO
-  std::cout << s;
-
-}
-
-void SimulationWorker::message(boost::format)
-{
-  //TODO
-
 }
 
 

@@ -1,9 +1,7 @@
 #ifndef COMMANDLINEUPDATER_H
 #define COMMANDLINEUPDATER_H
 
-#include <string>
-
-#include "Updater.h"
+#include "../Updater.h"
 
 class CommandLineUpdater : public Updater
 {

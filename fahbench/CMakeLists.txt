@@ -1,13 +1,11 @@
 
-find_package(Qt5Widgets)
+# Find boost and CUDA using CMake
 find_package(Boost REQUIRED COMPONENTS program_options system filesystem)
 find_package(CUDA)
 
 # Find openmm
 find_path(OPENMM_INCLUDE_PATH OpenMM.h HINTS ENV OPENMM_INCLUDE_PATH)
 find_library(OPENMM_LIB OpenMM PATHS ENV OPENMM_LIB_PATH)
-#add_library(OpenMM SHARED IMPORTED)
-#set_property(TARGET OpenMM PROPERTY IMPORTED_LOCATION "${OPENMM_LIB}")
 get_filename_component(OPENMM_LIB_DIR ${OPENMM_LIB} DIRECTORY)
 
 # Find opencl
@@ -21,27 +19,28 @@ include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH} ${CUDA_INCLUDE
 # When we install, it needs to look in install_dir/lib for OpenMM
 # TODO: test how this behaves on windows
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-add_executable(FAHBench
-        FAHBench.cpp
+
+# Make library
+add_library(fahbench SHARED
         StateTests.cpp
-        SimulationWorker.cpp
+        Simulation.cpp
         GPUInfo.cpp
         Utils.cpp
-        window/window.cpp
-        window/OneShotButton.cpp
-        CommandLineUpdater.cpp
 )
 
-target_link_libraries(FAHBench
-    Qt5::Widgets 
+target_link_libraries(fahbench
     "${OPENMM_LIB}"
     "${Boost_LIBRARIES}"
     "${OPENCL_LIBRARY}"
     "${CUDA_CUDART_LIBRARY}"
 )
 
-# Install the program
-INSTALL(TARGETS FAHBench
+# Make executables
+add_subdirectory(gui)
+add_subdirectory(cmd)
+
+# Install
+INSTALL(TARGETS fahbench
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
 )
@@ -53,6 +52,7 @@ INSTALL(FILES
   "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCPU${CMAKE_SHARED_LIBRARY_SUFFIX}"
 DESTINATION lib/plugins)
 
+# For linux, put libOpenMM.so in the lib/ directory
 if(${UNIX})
   INSTALL(FILES "${OPENMM_LIB}" DESTINATION lib)
 endif(${UNIX})
@@ -76,3 +76,4 @@ if(${WIN32})
           ${QtGui_location}
   DESTINATION bin)
 endif(${WIN32})
+

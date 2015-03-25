@@ -4,10 +4,12 @@ OneShotButton::OneShotButton(const QString &text, QWidget *parent) : QPushButton
     connect(this, SIGNAL(clicked()), this, SLOT(disable()));
 }
 
-void OneShotButton::disable() { 
-    setEnabled(false); 
+void OneShotButton::disable() {
+    setEnabled(false);
 }
 
-void OneShotButton::enable() { 
-    setEnabled(true); 
+void OneShotButton::enable() {
+    setEnabled(true);
 }
+
+#include "OneShotButton.moc"

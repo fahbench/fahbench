@@ -13,12 +13,12 @@ namespace fs = boost::filesystem;
 #include <windows.h>
 
 string getExecutablePath() {
-  wchar_t buffer[MAX_PATH];
-  size = GetModuleFileNameW(null, buffer, MAX_PATH);
-  if (size <= 0)
-    raise std::exception("Could not determine path of executable");
-  
-  return string(buffer);
+    wchar_t buffer[MAX_PATH];
+    size = GetModuleFileNameW(null, buffer, MAX_PATH);
+    if (size <= 0)
+        raise std::exception("Could not determine path of executable");
+
+    return string(buffer);
 }
 
 #elif defined(__linux__)
@@ -26,15 +26,15 @@ string getExecutablePath() {
 #include <stdlib.h>
 const static string proc_self_exe = "/proc/self/exe";
 
-string getExecutablePath() {  
-  char * buffer = realpath(proc_self_exe.c_str(), nullptr);
-  string path(buffer);
-  free(buffer);
-  return path;
+string getExecutablePath() {
+    char * buffer = realpath(proc_self_exe.c_str(), nullptr);
+    string path(buffer);
+    free(buffer);
+    return path;
 }
 
 #endif
 
 string getExecutableDir() {
-  return fs::path(getExecutablePath()).parent_path().native();
+    return fs::path(getExecutablePath()).parent_path().native();
 }

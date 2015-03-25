@@ -1,4 +1,4 @@
-// This is a one shot button that disables itself after being clicked once. 
+// This is a one shot button that disables itself after being clicked once.
 #ifndef ONESHOTBUTTON_H_
 #define ONESHOTBUTTON_H_
 
@@ -7,7 +7,7 @@
 #include <QWidget>
 
 class OneShotButton : public QPushButton {
-    
+
     Q_OBJECT
 
 public:
@@ -18,4 +18,4 @@ public slots:
     void enable();
 };
 
-#endif  
+#endif

@@ -8,7 +8,6 @@
 
 \******************************************************************************/
 
-//#include <math.h>
 #include <OpenMM.h>
 #include <stdexcept>
 #include <boost/format.hpp>
@@ -21,7 +20,6 @@
 #endif
 
 using namespace OpenMM;
-//using namespace std;
 using std::vector;
 
 
