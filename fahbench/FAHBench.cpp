@@ -1,12 +1,16 @@
 
 #include <iostream>
 #include <sstream>
+#include <functional>
 #include <boost/program_options.hpp>
+#include <boost/function.hpp>
 #include <boost/format.hpp>
 
 #include "FAHBenchVersion.h"
 #include "SimulationWorker.h"
+#include "CommandLineUpdater.h"
 #include "GPUInfo.h"
+#include "Utils.h"
 
 namespace po = boost::program_options;
 namespace mm = OpenMM;
@@ -43,7 +47,10 @@ string getGpuDesc() {
 
 int main(int argc, char **argv) {
     Simulation simulation;
-
+    auto setSys = std::bind(&Simulation::setSysFile, &simulation, std::placeholders::_1);
+    auto setInt = std::bind(&Simulation::setIntFile, &simulation, std::placeholders::_1);
+    auto setState = std::bind(&Simulation::setStateFile, &simulation, std::placeholders::_1);
+    
     po::options_description desc("FAHBench options");
     desc.add_options()
     ("help,h", "produce help message")
@@ -52,11 +59,11 @@ int main(int argc, char **argv) {
     ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (CPU, OpenCL, or CUDA)")
     ("platform-id", po::value<int>()->default_value(0), "Platform index (OpenCL only)")
     ("precision", po::value<string>(&simulation.precision)->default_value("single"), "Precision (single or double)")
-    ("system", po::value<string>(&simulation.sysFile)->default_value(""), "Path to system xml file")
-    ("state", po::value<string>(&simulation.stateFile)->default_value(""), "Path to state xml file")
-    ("integrator", po::value<string>(&simulation.integratorFile)->default_value(""), "Path to integrator xml file")
+    ("system", po::value<string>()->default_value("")->notifier(setSys), "Path to system xml file")
+    ("state", po::value<string>()->default_value("")->notifier(setState), "Path to state xml file")
+    ("integrator", po::value<string>()->default_value("")->notifier(setInt), "Path to integrator xml file")
     ("steps", po::value<int>(&simulation.numSteps)->default_value(9000), "Number of steps to take")
-    ("solvent", po::value<string>()->default_value("explicit"), "Use explicit or implicit solvent")
+    ("solvent", po::value<string>(&simulation.solvent)->default_value("explicit"), "Use explicit or implicit solvent")
     ("disable-accuracy-check", "Don't check against the reference platform")
     ("enable-accuracy-check", "Check against the reference platform (default)")
     ("nan-check", po::value<int>(&simulation.nan_check_freq)->default_value(0),
@@ -99,6 +106,15 @@ int main(int argc, char **argv) {
     if (vm.count("enable_accuracy-check")){
         simulation.verifyAccuracy = true;
     }
+    
+    std::cout << simulation.summary() << std::endl;
+    
+    CommandLineUpdater updater;
+    simulation.run(updater);
+    
+    /*
+    
+    simulation.configure();
 
     SimulationWorker sWorker;
     if(simulation.sysFile != "" && simulation.stateFile != "") {
@@ -124,5 +140,7 @@ int main(int argc, char **argv) {
 
         }
     }
+    
+    */
 
 }

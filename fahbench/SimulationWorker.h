@@ -6,7 +6,9 @@
 #include <QLineEdit>
 
 #include <string>
+#include <sstream>
 #include <map>
+#include <boost/format.hpp>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -16,6 +18,7 @@
 #endif
 
 #include <OpenMM.h>
+#include "Updater.h"
 
 #define NUMSTEPSEXPLICIT 1.5e4;
 #define NUMSTEPSIMPLICIT 1e5;
@@ -26,7 +29,7 @@ using std::map;
 class Simulation {
 
 public:
-    Simulation() : stateFile(""), sysFile(""), integratorFile(""), window(nullptr) {};
+    Simulation();
 
     // same across all runs
     std::string platform;
@@ -37,32 +40,53 @@ public:
     
     bool verifyAccuracy;
     int nan_check_freq;
-    std::map<std::string, std::string> properties;
     int numSteps;
-
-    // varying per run.
-    string stateFile;
-    string sysFile;
-    string integratorFile;
+    
+    string solvent;
+    
+    // Set these, but use get methods
+    
+    void setSysFile(const string & sysFile);
+    void setIntFile(const string & intFile);
+    void setStateFile(const string & stateFile);
     
     QLineEdit * window;
     
     map<string, string> getPropertiesMap() const;
+    string getPluginDir() const;
+    string getSysFile() const;
+    string getIntFile() const;
+    string getStateFile() const;
+    
+    std::string summary() const;
+    
+    void run(Updater & update) const;
+    
+private:
+    bool use_built_in() const;
+    
+    string sysFile;
+    string intFile;
+    string stateFile;
+    
+    string openmm_data_dir;
+    string openmm_plugin_dir;
+    
+    template<class T>
+    T* loadObject(const string & fname) const;
+    
+    double benchmark(OpenMM::Context & context, Updater & update) const;
 };
 
-class SimulationWorker : public QObject {
+class SimulationWorker : public QObject, public Updater {
 
     Q_OBJECT
 
 public:
-
     SimulationWorker(QObject *parent = 0);
-    ~SimulationWorker();
-
-    template<class T>
-    T* loadObject(const string & fname) const;
-
-    double benchmark(OpenMM::Context & context, int numSteps, int nan_check_freq);
+    void progress(int);
+    void message(std::string);
+    void message(boost::format);
 
 public slots:
     void startSimulation(const Simulation & simulation);

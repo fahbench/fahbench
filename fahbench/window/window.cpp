@@ -124,6 +124,7 @@ void Window::simulationCompleted() {
 #include <iostream>
 
 void Window::setupProperties(Simulation &simulation) {
+  /*
     assert(simulation.platform.size() > 0);
     // setup device indices
     string prefix;
@@ -156,6 +157,7 @@ void Window::setupProperties(Simulation &simulation) {
     if(precisionBox_->isChecked()) {
         simulation.properties[prefix+"Precision"] = "double";
     }
+    */
 }
 
 void Window::setupSimulation() {
@@ -174,7 +176,7 @@ void Window::setupSimulation() {
     }
     genericSimulation.verifyAccuracy = verifyAccuracyBox_->isChecked();
     setupProperties(genericSimulation);
-
+/*
     // Put the runs into a queue
     if(explicitBox_->isChecked()) {
         Simulation simulation(genericSimulation);
@@ -200,7 +202,7 @@ void Window::setupSimulation() {
             simulation.numSteps = simulation.numSteps*10;
         }
         simulationQueue_.push(simulation);
-    }
+    }*/
 
     implicitResult_->setText("");
     explicitResult_->setText("");

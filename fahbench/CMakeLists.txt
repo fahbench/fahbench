@@ -1,6 +1,6 @@
 
 find_package(Qt5Widgets)
-find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(Boost REQUIRED COMPONENTS program_options system filesystem)
 find_package(CUDA)
 
 # Find openmm
@@ -26,8 +26,10 @@ add_executable(FAHBench
         StateTests.cpp
         SimulationWorker.cpp
         GPUInfo.cpp
+        Utils.cpp
         window/window.cpp
         window/OneShotButton.cpp
+        CommandLineUpdater.cpp
 )
 
 target_link_libraries(FAHBench
