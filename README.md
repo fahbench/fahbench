@@ -39,7 +39,7 @@ Building
 
     ```bash
     sudo apt-get install \
-        libboost-dev libboost-program-options-dev \
+        libboost-dev libboost-program-options-dev libboost-filesystem-dev \
         qt5-default \
         nvidia-cuda-dev nvidia-opencl-dev
     ```
