@@ -1,7 +1,7 @@
 
 # Find boost and CUDA using CMake
 find_package(Boost REQUIRED COMPONENTS program_options system filesystem)
-find_package(CUDA)
+find_package(CUDA QUIET)
 
 # Find openmm
 find_path(OPENMM_INCLUDE_PATH OpenMM.h HINTS ENV OPENMM_INCLUDE_PATH)
