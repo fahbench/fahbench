@@ -15,7 +15,11 @@ find_path(OPENCL_INCLUDE_PATH CL/cl.h PATHS "/usr/local/cuda/include")
 # Configure version information
 configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
-include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH} ${CUDA_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH} ${Boost_INCLUDE_DIRS})
+if(${CUDA_FOUND})
+    include_directories("${CUDA_INCLUDE_DIRS}")
+endif(${CUDA_FOUND})
+
 # When we install, it needs to look in install_dir/lib for OpenMM
 # TODO: test how this behaves on windows
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
@@ -28,15 +32,20 @@ add_library(fahbench SHARED
         Utils.cpp
 )
 
+# Link
 target_link_libraries(fahbench
     "${OPENMM_LIB}"
     "${Boost_LIBRARIES}"
     "${OPENCL_LIBRARY}"
-    "${CUDA_CUDART_LIBRARY}"
 )
+if(${CUDA_FOUND})
+    target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
+endif(${CUDA_FOUND})
 
 # Make executables
-add_subdirectory(gui)
+if(${QT5_FOUND})
+    add_subdirectory(gui)
+endif(${QT5_FOUND})
 add_subdirectory(cmd)
 
 # Install
@@ -46,11 +55,9 @@ INSTALL(TARGETS fahbench
 )
 
 # Copy OpenMM plugins
-INSTALL(FILES
-  "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMOpenCL${CMAKE_SHARED_LIBRARY_SUFFIX}"
-  "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCUDA${CMAKE_SHARED_LIBRARY_SUFFIX}"
-  "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCPU${CMAKE_SHARED_LIBRARY_SUFFIX}"
-DESTINATION lib/plugins)
+FILE(GLOB OPENMM_PLUGIN_FILES "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMM*${CMAKE_SHARED_LIBRARY_SUFFIX}")
+INSTALL(FILES ${OPENMM_PLUGIN_FILES}
+	DESTINATION lib/plugins)
 
 # For linux, put libOpenMM.so in the lib/ directory
 if(${UNIX})

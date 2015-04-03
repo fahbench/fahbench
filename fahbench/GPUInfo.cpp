@@ -1,8 +1,7 @@
+#include "FAHBenchVersion.h"
 #include "GPUInfo.h"
 
 #include <CL/cl.h>
-#include <cuda.h>
-#include <cuda_runtime.h>
 
 #include <map>
 #include <string>
@@ -53,6 +52,9 @@ map<string, OpenCLId> GPUInfo::getOpenCLDevices() {
     return openCLdevices;
 }
 
+#ifdef CUDA_FOUND
+#include <cuda.h>
+#include <cuda_runtime.h>
 map<string, int> GPUInfo::getCUDADevices() {
     cudaError_t cu_error;
 
@@ -71,3 +73,9 @@ map<string, int> GPUInfo::getCUDADevices() {
     }
     return cuda_devices;
 }
+#else // CUDA_FOUND
+map<string, int> GPUInfo::getCUDADevices() {
+    map<string, int> cuda_devices;
+    return cuda_devices;
+}
+#endif // CUDA_FOUND
