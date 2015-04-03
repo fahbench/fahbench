@@ -43,9 +43,7 @@ if(${CUDA_FOUND})
 endif(${CUDA_FOUND})
 
 # Make executables
-if(${QT5_FOUND})
-    add_subdirectory(gui)
-endif(${QT5_FOUND})
+add_subdirectory(gui)
 add_subdirectory(cmd)
 
 # Install

@@ -1,6 +1,6 @@
 
 find_package(Qt5Widgets QUIET)
-if(${QT5_FOUND})
+if(Qt5Widgets_DIR)
    set(MAKE_QT_GUI ON
        CACHE BOOL "Build a GUI using Qt5")
 else()
