@@ -62,23 +62,11 @@ if(${UNIX})
   INSTALL(FILES "${OPENMM_LIB}" DESTINATION lib)
 endif(${UNIX})
 
-# Windows requires Qt dll's to be installed alongside
-# the executable.
+# Windows requires dll's to be installed alongside the executable
 if(${WIN32})
-  # Get path to install dll's
-  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-  get_target_property(QtCore_location Qt5::Core LOCATION)
-  get_target_property(QtGui_location Qt5::Gui LOCATION)
-
-  # TODO: Install icuin53.dll, icudt53.dll, icuuc53.dll
-  #       (or compile qt sans unicode)
-
   INSTALL(FILES
           ${OPENMM_LIB_DIR}/OpenMM.dll
           ${OPENMM_LIB_DIR}/pthreadVC2_x64.dll
-          ${QtWidgets_location}
-          ${QtCore_location}
-          ${QtGui_location}
   DESTINATION bin)
 endif(${WIN32})
 

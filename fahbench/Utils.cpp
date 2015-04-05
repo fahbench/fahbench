@@ -6,19 +6,33 @@
 #include "Utils.h"
 
 using std::string;
+using std::wstring;
 namespace fs = boost::filesystem;
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <locale>
+#include <codecvt>
 
 string getExecutablePath() {
     wchar_t buffer[MAX_PATH];
-    size = GetModuleFileNameW(null, buffer, MAX_PATH);
+    int size = GetModuleFileNameW(NULL, buffer, MAX_PATH);
     if (size <= 0)
-        raise std::exception("Could not determine path of executable");
+        throw std::exception("Could not determine path of executable");
 
-    return string(buffer);
+	// Convert a wchar_t string to a normal string
+	// This may or may not be legit
+	wstring wret = wstring(buffer);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.to_bytes(wret);
+	
+}
+
+string getExecutableDir() {
+	wstring wret = fs::path(getExecutablePath()).parent_path().native();
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.to_bytes(wret);
 }
 
 #elif defined(__linux__)
@@ -33,8 +47,8 @@ string getExecutablePath() {
     return path;
 }
 
-#endif
-
 string getExecutableDir() {
     return fs::path(getExecutablePath()).parent_path().native();
 }
+
+#endif
