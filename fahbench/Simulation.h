@@ -7,6 +7,8 @@
 #include <boost/format.hpp>
 
 #include <OpenMM.h>
+
+#include "DLLDefines.h"
 #include "Updater.h"
 
 #define NUMSTEPSEXPLICIT 1.5e4;
@@ -15,7 +17,7 @@
 using std::string;
 using std::map;
 
-class Simulation {
+class FAHBENCH_EXPORT Simulation {
 
 public:
     Simulation();

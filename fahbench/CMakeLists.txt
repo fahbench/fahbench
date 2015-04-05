@@ -1,5 +1,7 @@
 
 # Find boost and CUDA using CMake
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
 find_package(Boost REQUIRED COMPONENTS program_options system filesystem)
 find_package(CUDA QUIET)
 
@@ -9,13 +11,16 @@ find_library(OPENMM_LIB OpenMM PATHS ENV OPENMM_LIB_PATH)
 get_filename_component(OPENMM_LIB_DIR ${OPENMM_LIB} DIRECTORY)
 
 # Find opencl
-find_library(OPENCL_LIBRARY OpenCL)
-find_path(OPENCL_INCLUDE_PATH CL/cl.h PATHS "/usr/local/cuda/include")
+find_package(OpenCL)
 
 # Configure version information
 configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
-include_directories(${OPENMM_INCLUDE_PATH} ${OPENCL_INCLUDE_PATH} ${Boost_INCLUDE_DIRS})
+include_directories(
+	"${OPENMM_INCLUDE_PATH}"
+	"${OpenCL_INCLUDE_DIRS}"
+	"${Boost_INCLUDE_DIRS}"
+)
 if(${CUDA_FOUND})
     include_directories("${CUDA_INCLUDE_DIRS}")
 endif(${CUDA_FOUND})
@@ -34,9 +39,9 @@ add_library(fahbench SHARED
 
 # Link
 target_link_libraries(fahbench
-    "${OPENMM_LIB}"
-    "${Boost_LIBRARIES}"
-    "${OPENCL_LIBRARY}"
+	"${OPENMM_LIB}"
+	${Boost_LIBRARIES}
+	${OpenCL_LIBRARIES}
 )
 if(${CUDA_FOUND})
     target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
