@@ -71,7 +71,7 @@ Building
 
 	```batch
 	bootstrap
-	.\b2 address-model=64 # need 64 bit!
+	.\b2 address-model=64   %= need 64 bit! =%
 	```
 
  3. Download OpenMM and build with CMake. I don't think the provided
