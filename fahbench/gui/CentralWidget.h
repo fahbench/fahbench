@@ -3,14 +3,14 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QListWidget>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QLineEdit>
+#include <QTableView>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QProgressBar>
+#include <QPushButton>
 
-#include "../GPUInfo.h"
-#include "OneShotButton.h"
+#include "SimulationTableModel.h"
+#include "DeviceTableModel.h"
 
 
 class CentralWidget :  public QWidget
@@ -20,44 +20,21 @@ class CentralWidget :  public QWidget
 public:
     CentralWidget();
 
-    // Options
-    QCheckBox *explicitBox_;
-    QCheckBox *implicitBox_;
-    QCheckBox *precisionBox_;
-    QCheckBox *verifyAccuracyBox_;
-    QCheckBox *stressTestBox_;
-
-    // Device List
-    QListWidget *qLWidgetHandle_;
-
-    OneShotButton *startButton_;
-
-    // Platform Buttons
-    QRadioButton *cudaButton_;
-    QRadioButton *openCLButton_;
-
-    // Result Boxes
-    QLineEdit *explicitResult_;
-    QLineEdit *implicitResult_;
-    
-private slots:
-    // updates the internal openCLDeviceMap_ object
-    // by querying the OpenCL drivers at run-time
-    // the available OpenCL devices are vendor specific
-    void updateOpenCLDevices();
-
-    // updates the internal cudaDeviceMaps_ object
-    void updateCUDADevices();
-
-
 private:
-    QGroupBox *createPlatformsPicker();
-    QGroupBox *createOptions();
-    QGroupBox *createAvailableDevices();
-    QGroupBox *createResults();
+	
+	QVBoxLayout * layout_a;
+	QHBoxLayout * layout_a1;
+	QHBoxLayout * layout_a2;
 
-    std::map<std::string, OpenCLId> openCLDeviceMap_;
-    std::map<std::string, int> cudaDeviceMap_;
+	DeviceTableModel * device_table_model;
+	QTableView * device_table_view;
+	SimulationTableModel * simulation_table_model;
+	QTableView * simulation_table_view;
+
+	QLabel * status_bar;
+
+	QProgressBar * progress_bar;
+	QPushButton * start_button;
 
 
 };

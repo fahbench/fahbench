@@ -22,13 +22,13 @@ using std::string;
 using std::map;
 
 
-void SimulationWorker::startSimulation(const Simulation & simulation) {
+void SimulationWorker::run_simulation(Simulation & simulation) {
 
     try {
         simulation.run(*this);
     } catch(std::exception &e) {
         message(e.what());
-        emit simulationComplete();
+		emit simulation_finished(simulation);
     }
 }
 
@@ -40,13 +40,13 @@ void SimulationWorker::progress(int i)
 
 void SimulationWorker::message(std::string s)
 {
-    emit emitProgress(QString::fromStdString(s));
+    emit message_update(QString::fromStdString(s));
 
 }
 
 void SimulationWorker::message(boost::format f)
 {
-    emit emitProgress(QString::fromStdString(f.str()));
+    emit message_update(QString::fromStdString(f.str()));
 
 }
 

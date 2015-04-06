@@ -22,9 +22,9 @@ string getGpuDesc() {
 
     try {
         // OpenCL
-        map<string, OpenCLId> opencl_devices = GPUInfo::getOpenCLDevices();
+        auto opencl_devices = GPUInfo::getOpenCLDevices();
         for (auto const & kv : opencl_devices) {
-            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.first % kv.second.platformId % kv.second.deviceId << std::endl;
+            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.device() % kv.platform_id() % kv.device_id() << std::endl;
         }
     } catch(const std::exception & err) {
         ss << err.what() << std::endl;
@@ -32,9 +32,9 @@ string getGpuDesc() {
 
     try {
         // Cuda
-        map<string, int> cuda_devices = GPUInfo::getCUDADevices();
+        auto cuda_devices = GPUInfo::getCUDADevices();
         for (auto const & kv : cuda_devices) {
-            ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.first % kv.second << std::endl;
+            ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.device() % kv.device_id() << std::endl;
         }
     } catch(const std::exception & err) {
         ss << err.what() << std::endl;

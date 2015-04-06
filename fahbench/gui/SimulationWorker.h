@@ -10,7 +10,6 @@
 
 #include <OpenMM.h>
 
-//#include "MainWindow.h"
 #include "../Updater.h"
 #include "../Simulation.h"
 
@@ -29,11 +28,12 @@ public:
     void message(boost::format);
 
 public slots:
-    void startSimulation(const Simulation & simulation);
+    void run_simulation(Simulation & simulation);
 
 signals:
-    void emitProgress(QString stateString) const;
-    void simulationComplete();
+    void simulation_finished(Simulation & simulation);
+	void progress_update(const int &);
+	void message_update(const QString &);
 
 };
 
