@@ -11,7 +11,7 @@ class OneShotButton : public QPushButton {
     Q_OBJECT
 
 public:
-    OneShotButton(const QString &text, QWidget *parent = 0);
+    OneShotButton(const QString & text, QWidget * parent = 0);
 
 public slots:
     void disable();

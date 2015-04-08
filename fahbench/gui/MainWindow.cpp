@@ -11,8 +11,7 @@
 using namespace std;
 
 
-MainWindow::MainWindow() : QMainWindow()
-{
+MainWindow::MainWindow() : QMainWindow() {
     // Set up SimulationWorker on another thread and connect signals and slots
     worker = new SimulationWorker();
     worker->moveToThread(&thread);
@@ -23,25 +22,24 @@ MainWindow::MainWindow() : QMainWindow()
     // Set up layout and add components
     central_widget = new CentralWidget();
     setCentralWidget(central_widget);
-	setWindowTitle("FAHBench");
+    setWindowTitle("FAHBench");
 
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     thread.quit();
     thread.wait();
 }
 
 void MainWindow::simulation_finished(Simulation & sim) {
-	/*
+    /*
     if(simulationQueue_.size() > 0) {
         emit doNextSimulation(simulationQueue_.front());
         simulationQueue_.pop();
     } else {
         //central_widget->startButton_->enable();
     }
-	*/
+    */
 }
 
 

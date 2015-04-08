@@ -3,8 +3,7 @@
 
 #include "../Updater.h"
 
-class CommandLineUpdater : public Updater
-{
+class CommandLineUpdater : public Updater {
 public:
     void progress(int i);
     void message(std::string);

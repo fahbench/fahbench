@@ -4,8 +4,7 @@
 #include <string>
 #include <boost/format.hpp>
 
-class Updater
-{
+class Updater {
 public:
     virtual void progress(int) = 0;
     virtual void message(std::string) = 0;

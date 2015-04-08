@@ -1,0 +1,7 @@
+style=attach
+indent=spaces=4
+pad-oper
+pad-header
+unpad-paren
+align-pointer=middle
+convert-tabs

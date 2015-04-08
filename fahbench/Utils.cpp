@@ -21,18 +21,18 @@ string getExecutablePath() {
     if (size <= 0)
         throw std::exception("Could not determine path of executable");
 
-	// Convert a wchar_t string to a normal string
-	// This may or may not be legit
-	wstring wret = wstring(buffer);
-	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	return converter.to_bytes(wret);
-	
+    // Convert a wchar_t string to a normal string
+    // This may or may not be legit
+    wstring wret = wstring(buffer);
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    return converter.to_bytes(wret);
+
 }
 
 string getExecutableDir() {
-	wstring wret = fs::path(getExecutablePath()).parent_path().native();
-	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	return converter.to_bytes(wret);
+    wstring wret = fs::path(getExecutablePath()).parent_path().native();
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    return converter.to_bytes(wret);
 }
 
 #elif defined(__linux__)

@@ -12,24 +12,24 @@
 using std::vector;
 using std::string;
 
-Device::Device(const string & platform, const string & device, int device_id, int platform_id) : 
-_platform(platform), _device(device), _device_id(device_id), _platform_id(platform_id)
-{}
-
-const string & Device::device() const{
-	return _device;
+Device::Device(const string & platform, const string & device, int device_id, int platform_id) :
+    _platform(platform), _device(device), _device_id(device_id), _platform_id(platform_id) {
 }
 
-const string & Device::platform() const{
-	return _platform;
+const string & Device::device() const {
+    return _device;
 }
 
-int Device::platform_id() const{
-	return _platform_id;
+const string & Device::platform() const {
+    return _platform;
 }
 
-int Device::device_id() const{
-	return _device_id;
+int Device::platform_id() const {
+    return _platform_id;
+}
+
+int Device::device_id() const {
+    return _device_id;
 }
 
 vector<Device> GPUInfo::getOpenCLDevices() {
@@ -43,7 +43,7 @@ vector<Device> GPUInfo::getOpenCLDevices() {
         throw std::runtime_error("OpenCL Error: Cannot get platforms.");
 
     vector<Device> openCLdevices;
-    for(int j = 0; j < n_platforms; j++) {
+    for (int j = 0; j < n_platforms; j++) {
 
         // Get devices for each platform
         cl_device_id devices[MAXDEVICES];
@@ -59,7 +59,7 @@ vector<Device> GPUInfo::getOpenCLDevices() {
                 throw std::runtime_error("OpenCL Error: Cannot get device info.");
             string device_name = buffer;
 
-			openCLdevices.push_back(Device("OpenCL", device_name, i, j));
+            openCLdevices.push_back(Device("OpenCL", device_name, i, j));
         }
     }
     return openCLdevices;
@@ -73,17 +73,17 @@ vector<Device> GPUInfo::getCUDADevices() {
 
     int num_devices = 0;
     cu_error = cudaGetDeviceCount(&num_devices);
-    if(cu_error != cudaSuccess)
+    if (cu_error != cudaSuccess)
         throw std::runtime_error("CUDA ERROR: cannot get number of devices.");
 
     vector<Device> cuda_devices;
-    for(int i = 0; i < num_devices; i++) {
+    for (int i = 0; i < num_devices; i++) {
         cudaDeviceProp prop;
         cu_error = cudaGetDeviceProperties(&prop, i);
         if (cu_error != cudaSuccess)
             throw std::runtime_error("CUDA ERROR: Cannot get device properties.");
 
-		cuda_devices.push_back(Device("CUDA", prop.name, i));
+        cuda_devices.push_back(Device("CUDA", prop.name, i));
     }
     return cuda_devices;
 }

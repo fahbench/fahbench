@@ -23,10 +23,10 @@ using namespace OpenMM;
 using std::vector;
 
 
-void StateTests::checkForNans(const State& state) {
-    const vector<Vec3> &positions = state.getPositions();
-    const vector<Vec3> &velocities = state.getVelocities();
-    const vector<Vec3> &forces = state.getForces();
+void StateTests::checkForNans(const State & state) {
+    const vector<Vec3> & positions = state.getPositions();
+    const vector<Vec3> & velocities = state.getVelocities();
+    const vector<Vec3> & forces = state.getForces();
 
     for (unsigned i = 0; i < positions.size(); i++)
         for (int j = 0; j < 3; j++)
@@ -45,13 +45,13 @@ void StateTests::checkForNans(const State& state) {
 }
 
 
-void StateTests::checkForDiscrepancies(const State &state) {
-    const vector<Vec3> &positions = state.getPositions();
-    const vector<Vec3> &velocities = state.getVelocities();
-    const vector<Vec3> &forces = state.getForces();
+void StateTests::checkForDiscrepancies(const State & state) {
+    const vector<Vec3> & positions = state.getPositions();
+    const vector<Vec3> & velocities = state.getVelocities();
+    const vector<Vec3> & forces = state.getForces();
     Vec3 a, b, c;
 
-    state.getPeriodicBoxVectors(a,b,c);
+    state.getPeriodicBoxVectors(a, b, c);
 
     // velocities in a Boltzmann-Maxwell distribution has standard deviation
     // equal to roughly sqrt(0.00831451121 * temperature / mass)
@@ -81,11 +81,11 @@ void StateTests::checkForDiscrepancies(const State &state) {
 }
 
 
-void StateTests::compareEnergies(const State &first, const State &b,
+void StateTests::compareEnergies(const State & first, const State & b,
                                  double tolerance) {
     double potentialEnergyA = first.getPotentialEnergy();
     double potentialEnergyB = b.getPotentialEnergy();
-    double diff = fabs(potentialEnergyA-potentialEnergyB);
+    double diff = fabs(potentialEnergyA - potentialEnergyB);
 
     if (diff > tolerance)
         throw std::runtime_error(boost::str(boost::format("Potential energy error of %1%, threshold of %2%\nReference potential energy: %3% | Given potential energy: %4%")
@@ -93,7 +93,7 @@ void StateTests::compareEnergies(const State &first, const State &b,
 
     double kineticEnergyA = first.getKineticEnergy();
     double kineticEnergyB = b.getKineticEnergy();
-    diff = fabs(kineticEnergyA-kineticEnergyB);
+    diff = fabs(kineticEnergyA - kineticEnergyB);
 
     if (diff > tolerance)
         throw std::runtime_error(boost::str(boost::format("Kinetic energy error of %1%, threshold of %2%\nReference potential energy: %3% | Given potential energy: %4%")
@@ -101,10 +101,10 @@ void StateTests::compareEnergies(const State &first, const State &b,
 }
 
 
-void StateTests::compareForces(const State &first, const State &b,
+void StateTests::compareForces(const State & first, const State & b,
                                double tolerance) {
-    const vector<Vec3> &forcesA = first.getForces();
-    const vector<Vec3> &forcesB = b.getForces();
+    const vector<Vec3> & forcesA = first.getForces();
+    const vector<Vec3> & forcesB = b.getForces();
     int nAtoms = forcesA.size();
     double mse = 0;
 
@@ -116,17 +116,17 @@ void StateTests::compareForces(const State &first, const State &b,
             sqrt(forcesB[i][0] * forcesB[i][0] + forcesB[i][1] * forcesB[i][1] +
                  forcesB[i][2] * forcesB[i][2]);
         double error = magnitudeA - magnitudeB;
-        mse += error*error;
+        mse += error * error;
     }
 
-    mse = sqrt(mse/nAtoms);
+    mse = sqrt(mse / nAtoms);
 
     if (mse > tolerance)
         throw std::runtime_error(boost::str(boost::format("Force RMSE error of %1% with threshold of %2%") % mse % tolerance));
 }
 
 
-void StateTests::compareForcesAndEnergies(const State &a, const State &b,
+void StateTests::compareForcesAndEnergies(const State & a, const State & b,
         double forceTolerance,
         double energyTolerance) {
     compareForces(a, b);

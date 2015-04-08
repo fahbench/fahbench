@@ -26,7 +26,7 @@ string getGpuDesc() {
         for (auto const & kv : opencl_devices) {
             ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.device() % kv.platform_id() % kv.device_id() << std::endl;
         }
-    } catch(const std::exception & err) {
+    } catch (const std::exception & err) {
         ss << err.what() << std::endl;
     }
 
@@ -36,14 +36,14 @@ string getGpuDesc() {
         for (auto const & kv : cuda_devices) {
             ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.device() % kv.device_id() << std::endl;
         }
-    } catch(const std::exception & err) {
+    } catch (const std::exception & err) {
         ss << err.what() << std::endl;
     }
 
     return ss.str();
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char ** argv) {
     Simulation simulation;
     auto setSys = std::bind(&Simulation::setSysFile, &simulation, std::placeholders::_1);
     auto setInt = std::bind(&Simulation::setIntFile, &simulation, std::placeholders::_1);

@@ -35,8 +35,6 @@ public:
 
     string solvent;
 
-    // Set these, but use get methods
-
     void setSysFile(const string & sysFile);
     void setIntFile(const string & intFile);
     void setStateFile(const string & stateFile);
@@ -62,7 +60,7 @@ private:
     string openmm_plugin_dir;
 
     template<class T>
-    T* loadObject(const string & fname) const;
+    T * loadObject(const string & fname) const;
 
     double benchmark(OpenMM::Context & context, Updater & update) const;
 };

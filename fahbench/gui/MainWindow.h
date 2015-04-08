@@ -17,8 +17,8 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow();  
-	~MainWindow();
+    MainWindow();
+    ~MainWindow();
 
 private:
     CentralWidget * central_widget;
@@ -26,10 +26,10 @@ private:
     SimulationWorker * worker;
 
 signals:
-	void start_new_simulation(Simulation &);
+    void start_new_simulation(Simulation &);
 
 private slots:
-	void simulation_finished(Simulation &);
+    void simulation_finished(Simulation &);
 
 };
 

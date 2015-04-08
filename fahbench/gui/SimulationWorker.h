@@ -32,8 +32,8 @@ public slots:
 
 signals:
     void simulation_finished(Simulation & simulation);
-	void progress_update(const int &);
-	void message_update(const QString &);
+    void progress_update(const int &);
+    void message_update(const QString &);
 
 };
 
