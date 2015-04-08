@@ -18,6 +18,7 @@ class CentralWidget :  public QWidget {
 
 public:
     CentralWidget();
+    QSize sizeHint() const;
 
 private:
 
@@ -35,6 +36,8 @@ private:
     QProgressBar * progress_bar;
     QPushButton * start_button;
 
+    // Helper functions
+    void make_device_table();
 
 };
 
