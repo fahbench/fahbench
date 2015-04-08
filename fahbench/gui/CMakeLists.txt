@@ -21,7 +21,7 @@ add_executable(FAHBench-gui WIN32
     SimulationWorker.cpp
     OneShotButton.cpp
     gui-main.cpp
-	icon.rc
+	FahIcon.rc
 )
 
 target_link_libraries(FAHBench-gui fahbench Qt5::Widgets)
