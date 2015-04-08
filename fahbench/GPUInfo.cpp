@@ -1,6 +1,7 @@
 #include "FAHBenchVersion.h"
 #include "GPUInfo.h"
 
+#include <stdexcept>
 #include <CL/cl.h>
 
 #ifdef _WIN32

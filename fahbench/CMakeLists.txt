@@ -1,8 +1,8 @@
 
 # Find boost and CUDA using CMake
-set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost REQUIRED COMPONENTS program_options system filesystem)
+find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
 find_package(CUDA QUIET)
 
 # Find openmm
@@ -18,11 +18,11 @@ configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
 include_directories(
 	"${OPENMM_INCLUDE_PATH}"
-	"${OpenCL_INCLUDE_DIRS}"
-	"${Boost_INCLUDE_DIRS}"
+	${OpenCL_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 )
 if(${CUDA_FOUND})
-    include_directories("${CUDA_INCLUDE_DIRS}")
+    include_directories(${CUDA_INCLUDE_DIRS})
 endif(${CUDA_FOUND})
 
 # When we install, it needs to look in install_dir/lib for OpenMM
