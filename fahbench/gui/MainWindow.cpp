@@ -3,27 +3,30 @@
 #include "../FAHBenchVersion.h"
 
 #include <sstream>
-
 #include <QThread>
-
 #include <OpenMM.h>
 
 using namespace std;
 
 
 MainWindow::MainWindow() : QMainWindow() {
+    qRegisterMetaType<Simulation>();
+
     // Set up SimulationWorker on another thread and connect signals and slots
     worker = new SimulationWorker();
     worker->moveToThread(&thread);
     connect(&thread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this, &MainWindow::start_new_simulation, worker, &SimulationWorker::run_simulation);
     connect(worker, &SimulationWorker::simulation_finished, this, &MainWindow::simulation_finished);
+    thread.start();
 
     // Set up layout and add components
     central_widget = new CentralWidget();
     setCentralWidget(central_widget);
+    connect(central_widget->start_button, &QAbstractButton::clicked, this, &MainWindow::start_button_clicked);
+    connect(worker, &SimulationWorker::progress_update, central_widget, &CentralWidget::progress_update);
+    connect(worker, &SimulationWorker::message_update, central_widget, &CentralWidget::message_update);
     setWindowTitle("FAHBench");
-
 }
 
 MainWindow::~MainWindow() {
@@ -31,57 +34,33 @@ MainWindow::~MainWindow() {
     thread.wait();
 }
 
-void MainWindow::simulation_finished(Simulation & sim) {
-    /*
-    if(simulationQueue_.size() > 0) {
-        emit doNextSimulation(simulationQueue_.front());
-        simulationQueue_.pop();
-    } else {
-        //central_widget->startButton_->enable();
-    }
-    */
+void MainWindow::start_button_clicked() {
+    Simulation sim;
+    // TODO: Get from GUI
+    sim.platform = "OpenCL";
+    sim.deviceId = 0;
+    sim.precision = "single";
+    sim.platformId = 0;
+    sim.verifyAccuracy = false;
+    sim.nan_check_freq = 1000;
+    sim.numSteps = 500;
+    sim.solvent = "explicit";
+
+    auto pbar = central_widget->progress_bar;
+    auto sbut = central_widget->start_button;
+    pbar->reset();
+    // Show "busy" bar
+    pbar->setMinimum(0);
+    pbar->setMaximum(0);
+    sbut->setEnabled(false);
+    emit start_new_simulation(sim);
 }
 
-
-/*
-void MainWindow::setupProperties(Simulation &simulation) {
-
-      assert(simulation.platform.size() > 0);
-      // setup device indices
-      string prefix;
-      if(openCLButton_->isChecked()) {
-          prefix = "OpenCL";
-
-          QList<QListWidgetItem *> selection = qLWidgetHandle_->selectedItems();
-          stringstream dIdstream;
-          stringstream pIdstream;
-          for(int i=0; i<selection.size(); i++) {
-              string deviceName = selection[i]->text().toStdString();
-              dIdstream << openCLDeviceMap_[deviceName];
-              if(i == 0) {
-                  pIdstream << openCLDeviceMap_[deviceName];
-              }
-              if(i != selection.size() - 1) {
-                  dIdstream << ',';
-              }
-          }
-
-
-          simulation.properties["OpenCLDeviceIndex"]=dIdstream.str();
-          simulation.properties["OpenCLPlatformIndex"]=pIdstream.str();
-      } else if(cudaButton_->isChecked()) {
-          prefix = "Cuda";
-          string deviceName = qLWidgetHandle_->currentItem()->text().toStdString();
-          stringstream dIndex; dIndex << cudaDeviceMap_[deviceName];
-          simulation.properties["CudaDeviceIndex"]=dIndex.str();
-      }
-      if(precisionBox_->isChecked()) {
-          simulation.properties[prefix+"Precision"] = "double";
-      }
-
+void MainWindow::simulation_finished(const double &) {
+    auto pbar = central_widget->progress_bar;
+    auto sbut = central_widget->start_button;
+    pbar->setValue(pbar->maximum());
+    sbut->setEnabled(true);
 }
-*/
-
-
 
 #include "MainWindow.moc"

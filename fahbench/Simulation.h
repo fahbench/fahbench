@@ -22,7 +22,6 @@ class FAHBENCH_EXPORT Simulation {
 public:
     Simulation();
 
-    // same across all runs
     std::string platform;
     std::string precision;
 

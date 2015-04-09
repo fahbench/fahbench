@@ -2,39 +2,31 @@
 #define SIMULATION_WORKER_H_
 
 #include <string>
-#include <sstream>
-#include <map>
 #include <boost/format.hpp>
 
 #include <QObject>
-
 #include <OpenMM.h>
 
 #include "../Updater.h"
-#include "../Simulation.h"
-
-using std::string;
-using std::map;
-
-
+#include "QSimulation.h"
 
 class SimulationWorker : public QObject, public Updater {
 
     Q_OBJECT
 
 public:
+    SimulationWorker();
     void progress(int, int, double);
     void message(std::string);
     void message(boost::format);
 
 public slots:
-    void run_simulation(Simulation & simulation);
+    void run_simulation(Simulation simulation);
 
 signals:
-    void simulation_finished(Simulation & simulation);
-    void progress_update(const int &);
+    void simulation_finished(const double & score);
+    void progress_update(const int &, const int &, const double &);
     void message_update(const QString &);
-
 };
 
 #endif

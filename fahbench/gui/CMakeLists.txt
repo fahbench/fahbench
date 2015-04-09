@@ -19,7 +19,6 @@ add_executable(FAHBench-gui WIN32
 	SimulationTableModel.cpp
 	DeviceTableModel.cpp
     SimulationWorker.cpp
-    OneShotButton.cpp
     gui-main.cpp
 	FahIcon.rc
 )

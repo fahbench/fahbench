@@ -45,6 +45,15 @@ void CentralWidget::make_device_table() {
     tv->resizeRowsToContents();
 }
 
+void CentralWidget::progress_update(const int & i, const int & numSteps, const double & score) {
+    progress_bar->setMaximum(numSteps);
+    progress_bar->setValue(i);
+    status_bar->setText(QString("Current score: %1").arg(score));
+}
+
+void CentralWidget::message_update(const QString & s) {
+    status_bar->setText(s);
+}
 
 
 

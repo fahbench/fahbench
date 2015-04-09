@@ -10,7 +10,7 @@
 
 #include "CentralWidget.h"
 #include "SimulationWorker.h"
-#include "../Simulation.h"
+#include "QSimulation.h"
 
 
 class MainWindow : public QMainWindow {
@@ -26,10 +26,11 @@ private:
     SimulationWorker * worker;
 
 signals:
-    void start_new_simulation(Simulation &);
+    void start_new_simulation(Simulation);
 
 private slots:
-    void simulation_finished(Simulation &);
+    void simulation_finished(const double &);
+    void start_button_clicked();
 
 };
 

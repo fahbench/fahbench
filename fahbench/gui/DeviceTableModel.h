@@ -9,7 +9,6 @@
 #include "../GPUInfo.h"
 
 
-
 class DeviceTableModel : public QAbstractTableModel {
 
 private:

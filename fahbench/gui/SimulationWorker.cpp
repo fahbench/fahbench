@@ -21,20 +21,24 @@ using namespace OpenMM;
 using std::string;
 using std::map;
 
+SimulationWorker::SimulationWorker(): QObject() {
+    qRegisterMetaType<Simulation>();
+}
 
-void SimulationWorker::run_simulation(Simulation & simulation) {
 
+void SimulationWorker::run_simulation(Simulation simulation) {
+    std::cout << "Caught run simulation\n";
     try {
-        simulation.run(*this);
+        double score = simulation.run(*this);
+        emit simulation_finished(score);
     } catch (std::exception & e) {
         message(e.what());
-        emit simulation_finished(simulation);
+        emit simulation_finished(0.0);
     }
 }
 
 void SimulationWorker::progress(int i, int num_steps, double score) {
-    // TODO
-    message(boost::format("Progress update: %1%") % i);
+    emit progress_update(i, num_steps, score);
 }
 
 void SimulationWorker::message(std::string s) {
@@ -44,7 +48,6 @@ void SimulationWorker::message(std::string s) {
 
 void SimulationWorker::message(boost::format f) {
     emit message_update(QString::fromStdString(f.str()));
-
 }
 
 #include "SimulationWorker.moc"

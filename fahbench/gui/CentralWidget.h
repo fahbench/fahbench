@@ -20,12 +20,6 @@ public:
     CentralWidget();
     QSize sizeHint() const;
 
-private:
-
-    QVBoxLayout * layout_a;
-    QHBoxLayout * layout_a1;
-    QHBoxLayout * layout_a2;
-
     DeviceTableModel * device_table_model;
     QTableView * device_table_view;
     SimulationTableModel * simulation_table_model;
@@ -36,8 +30,17 @@ private:
     QProgressBar * progress_bar;
     QPushButton * start_button;
 
+private:
+    QVBoxLayout * layout_a;
+    QHBoxLayout * layout_a1;
+    QHBoxLayout * layout_a2;
+
     // Helper functions
     void make_device_table();
+
+public slots:
+    void progress_update(const int &, const int &, const double &);
+    void message_update(const QString &);
 
 };
 
