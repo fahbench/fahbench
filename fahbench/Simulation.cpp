@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <boost/format.hpp>
 
+// TODO remove output
+
 #include <OpenMM.h>
 #include <openmm/serialization/XmlSerializer.h>
 
@@ -102,7 +104,7 @@ string Simulation::summary() const {
 }
 
 
-void Simulation::run(Updater & update) const {
+double Simulation::run(Updater & update) const {
     string plugin_dir = getPluginDir();
     update.message(boost::format("Loading plugins from %1%") % plugin_dir);
     Platform::loadPluginsFromDirectory(plugin_dir);
@@ -111,35 +113,35 @@ void Simulation::run(Updater & update) const {
 
     update.message("Deserializing system...");
     System * sys = loadObject<System>(getSysFile());
-    update.message("deserializing state...");
+    update.message("Deserializing state...");
     State * state = loadObject<State>(getStateFile());
 
-    update.message("deserializing integrator...");
+    update.message("Deserializing integrator...");
     Integrator * intg = loadObject<Integrator>(getIntFile());
-    update.message("creating context...");
+    update.message("Creating context...");
     Context context = Context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
 
     if (verifyAccuracy) {
-        update.message("checking for accuracy...");
+        update.message("Checking for accuracy...");
         Integrator * refIntg = loadObject<Integrator>(getIntFile());
-        update.message("creating reference context...");
+        update.message("Creating reference context...");
         Context refContext = Context(*sys, *refIntg, Platform::getPlatformByName("Reference"));
-        update.message("setting state...");
         refContext.setState(*state);
-        update.message("comparing forces and energy...");
+        update.message("Comparing forces and energy...");
         StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy), context.getState(State::Forces | State::Energy));
     }
     delete state;
 
-    update.message("benchmarking...");
+    update.message("Starting Benchmark");
     double score = benchmark(context, update);
-    update.message(boost::format("%1$.4f ns/day") % score);
+    update.message("Benchmarking finished.");
+    return score;
 }
 
 double Simulation::benchmark(Context & context, Updater & update) const {
     double stepSize = context.getIntegrator().getStepSize();
-    const int interval = 50;
+    const int rep_interval = 50; // TODO: configurable
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
 
@@ -147,14 +149,11 @@ double Simulation::benchmark(Context & context, Updater & update) const {
     clock_t startClock = clock();
 
     for (int i = 0; i < numSteps; i++) {
-        if (i % max((numSteps / interval), 1) == 0 && i > 0) {
+        if (i > 0 && i % rep_interval == 0) {
             double estimateClock = clock();
             double estimateTimeInSec = (double)(estimateClock - startClock) / (double) CLOCKS_PER_SEC;
-            double estimateNsPerDay = (86400.0 / estimateTimeInSec)     * i * stepSize / 1000.0;
-            double estimatePercent = (1.0 * i / numSteps) * 100;
-
-            update.message(boost::format("Progress: %1$2d%%\testimate: %2$.2f ns/day") % estimatePercent % estimateNsPerDay);
-            update.progress(i);
+            double estimateNsPerDay = (86400.0 / estimateTimeInSec) * i * stepSize / 1000.0;
+            update.progress(i, numSteps, estimateNsPerDay);
         }
         if (nan_check_freq > 0 && i % nan_check_freq == 0)
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));

@@ -41,8 +41,8 @@ void CentralWidget::make_device_table() {
     auto tv = device_table_view;
     tv->setSelectionBehavior(QAbstractItemView::SelectRows);
     tv->setShowGrid(false);
-    tv->resizeRowsToContents();
     tv->resizeColumnsToContents();
+    tv->resizeRowsToContents();
 }
 
 

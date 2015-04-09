@@ -47,7 +47,7 @@ public:
 
     std::string summary() const;
 
-    void run(Updater & update) const;
+    double run(Updater & update) const;
 
 private:
     bool use_built_in() const;

@@ -32,7 +32,7 @@ void SimulationWorker::run_simulation(Simulation & simulation) {
     }
 }
 
-void SimulationWorker::progress(int i) {
+void SimulationWorker::progress(int i, int num_steps, double score) {
     // TODO
     message(boost::format("Progress update: %1%") % i);
 }

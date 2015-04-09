@@ -108,5 +108,6 @@ int main(int argc, char ** argv) {
     std::cout << simulation.summary() << std::endl;
 
     CommandLineUpdater updater;
-    simulation.run(updater);
+    double score = simulation.run(updater);
+    updater.message(boost::format("Final score: %1$.4f") % score);
 }
