@@ -18,7 +18,7 @@ configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
 include_directories(
 	"${OPENMM_INCLUDE_PATH}"
-	${OpenCL_INCLUDE_DIRS}
+	${OPENCL_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
 )
 if(${CUDA_FOUND})
@@ -41,7 +41,7 @@ add_library(fahbench SHARED
 target_link_libraries(fahbench
 	"${OPENMM_LIB}"
 	${Boost_LIBRARIES}
-	${OpenCL_LIBRARIES}
+	${OPENCL_LIBRARIES}
 )
 if(${CUDA_FOUND})
     target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
