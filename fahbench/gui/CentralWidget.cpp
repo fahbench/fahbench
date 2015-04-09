@@ -11,18 +11,19 @@ QSize CentralWidget::sizeHint() const {
 CentralWidget::CentralWidget() : QWidget() {
     layout_a = new QVBoxLayout();
 
+    // Tables
     layout_a1 = new QHBoxLayout();
     make_device_table();
-    layout_a1->addWidget(device_table_view);
-    simulation_table_view = new QTableView();
-    simulation_table_model = new SimulationTableModel();
-    simulation_table_view->setModel(simulation_table_model);
-    layout_a1->addWidget(simulation_table_view, 1);
+    make_simulation_table();
+    layout_a1->addLayout(device_vbox);
+    layout_a1->addLayout(simulation_vbox, 1);
     layout_a->addLayout(layout_a1);
 
+    // Status bar
     status_bar = new QLabel("Status bar placeholder text");
     layout_a->addWidget(status_bar);
 
+    // Bottom panel
     layout_a2 = new QHBoxLayout();
     progress_bar = new QProgressBar();
     layout_a2->addWidget(progress_bar);
@@ -43,7 +44,22 @@ void CentralWidget::make_device_table() {
     tv->setShowGrid(false);
     tv->resizeColumnsToContents();
     tv->resizeRowsToContents();
+    
+    device_vbox = new QVBoxLayout();
+    device_vbox->addWidget(new QLabel("Devices"));
+    device_vbox->addWidget(device_table_view);
 }
+
+void CentralWidget::make_simulation_table() {
+    simulation_table_view = new QTableView();
+    simulation_table_model = new SimulationTableModel();
+    simulation_table_view->setModel(simulation_table_model);
+    
+    simulation_vbox = new QVBoxLayout();
+    simulation_vbox->addWidget(new QLabel("Benchmarking runs"));
+    simulation_vbox->addWidget(simulation_table_view);
+}
+
 
 void CentralWidget::progress_update(const int & i, const int & numSteps, const double & score) {
     progress_bar->setMaximum(numSteps);

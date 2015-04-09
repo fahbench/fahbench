@@ -34,9 +34,13 @@ private:
     QVBoxLayout * layout_a;
     QHBoxLayout * layout_a1;
     QHBoxLayout * layout_a2;
+    
+    QVBoxLayout * device_vbox;
+    QVBoxLayout * simulation_vbox;
 
     // Helper functions
     void make_device_table();
+    void make_simulation_table();
 
 public slots:
     void progress_update(const int &, const int &, const double &);

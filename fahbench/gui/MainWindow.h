@@ -7,6 +7,8 @@
 
 #include <QMainWindow>
 #include <QThread>
+#include <QMenuBar>
+#include <QAction>
 
 #include "CentralWidget.h"
 #include "SimulationWorker.h"
@@ -22,8 +24,14 @@ public:
 
 private:
     CentralWidget * central_widget;
+    QAction * about_action;
+    
     QThread thread;
     SimulationWorker * worker;
+    
+    void make_actions();
+    void make_menu_bar();
+   
 
 signals:
     void start_new_simulation(Simulation);

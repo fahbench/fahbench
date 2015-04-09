@@ -14,7 +14,6 @@ class DeviceTableModel : public QAbstractTableModel {
 private:
     std::vector<Device> _entries;
 
-
 public:
     DeviceTableModel();
     int rowCount(const QModelIndex & parent) const;

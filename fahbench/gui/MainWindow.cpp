@@ -27,12 +27,28 @@ MainWindow::MainWindow() : QMainWindow() {
     connect(worker, &SimulationWorker::progress_update, central_widget, &CentralWidget::progress_update);
     connect(worker, &SimulationWorker::message_update, central_widget, &CentralWidget::message_update);
     setWindowTitle("FAHBench");
+    
+    make_actions();
+    make_menu_bar();
 }
 
 MainWindow::~MainWindow() {
     thread.quit();
     thread.wait();
 }
+
+void MainWindow::make_actions() {
+    about_action = new QAction("About", this);
+    //connect
+}
+
+
+void MainWindow::make_menu_bar() {
+    auto file_menu = menuBar()->addMenu("&File");
+    auto help_menu = menuBar()->addMenu("Help");
+    help_menu->addAction(about_action);
+}
+
 
 void MainWindow::start_button_clicked() {
     Simulation sim;
