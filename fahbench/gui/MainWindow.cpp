@@ -6,6 +6,8 @@
 #include <QThread>
 #include <OpenMM.h>
 
+#include <QMessageBox>
+
 using namespace std;
 
 
@@ -39,7 +41,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::make_actions() {
     about_action = new QAction("About", this);
-    //connect
+    connect(about_action, SIGNAL(triggered(bool)), this, SLOT(about()));
 }
 
 
@@ -59,7 +61,7 @@ void MainWindow::start_button_clicked() {
     sim.platformId = 0;
     sim.verifyAccuracy = false;
     sim.nan_check_freq = 1000;
-    sim.numSteps = 500;
+    sim.numSteps = 5000;
     sim.solvent = "explicit";
 
     auto pbar = central_widget->progress_bar;
@@ -78,5 +80,12 @@ void MainWindow::simulation_finished(const double &) {
     pbar->setValue(pbar->maximum());
     sbut->setEnabled(true);
 }
+
+void MainWindow::about() {
+    QString about_text("Folding @ Home Benchmark\n");
+    about_text += "version " + QString::fromStdString(getVersion()) + " \n";
+    QMessageBox::about(this, "FAHBench", about_text);
+}
+
 
 #include "MainWindow.moc"

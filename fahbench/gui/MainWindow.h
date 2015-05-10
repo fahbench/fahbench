@@ -24,7 +24,6 @@ public:
 
 private:
     CentralWidget * central_widget;
-    QAction * about_action;
 
     QThread thread;
     SimulationWorker * worker;
@@ -32,6 +31,7 @@ private:
     void make_actions();
     void make_menu_bar();
 
+    QAction * about_action;
 
 signals:
     void start_new_simulation(Simulation);
@@ -39,6 +39,8 @@ signals:
 private slots:
     void simulation_finished(const double &);
     void start_button_clicked();
+
+    void about();
 
 };
 
