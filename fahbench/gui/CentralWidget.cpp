@@ -44,7 +44,7 @@ void CentralWidget::make_device_table() {
     tv->setShowGrid(false);
     tv->resizeColumnsToContents();
     tv->resizeRowsToContents();
-    
+
     device_vbox = new QVBoxLayout();
     device_vbox->addWidget(new QLabel("Devices"));
     device_vbox->addWidget(device_table_view);
@@ -54,7 +54,7 @@ void CentralWidget::make_simulation_table() {
     simulation_table_view = new QTableView();
     simulation_table_model = new SimulationTableModel();
     simulation_table_view->setModel(simulation_table_model);
-    
+
     simulation_vbox = new QVBoxLayout();
     simulation_vbox->addWidget(new QLabel("Benchmarking runs"));
     simulation_vbox->addWidget(simulation_table_view);

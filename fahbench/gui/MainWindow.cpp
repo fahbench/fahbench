@@ -27,7 +27,7 @@ MainWindow::MainWindow() : QMainWindow() {
     connect(worker, &SimulationWorker::progress_update, central_widget, &CentralWidget::progress_update);
     connect(worker, &SimulationWorker::message_update, central_widget, &CentralWidget::message_update);
     setWindowTitle("FAHBench");
-    
+
     make_actions();
     make_menu_bar();
 }

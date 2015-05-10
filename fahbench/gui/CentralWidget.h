@@ -34,7 +34,7 @@ private:
     QVBoxLayout * layout_a;
     QHBoxLayout * layout_a1;
     QHBoxLayout * layout_a2;
-    
+
     QVBoxLayout * device_vbox;
     QVBoxLayout * simulation_vbox;
 
