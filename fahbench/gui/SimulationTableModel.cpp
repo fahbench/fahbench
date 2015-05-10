@@ -1,9 +1,14 @@
 #include "SimulationTableModel.h"
 
+
 const static int NCOLUMNS = 5;
+const static int RESULTS_COL = 4;
 
 SimulationTableModel::SimulationTableModel() :
-    _entries() {
+    _entries(),
+    current_entry(-1) {
+    _entries.append(SimulationTableEntry());
+    current_entry = 0;
 }
 
 int SimulationTableModel::rowCount(const QModelIndex & parent) const {
@@ -34,7 +39,7 @@ QVariant SimulationTableModel::data(const QModelIndex & index, int role) const {
         return item.protein();
     case 3:
         return QString("Advanced");
-    case 4:
+    case RESULTS_COL:
         return item.result();
     default:
         return QVariant();
@@ -57,7 +62,7 @@ QVariant SimulationTableModel::headerData(int section, Qt::Orientation orientati
             return QString("Protein");
         case 3:
             return QString("Advanced");
-        case 4:
+        case RESULTS_COL:
             return QString("Results");
         default:
             return QVariant();
@@ -66,6 +71,32 @@ QVariant SimulationTableModel::headerData(int section, Qt::Orientation orientati
         return QString("%1").arg(section);
     }
 }
+
+const SimulationTableEntry & SimulationTableModel::get_next() {
+    return _entries.at(current_entry);
+}
+
+void SimulationTableModel::finish(double score) {
+    auto entry = &_entries[current_entry];
+    entry->set_result(score);
+    emit dataChanged(index(current_entry, RESULTS_COL), index(current_entry, RESULTS_COL));
+}
+
+
+void SimulationTableEntry::configure_simulation(Simulation & sim) {
+
+    sim.platform = _platform.toStdString();
+    sim.deviceId = _deviceId;
+    sim.precision = _precision.toStdString();
+    sim.platformId = _platformId;
+    sim.verifyAccuracy = _verifyAccuracy;
+    sim.nan_check_freq = _nan_check_freq;
+    sim.numSteps = _num_steps;
+
+    // TODO: figure out how to pass xml files.
+    sim.solvent = "explicit";
+}
+
 
 
 QString SimulationTableEntry::device() const {
@@ -79,6 +110,10 @@ QString SimulationTableEntry::protein() const {
 }
 QString SimulationTableEntry::result() const {
     return QString("%1 ns/day").arg(_result);
+}
+
+void SimulationTableEntry::set_result(double result) {
+    _result = result;
 }
 
 #include "SimulationTableModel.moc"

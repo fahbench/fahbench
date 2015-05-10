@@ -28,7 +28,7 @@ SimulationWorker::SimulationWorker(): QObject() {
 
 void SimulationWorker::run_simulation(Simulation simulation) {
     try {
-        double score = simulation.run(*this);
+        float score = simulation.run(*this);
         emit simulation_finished(score);
     } catch (std::exception & e) {
         message(e.what());

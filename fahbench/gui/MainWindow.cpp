@@ -58,15 +58,8 @@ void MainWindow::make_menu_bar() {
 
 void MainWindow::start_button_clicked() {
     Simulation sim;
-    // TODO: Get from GUI
-    sim.platform = "OpenCL";
-    sim.deviceId = 0;
-    sim.precision = "single";
-    sim.platformId = 0;
-    sim.verifyAccuracy = false;
-    sim.nan_check_freq = 1000;
-    sim.numSteps = 5000;
-    sim.solvent = "explicit";
+    auto entry = central_widget->simulation_table_model->get_next();
+    entry.configure_simulation(sim);
 
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;
@@ -78,11 +71,12 @@ void MainWindow::start_button_clicked() {
     emit start_new_simulation(sim);
 }
 
-void MainWindow::simulation_finished(const double &) {
+void MainWindow::simulation_finished(const double & score) {
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;
     pbar->setValue(pbar->maximum());
     sbut->setEnabled(true);
+    central_widget->simulation_table_model->finish(score);
 }
 
 void MainWindow::about() {

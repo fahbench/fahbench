@@ -16,7 +16,7 @@ class SimulationWorker : public QObject, public Updater {
 
 public:
     SimulationWorker();
-    void progress(int, int, double);
+    void progress(int i, int num_steps, double score);
     void message(std::string);
     void message(boost::format);
 
