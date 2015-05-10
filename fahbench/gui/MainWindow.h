@@ -31,6 +31,7 @@ private:
     void make_actions();
     void make_menu_bar();
 
+    QAction * exit_action;
     QAction * about_action;
 
 signals:

@@ -42,11 +42,15 @@ MainWindow::~MainWindow() {
 void MainWindow::make_actions() {
     about_action = new QAction("About", this);
     connect(about_action, SIGNAL(triggered(bool)), this, SLOT(about()));
+
+    exit_action = new QAction("Exit", this);
+    connect(exit_action, SIGNAL(triggered(bool)), this, SLOT(close()));
 }
 
 
 void MainWindow::make_menu_bar() {
     auto file_menu = menuBar()->addMenu("&File");
+    file_menu->addAction(exit_action);
     auto help_menu = menuBar()->addMenu("Help");
     help_menu->addAction(about_action);
 }
