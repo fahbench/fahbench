@@ -1,12 +1,9 @@
-#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 
 #include <stdexcept>
 #include <boost/format.hpp>
-
-// TODO remove output
 
 #include <OpenMM.h>
 #include <openmm/serialization/XmlSerializer.h>
@@ -20,7 +17,6 @@
 #define isnan(x) _isnan(x)
 #endif
 
-using namespace std;
 using namespace OpenMM;
 
 using std::string;
@@ -171,11 +167,11 @@ double Simulation::benchmark(Context & context, Updater & update) const {
 
 template<class T>
 T * Simulation::loadObject(const string & fname) const {
-    ifstream f(fname);
+    std::ifstream f(fname);
     if (!f) {
         throw std::runtime_error(boost::str(boost::format("cannot open %1%") % fname));
     }
-    istream & s = f;
+    std::istream & s = f;
     return XmlSerializer::deserialize<T>(s);
 }
 
