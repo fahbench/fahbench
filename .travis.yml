@@ -1,0 +1,16 @@
+language: cpp
+
+sudo: required
+dist: trusty
+
+install:
+    - sudo apt-get update     -qq
+    - sudo apt-get install    -qq  build-essential mesa-common-dev fftw3-dev qt5-default fglrx opencl-headers
+
+script:
+    - cd ../
+    - bash fahbench/packaging/travis/install-openmm.sh
+    - bash fahbench/packaging/travis/install-fahbench.sh
+    - ~/fahbench/bin/FAHBench-cmd -hlvd
+    - ~/fahbench/bin/FAHBench-cmd
+
