@@ -1,6 +1,6 @@
 
 # Find boost and CUDA using CMake
-#set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
 find_package(CUDA QUIET)
@@ -26,7 +26,6 @@ if(${CUDA_FOUND})
 endif(${CUDA_FOUND})
 
 # When we install, it needs to look in install_dir/lib for OpenMM
-# TODO: test how this behaves on windows
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 # Make library
