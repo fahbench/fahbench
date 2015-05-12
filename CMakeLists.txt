@@ -3,7 +3,7 @@ project(FAHBench)
 
 set(FAHBench_VERSION_MAJOR 2)
 set(FAHBench_VERSION_MINOR 0)
-set(FAHBench_VERSION_REVIS 1)
+set(FAHBench_VERSION_REVIS 2)
 
 # Cmake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
@@ -31,6 +31,9 @@ set(CPACK_PACKAGE_NAME "fahbench")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Folding@Home GPU Benchmarking")
 set(CPACK_PACKAGE_DESCRIPTION "This package uses OpenMM to run GPU simulations of protein folding. The reported speed can be used as a benchmark for evaluating Folding@Home hardware.")
 set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
+
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-program-options1.54.0 libboost-filesystem1.54.0 libqt5widgets5")
 set(CPACK_BINARY_DEB "ON")
 
 include (CPack)

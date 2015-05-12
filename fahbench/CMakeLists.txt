@@ -28,7 +28,7 @@ if(${CUDA_FOUND})
 endif(${CUDA_FOUND})
 
 # When we install, it needs to look in install_dir/lib for OpenMM
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/")
 
 # Make library
 add_library(fahbench SHARED
@@ -66,6 +66,14 @@ INSTALL(FILES ${OPENMM_PLUGIN_FILES}
 # For linux, put libOpenMM.so in the lib/ directory
 if(${UNIX})
   INSTALL(FILES "${OPENMM_LIB}" DESTINATION lib)
+  
+  # Find real path to boost libraries
+  set (_resolvedFiles "")
+  foreach (_file ${Boost_LIBRARIES})
+    get_filename_component(_resolvedFile "${_file}" REALPATH)
+    list (APPEND _resolvedFiles "${_resolvedFile}")
+  endforeach()
+  INSTALL(FILES ${_resolvedFiles} DESTINATION lib)
 endif(${UNIX})
 
 # Windows requires dll's to be installed alongside the executable
