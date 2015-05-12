@@ -1,6 +1,8 @@
 
 # Find boost and CUDA using CMake
+if(${WIN32})
 set(Boost_USE_STATIC_LIBS ON)
+endif(${WIN32})
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
 find_package(CUDA QUIET)

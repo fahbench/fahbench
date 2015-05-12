@@ -1,4 +1,5 @@
 #include "CentralWidget.h"
+#include "../FAHBenchVersion.h"
 
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -20,7 +21,7 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_a->addLayout(layout_a1);
 
     // Status bar
-    status_bar = new QLabel("Status bar placeholder text");
+    status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));
     layout_a->addWidget(status_bar);
 
     // Bottom panel
@@ -52,8 +53,10 @@ void CentralWidget::make_device_table() {
 
 void CentralWidget::make_simulation_table() {
     simulation_table_view = new QTableView();
-    simulation_table_model = new SimulationTableModel();
+    simulation_table_model = new SimulationTableModel(device_table_model);
     simulation_table_view->setModel(simulation_table_model);
+    simulation_table_view->resizeColumnsToContents();
+    simulation_table_view->resizeRowsToContents();
 
     simulation_vbox = new QVBoxLayout();
     simulation_vbox->addWidget(new QLabel("Benchmarking runs"));

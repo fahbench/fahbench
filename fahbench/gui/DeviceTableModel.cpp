@@ -10,6 +10,12 @@ DeviceTableModel::DeviceTableModel() :
     _entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
 }
 
+const std::vector< Device > & DeviceTableModel::entries() const {
+    const std::vector<Device> & ret = _entries;
+    return ret;
+}
+
+
 int DeviceTableModel::rowCount(const QModelIndex & parent) const {
     return _entries.size();
 }

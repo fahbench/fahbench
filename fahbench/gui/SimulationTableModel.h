@@ -7,7 +7,8 @@
 #include <QAbstractTableModel>
 
 #include "QSimulation.h"
-
+#include "DeviceTableModel.h"
+#include "../GPUInfo.h"
 
 class ProteinSystem {
 private:
@@ -15,17 +16,17 @@ private:
     QString _intxml;
     QString _statexml;
 
+public:
+    QString summary() const;
+
 };
 
 class SimulationTableEntry {
 
 private:
-    QString _device; // TODO: Should we store this as a string?
-    QString _platform;
+    Device _device;
     ProteinSystem _protein;
 
-    int _deviceId;
-    int _platformId;
     QString _precision;
     bool _verifyAccuracy;
     int _nan_check_freq;
@@ -41,17 +42,14 @@ public:
 
     void set_result(double result);
 
-    SimulationTableEntry() :
-        _platform("OpenCL"),
-        _device("Device display name"),
-        _protein(ProteinSystem()),
-        _deviceId(0),
-        _platformId(0),
-        _precision("single"),
-        _verifyAccuracy(true),
-        _nan_check_freq(1000),
-        _num_steps(5000),
-        _result(0.0) {
+    SimulationTableEntry(const Device & device)
+        : _device(device)
+        , _protein(ProteinSystem())
+        , _precision("single")
+        , _verifyAccuracy(true)
+        , _nan_check_freq(1000)
+        , _num_steps(5000)
+        , _result(-1.0) {
     }
 
     void configure_simulation(Simulation & sim);
@@ -68,12 +66,13 @@ private:
 
 
 public:
-    SimulationTableModel();
+    SimulationTableModel(DeviceTableModel * device_table_model);
     int rowCount(const QModelIndex & parent) const;
     int columnCount(const QModelIndex & parent) const;
     QVariant data(const QModelIndex & index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    bool has_next() const;
     const SimulationTableEntry & get_next();
     void finish(double score);
 

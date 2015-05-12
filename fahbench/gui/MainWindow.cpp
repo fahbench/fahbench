@@ -26,6 +26,7 @@ MainWindow::MainWindow() : QMainWindow() {
     central_widget = new CentralWidget();
     setCentralWidget(central_widget);
     connect(central_widget->start_button, &QAbstractButton::clicked, this, &MainWindow::start_button_clicked);
+    connect(this, &MainWindow::continue_simulation_queue, this, &MainWindow::start_button_clicked);
     connect(worker, &SimulationWorker::progress_update, central_widget, &CentralWidget::progress_update);
     connect(worker, &SimulationWorker::message_update, central_widget, &CentralWidget::message_update);
     setWindowTitle("FAHBench");
@@ -57,6 +58,10 @@ void MainWindow::make_menu_bar() {
 
 
 void MainWindow::start_button_clicked() {
+    if (!central_widget->simulation_table_model->has_next()) {
+        central_widget->message_update("No more runs to run!");
+        return;
+    }
     Simulation sim;
     auto entry = central_widget->simulation_table_model->get_next();
     entry.configure_simulation(sim);
@@ -77,6 +82,10 @@ void MainWindow::simulation_finished(const double & score) {
     pbar->setValue(pbar->maximum());
     sbut->setEnabled(true);
     central_widget->simulation_table_model->finish(score);
+
+    if (central_widget->simulation_table_model->has_next()) {
+        emit continue_simulation_queue();
+    }
 }
 
 void MainWindow::about() {
