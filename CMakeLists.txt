@@ -1,40 +1,37 @@
-cmake_minimum_required (VERSION 2.6)
-PROJECT(FAHBench)
+cmake_minimum_required (VERSION 2.8.11)
+project(FAHBench)
 
-FIND_PACKAGE(Qt4 4.8.4 REQUIRED)
-INCLUDE(${QT_USE_FILE})
-
-set(FAHBench_VERSION_MAJOR 1)
-set(FAHBench_VERSION_MINOR 2)
+set(FAHBench_VERSION_MAJOR 2)
+set(FAHBench_VERSION_MINOR 0)
 set(FAHBench_VERSION_REVIS 1)
 
-configure_file("${PROJECT_SOURCE_DIR}/FAHBenchVersion.h.in" "${PROJECT_SOURCE_DIR}/FAHBenchVersion.h")
+# Cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
-set(OPENMM_DIR "C:/Libs/openmm51/" CACHE PATH "OpenMM Installation Directory")
+# For QT
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-get_filename_component(QT_ROOT_DIR ${QT_INCLUDE_DIR} PATH)
-set(QT_BIN_DIR ${QT_ROOT_DIR}/bin CACHE PATH "Qt Binaries Directory")
-set(CUDA_ROOT_DIR "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v5.5/" CACHE PATH "CUDA INSTALL PATH")
-set(OPENMM_LIB_DIR ${OPENMM_DIR}/lib)
-set(OPENMM_INC_DIR ${OPENMM_DIR}/include)
-include_directories(${OPENMM_INC_DIR} ${CUDA_ROOT_DIR}/include ${QT_USE_FILE} ${PROJECT_SOURCE_DIR})
-link_directories(${OPENMM_LIB_DIR} ${CUDA_ROOT_DIR}/lib/Win32)
-set(qt_HEADERS SimulationWorker.h window/window.h window/OneShotButton.h)
-qt4_wrap_cpp(qt4_HEADERS_MOC ${qt_HEADERS})
-ADD_DEFINITIONS(${QT_DEFINITIONS})
+# Use c++11
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
-add_executable(FAHBench FAHBench.cpp StateTests.cpp SimulationWorker.cpp gpuinfo.cpp
-               window/window.cpp window/OneShotButton.cpp icon.rc ${qt4_HEADERS_MOC})
+add_subdirectory(fahbench)
 
-target_link_libraries(FAHBench OpenCL ${QT_LIBRARIES})
-target_link_libraries(FAHBench debug OpenMM_d debug OpenMMSerialization_d)
-target_link_libraries(FAHBench optimized OpenMM optimized OpenMMSerialization)
+# Copy data to build directory
+file(GLOB OPENMM_DATA_FILES openmm_data/*.xml)
+install(FILES ${OPENMM_DATA_FILES} DESTINATION share/openmm_data/)
 
-SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/install CACHE PATH "Install Location" FORCE)
 
-INSTALL(TARGETS FAHBench RUNTIME DESTINATION ./)
-INSTALL(FILES ${OPENMM_LIB_DIR}/OpenMM.dll ${OPENMM_LIB_DIR}/OpenMMSerialization.dll ${OPENMM_LIB_DIR}/pthreadVC2.dll
-        ${OPENMM_LIB_DIR}/plugins/OpenMMOpenCL.dll  ${OPENMM_LIB_DIR}/plugins/OpenMMCUDA.dll 
-        ${QT_BIN_DIR}/QtGui4.dll ${QT_BIN_DIR}/QtCore4.dll DESTINATION ./)
-FILE(GLOB XMLS "${CMAKE_SOURCE_DIR}/scratch/*.xml")
-INSTALL(FILES ${XMLS} DESTINATION ./scratch/)
+# build a CPack driven installer package
+include (InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${FAHBench_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${FAHBench_VERSION_MINOR}")
+set(CPACK_PACKAGE_NAME "fahbench")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Folding@Home GPU Benchmarking")
+set(CPACK_PACKAGE_DESCRIPTION "This package uses OpenMM to run GPU simulations of protein folding. The reported speed can be used as a benchmark for evaluating Folding@Home hardware.")
+set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
+set(CPACK_BINARY_DEB "ON")
+
+include (CPack)
+

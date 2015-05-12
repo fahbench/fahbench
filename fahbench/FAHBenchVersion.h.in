@@ -8,9 +8,11 @@
 #define FAHBench_VERSION_MINOR @FAHBench_VERSION_MINOR@
 #define FAHBench_VERSION_REVIS @FAHBench_VERSION_REVIS@
 
+#cmakedefine CUDA_FOUND
+
 inline std::string getVersion() {
 	std::stringstream ss;
-	ss << "v" << FAHBench_VERSION_MAJOR << "." << FAHBench_VERSION_MINOR << "." << FAHBench_VERSION_REVIS;
+	ss << FAHBench_VERSION_MAJOR << "." << FAHBench_VERSION_MINOR << "." << FAHBench_VERSION_REVIS;
 	return ss.str();
 }
 
