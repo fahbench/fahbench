@@ -3,7 +3,7 @@ project(FAHBench)
 
 set(FAHBench_VERSION_MAJOR 2)
 set(FAHBench_VERSION_MINOR 0)
-set(FAHBench_VERSION_REVIS 1)
+set(FAHBench_VERSION_REVIS 2)
 
 # Cmake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
