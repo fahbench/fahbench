@@ -7,6 +7,14 @@ set(Boost_USE_MULTITHREADED ON)
 find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
 find_package(CUDA QUIET)
 
+IF(CUDA_FOUND)
+	set(USE_CUDA ON
+		   CACHE BOOL "Include CUDA")
+ELSE()
+	set(USE_CUDA OFF
+		   CACHE BOOL "Include CUDA")
+ENDIF(CUDA_FOUND)
+
 # Find openmm
 find_path(OPENMM_INCLUDE_PATH OpenMM.h HINTS ENV OPENMM_INCLUDE_PATH)
 find_library(OPENMM_LIB OpenMM PATHS ENV OPENMM_LIB_PATH)
@@ -23,9 +31,9 @@ include_directories(
 	${OPENCL_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
 )
-if(${CUDA_FOUND})
+if(${USE_CUDA})
     include_directories(${CUDA_INCLUDE_DIRS})
-endif(${CUDA_FOUND})
+endif(${USE_CUDA})
 
 # When we install, it needs to look in install_dir/lib for OpenMM
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
@@ -44,9 +52,9 @@ target_link_libraries(fahbench
 	${Boost_LIBRARIES}
 	${OPENCL_LIBRARIES}
 )
-if(${CUDA_FOUND})
+if(${USE_CUDA})
     target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
-endif(${CUDA_FOUND})
+endif(${USE_CUDA})
 
 # Make executables
 add_subdirectory(gui)
