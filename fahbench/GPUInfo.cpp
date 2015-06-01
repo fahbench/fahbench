@@ -65,20 +65,19 @@ void * loadCudaLibrary() {
 #ifdef WINDOWS
     return LoadLibraryA("cudart.dll");
 #else
-    return dlopen ("libcudart.so", RTLD_NOW);
+    return dlopen("libcudart.so", RTLD_NOW);
 #endif
 }
 
-void (*getProcAddress(void * lib, const char *name))(void){
+void (*getProcAddress(void * lib, const char * name))(void) {
 #ifdef WINDOWS
-    return (void (*)(void)) GetProcAddress(lib, name);
+    return (void ( *)(void)) GetProcAddress(lib, name);
 #else
-    return (void (*)(void)) dlsym(lib,(const char *)name);
+    return (void ( *)(void)) dlsym(lib, (const char *)name);
 #endif
 }
 
-int freeLibrary(void *lib)
-{
+int freeLibrary(void * lib) {
 #ifdef WINDOWS
     return FreeLibrary(lib);
 #else
@@ -86,23 +85,23 @@ int freeLibrary(void *lib)
 #endif
 }
 
-typedef cudaError_t CUDAAPI (*cudaGetDeviceCount_pt)(int * count);
-typedef cudaError_t CUDAAPI (*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
+typedef cudaError_t CUDAAPI(*cudaGetDeviceCount_pt)(int * count);
+typedef cudaError_t CUDAAPI(*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
 
 vector<Device> GPUInfo::getCUDADevices() {
     // TODO: custom exception
-  
+
     void * cu_rt;
     cudaGetDeviceCount_pt my_cuGetDeviceCount;
     cudaGetDeviceProperties_pt my_cuGetDeviceProperties;
-    
+
     if ((cu_rt = loadCudaLibrary()) == nullptr)
-        throw std::runtime_error("CUDA ERROR: could not load cuda runtime"); 
+        throw std::runtime_error("CUDA ERROR: could not load cuda runtime");
     if ((my_cuGetDeviceCount = (cudaGetDeviceCount_pt) getProcAddress(cu_rt, "cudaGetDeviceCount")) == nullptr)
         throw std::runtime_error("CUDA ERROR: could not load cudaGetDeviceCount");
     if ((my_cuGetDeviceProperties = (cudaGetDeviceProperties_pt) getProcAddress(cu_rt, "cudaGetDeviceProperties")) == nullptr)
         throw std::runtime_error("CUDA ERROR: could not load cudaGetDeviceProperties");
-    
+
     cudaError_t cu_error;
     int num_devices = 0;
     cu_error = my_cuGetDeviceCount(&num_devices);
