@@ -46,28 +46,82 @@ vector<Device> GPUInfo::getOpenCLDevices() {
     return openCLdevices;
 }
 
+
 #ifdef USE_CUDA
+// Taken from http://stackoverflow.com/a/12854285
+// Modified to use cuda runtime
+
 #include <cuda.h>
 #include <cuda_runtime.h>
-vector<Device> GPUInfo::getCUDADevices() {
-    cudaError_t cu_error;
 
+#ifdef WINDOWS
+#include <Windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
+
+void * loadCudaLibrary() {
+#ifdef WINDOWS
+    return LoadLibraryA("cudart.dll");
+#else
+    return dlopen ("libcudart.so", RTLD_NOW);
+#endif
+}
+
+void (*getProcAddress(void * lib, const char *name))(void){
+#ifdef WINDOWS
+    return (void (*)(void)) GetProcAddress(lib, name);
+#else
+    return (void (*)(void)) dlsym(lib,(const char *)name);
+#endif
+}
+
+int freeLibrary(void *lib)
+{
+#ifdef WINDOWS
+    return FreeLibrary(lib);
+#else
+    return dlclose(lib);
+#endif
+}
+
+typedef cudaError_t CUDAAPI (*cudaGetDeviceCount_pt)(int * count);
+typedef cudaError_t CUDAAPI (*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
+
+vector<Device> GPUInfo::getCUDADevices() {
+    // TODO: custom exception
+  
+    void * cu_rt;
+    cudaGetDeviceCount_pt my_cuGetDeviceCount;
+    cudaGetDeviceProperties_pt my_cuGetDeviceProperties;
+    
+    if ((cu_rt = loadCudaLibrary()) == nullptr)
+        throw std::runtime_error("CUDA ERROR: could not load cuda runtime"); 
+    if ((my_cuGetDeviceCount = (cudaGetDeviceCount_pt) getProcAddress(cu_rt, "cudaGetDeviceCount")) == nullptr)
+        throw std::runtime_error("CUDA ERROR: could not load cudaGetDeviceCount");
+    if ((my_cuGetDeviceProperties = (cudaGetDeviceProperties_pt) getProcAddress(cu_rt, "cudaGetDeviceProperties")) == nullptr)
+        throw std::runtime_error("CUDA ERROR: could not load cudaGetDeviceProperties");
+    
+    cudaError_t cu_error;
     int num_devices = 0;
-    cu_error = cudaGetDeviceCount(&num_devices);
+    cu_error = my_cuGetDeviceCount(&num_devices);
     if (cu_error != cudaSuccess)
         throw std::runtime_error("CUDA ERROR: cannot get number of devices.");
 
     vector<Device> cuda_devices;
     for (int i = 0; i < num_devices; i++) {
         cudaDeviceProp prop;
-        cu_error = cudaGetDeviceProperties(&prop, i);
+        cu_error = my_cuGetDeviceProperties(&prop, i);
         if (cu_error != cudaSuccess)
             throw std::runtime_error("CUDA ERROR: Cannot get device properties.");
 
         cuda_devices.push_back(Device("CUDA", prop.name, i));
     }
+    freeLibrary(cu_rt);
     return cuda_devices;
 }
+
 #else // USE_CUDA
 vector<Device> GPUInfo::getCUDADevices() {
     vector<Device> cuda_devices;
