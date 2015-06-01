@@ -53,9 +53,6 @@ target_link_libraries(fahbench
     ${Boost_LIBRARIES}
     ${OPENCL_LIBRARIES}
 )
-if(${USE_CUDA})
-    target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
-endif(${USE_CUDA})
 
 # Make executables
 add_subdirectory(gui)
