@@ -7,6 +7,7 @@
 #include <QAbstractTableModel>
 
 #include "../GPUInfo.h"
+#include "../Device.h"
 
 
 
