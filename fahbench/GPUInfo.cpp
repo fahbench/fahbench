@@ -66,7 +66,7 @@ vector<Device> GPUInfo::getOpenCLDevices() {
     return openCLdevices;
 }
 
-#ifdef CUDA_FOUND
+#ifdef USE_CUDA
 #include <cuda.h>
 #include <cuda_runtime.h>
 vector<Device> GPUInfo::getCUDADevices() {
@@ -88,9 +88,9 @@ vector<Device> GPUInfo::getCUDADevices() {
     }
     return cuda_devices;
 }
-#else // CUDA_FOUND
+#else // USE_CUDA
 vector<Device> GPUInfo::getCUDADevices() {
     vector<Device> cuda_devices;
     return cuda_devices;
 }
-#endif // CUDA_FOUND
+#endif // USE_CUDA
