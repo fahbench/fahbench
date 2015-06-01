@@ -24,7 +24,8 @@ string getGpuDesc() {
         // OpenCL
         auto opencl_devices = GPUInfo::getOpenCLDevices();
         for (auto const & kv : opencl_devices) {
-            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%") % kv.device() % kv.platform_id() % kv.device_id() << std::endl;
+            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%\tPlatform version: %4%\tDevice version: %5%\t")
+               % kv.device() % kv.platform_id() % kv.device_id() % kv.platform_version % kv.device_version << std::endl;
         }
     } catch (const std::exception & err) {
         ss << err.what() << std::endl;

@@ -6,21 +6,19 @@ const static int NCOLUMNS = 4;
 
 DeviceTableModel::DeviceTableModel(CentralWidget & parent) :
     _entries() {
-	try{
-		auto opencl_devices = GPUInfo::getOpenCLDevices();
-		_entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
-	}
-	catch (const std::exception & err) {
-		parent.message_update(err.what());
-	}
-	try {
-		auto cuda_devices = GPUInfo::getCUDADevices();
-		_entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
-	}
-	catch (const std::exception & err){
-		parent.message_update(err.what());
-	}
-    
+    try {
+        auto opencl_devices = GPUInfo::getOpenCLDevices();
+        _entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
+    } catch (const std::exception & err) {
+        parent.message_update(err.what());
+    }
+    try {
+        auto cuda_devices = GPUInfo::getCUDADevices();
+        _entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
+    } catch (const std::exception & err) {
+        parent.message_update(err.what());
+    }
+
 }
 
 const std::vector< Device > & DeviceTableModel::entries() const {
