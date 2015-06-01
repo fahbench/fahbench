@@ -8,11 +8,11 @@ find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
 find_package(CUDA QUIET)
 
 IF(CUDA_FOUND)
-	set(USE_CUDA ON
-		   CACHE BOOL "Include CUDA")
+    set(USE_CUDA ON
+    CACHE BOOL "Include CUDA")
 ELSE()
-	set(USE_CUDA OFF
-		   CACHE BOOL "Include CUDA")
+    set(USE_CUDA OFF
+    CACHE BOOL "Include CUDA")
 ENDIF(CUDA_FOUND)
 
 # Find openmm
@@ -27,9 +27,9 @@ find_package(OpenCL)
 configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
 include_directories(
-	"${OPENMM_INCLUDE_PATH}"
-	${OPENCL_INCLUDE_DIRS}
-	${Boost_INCLUDE_DIRS}
+    "${OPENMM_INCLUDE_PATH}"
+    ${OPENCL_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
 )
 if(${USE_CUDA})
     include_directories(${CUDA_INCLUDE_DIRS})
@@ -49,9 +49,9 @@ add_library(fahbench SHARED
 
 # Link
 target_link_libraries(fahbench
-	"${OPENMM_LIB}"
-	${Boost_LIBRARIES}
-	${OPENCL_LIBRARIES}
+    "${OPENMM_LIB}"
+    ${Boost_LIBRARIES}
+    ${OPENCL_LIBRARIES}
 )
 if(${USE_CUDA})
     target_link_libraries(fahbench "${CUDA_CUDART_LIBRARY}")
@@ -68,9 +68,20 @@ INSTALL(TARGETS fahbench
 )
 
 # Copy OpenMM plugins
-FILE(GLOB OPENMM_PLUGIN_FILES "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMM*${CMAKE_SHARED_LIBRARY_SUFFIX}")
-INSTALL(FILES ${OPENMM_PLUGIN_FILES}
-	DESTINATION lib/plugins)
+set(INSTALL_ALL_OPENMM_PLUGINS OFF
+    CACHE BOOL "Copy all available OpenMM plugins instead of just the defaults")
+    
+if(${INSTALL_ALL_OPENMM_PLUGINS})
+    FILE(GLOB OPENMM_PLUGIN_FILES "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMM*${CMAKE_SHARED_LIBRARY_SUFFIX}")
+else()
+    set(OPENMM_PLUGIN_FILES
+        "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMOpenCL${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCUDA${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCPU${CMAKE_SHARED_LIBRARY_SUFFIX}"
+    )
+endif()
+INSTALL(FILES ${OPENMM_PLUGIN_FILES} DESTINATION lib/plugins)
+            
 
 # For linux, put libOpenMM.so in the lib/ directory
 if(${UNIX})
