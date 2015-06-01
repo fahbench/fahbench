@@ -8,7 +8,7 @@
 
 #include "QSimulation.h"
 #include "DeviceTableModel.h"
-#include "../GPUInfo.h"
+#include "../Device.h"
 
 class ProteinSystem {
 private:

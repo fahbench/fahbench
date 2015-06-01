@@ -43,6 +43,7 @@ add_library(fahbench SHARED
         StateTests.cpp
         Simulation.cpp
         GPUInfo.cpp
+        Device.cpp
         Utils.cpp
 )
 
