@@ -12,6 +12,9 @@ QSize CentralWidget::sizeHint() const {
 CentralWidget::CentralWidget() : QWidget() {
     layout_a = new QVBoxLayout();
 
+	// Make sure this comes before construction of tables
+	status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));	
+
     // Tables
     layout_a1 = new QHBoxLayout();
     make_device_table();
@@ -20,9 +23,8 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_a1->addLayout(simulation_vbox, 1);
     layout_a->addLayout(layout_a1);
 
-    // Status bar
-    status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));
-    layout_a->addWidget(status_bar);
+	// Status bar
+	layout_a->addWidget(status_bar);
 
     // Bottom panel
     layout_a2 = new QHBoxLayout();
@@ -37,7 +39,7 @@ CentralWidget::CentralWidget() : QWidget() {
 
 void CentralWidget::make_device_table() {
     device_table_view = new QTableView();
-    device_table_model = new DeviceTableModel();
+    device_table_model = new DeviceTableModel(*this);
     device_table_view->setModel(device_table_model);
 
     auto tv = device_table_view;

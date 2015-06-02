@@ -9,7 +9,7 @@
 #include "../GPUInfo.h"
 #include "../Device.h"
 
-
+class CentralWidget; // resolve circular include
 
 class DeviceTableModel : public QAbstractTableModel {
 
@@ -17,7 +17,7 @@ private:
     std::vector<Device> _entries;
 
 public:
-    DeviceTableModel();
+    DeviceTableModel(CentralWidget & parent);
     int rowCount(const QModelIndex & parent) const;
     int columnCount(const QModelIndex & parent) const;
     QVariant data(const QModelIndex & index, int role) const;
