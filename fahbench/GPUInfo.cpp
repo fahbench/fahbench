@@ -64,7 +64,11 @@ vector<Device> GPUInfo::getOpenCLDevices() {
 
 HMODULE loadCudaLibrary() {
 #ifdef _WIN32
-    return LoadLibraryA("cudart.dll");
+#if _WIN64
+    return LoadLibraryA("cudart64_65.dll");
+#else
+	return loadLibraryA("cudart32_65.dll");
+#endif
 #else
     return dlopen("libcudart.so", RTLD_NOW);
 #endif
