@@ -27,6 +27,7 @@ include (InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR "${FAHBench_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${FAHBench_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${FAHBench_VERSION_REVIS}")
 set(CPACK_PACKAGE_NAME "fahbench")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Folding@Home GPU Benchmarking")
 set(CPACK_PACKAGE_DESCRIPTION "This package uses OpenMM to run GPU simulations of protein folding. The reported speed can be used as a benchmark for evaluating Folding@Home hardware.")
@@ -35,6 +36,15 @@ set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-program-options1.54.0 libboost-filesystem1.54.0 libqt5widgets5")
 set(CPACK_BINARY_DEB "ON")
+
+if(${UNIX})
+  set(CPACK_GENERATOR "TGZ")
+endif(${UNIX})
+
+if(${WIN32})
+  SET(CPACK_GENERATOR "ZIP")
+endif(${WIN32})
+
 
 include (CPack)
 
