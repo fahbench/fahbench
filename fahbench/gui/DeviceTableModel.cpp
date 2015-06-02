@@ -1,13 +1,26 @@
 #include "DeviceTableModel.h"
+#include "CentralWidget.h"
+#include <exception>
 
 const static int NCOLUMNS = 4;
 
-DeviceTableModel::DeviceTableModel() :
+DeviceTableModel::DeviceTableModel(CentralWidget & parent) :
     _entries() {
-    auto opencl_devices = GPUInfo::getOpenCLDevices();
-    auto cuda_devices = GPUInfo::getCUDADevices();
-    _entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
-    _entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
+	try{
+		auto opencl_devices = GPUInfo::getOpenCLDevices();
+		_entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
+	}
+	catch (const std::exception & err) {
+		parent.message_update(err.what());
+	}
+	try {
+		auto cuda_devices = GPUInfo::getCUDADevices();
+		_entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
+	}
+	catch (const std::exception & err){
+		parent.message_update(err.what());
+	}
+    
 }
 
 const std::vector< Device > & DeviceTableModel::entries() const {

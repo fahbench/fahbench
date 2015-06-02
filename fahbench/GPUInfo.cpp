@@ -54,44 +54,49 @@ vector<Device> GPUInfo::getOpenCLDevices() {
 #include <cuda.h>
 #include <cuda_runtime.h>
 
-#ifdef WINDOWS
+#ifdef _WIN32
 #include <Windows.h>
 #else
 #include <dlfcn.h>
+#define HMODULE void *
 #endif
 
 
-void * loadCudaLibrary() {
-#ifdef WINDOWS
-    return LoadLibraryA("cudart.dll");
+HMODULE loadCudaLibrary() {
+#ifdef _WIN32
+#if _WIN64
+    return LoadLibraryA("cudart64_65.dll");
+#else
+	return loadLibraryA("cudart32_65.dll");
+#endif
 #else
     return dlopen("libcudart.so", RTLD_NOW);
 #endif
 }
 
-void (*getProcAddress(void * lib, const char * name))(void) {
-#ifdef WINDOWS
+void (*getProcAddress(HMODULE lib, const char * name))(void) {
+#ifdef _WIN32
     return (void ( *)(void)) GetProcAddress(lib, name);
 #else
     return (void ( *)(void)) dlsym(lib, (const char *)name);
 #endif
 }
 
-int freeLibrary(void * lib) {
-#ifdef WINDOWS
+int freeLibrary(HMODULE lib) {
+#ifdef _WIN32
     return FreeLibrary(lib);
 #else
     return dlclose(lib);
 #endif
 }
 
-typedef cudaError_t CUDAAPI(*cudaGetDeviceCount_pt)(int * count);
-typedef cudaError_t CUDAAPI(*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
+typedef cudaError_t (*cudaGetDeviceCount_pt)(int * count);
+typedef cudaError_t (*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
 
 vector<Device> GPUInfo::getCUDADevices() {
     // TODO: custom exception
 
-    void * cu_rt;
+    HMODULE cu_rt;
     cudaGetDeviceCount_pt my_cuGetDeviceCount;
     cudaGetDeviceProperties_pt my_cuGetDeviceProperties;
 
