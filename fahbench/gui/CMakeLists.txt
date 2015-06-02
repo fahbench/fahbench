@@ -36,15 +36,22 @@ if(${WIN32})
   get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
   get_target_property(QtCore_location Qt5::Core LOCATION)
   get_target_property(QtGui_location Qt5::Gui LOCATION)
+  get_filename_component(Qt_DLL_ROOT "${QtCore_location}" PATH)
 
   # TODO: Install icuin53.dll, icudt53.dll, icuuc53.dll
   #       (or compile qt sans unicode)
 
   INSTALL(FILES
-          ${QtWidgets_location}
-          ${QtCore_location}
-          ${QtGui_location}
+          "${QtWidgets_location}"
+          "${QtCore_location}"
+          "${QtGui_location}"
+          "${Qt_DLL_ROOT}/icudt53.dll"
+          "${Qt_DLL_ROOT}/icuin53.dll"
+          "${Qt_DLL_ROOT}/icuuc53.dll"
   DESTINATION bin)
+  INSTALL(FILES
+	      "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"
+	      DESTINATION bin/platforms)
 endif(${WIN32})
 
 endif()
