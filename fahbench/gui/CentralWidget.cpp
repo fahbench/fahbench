@@ -12,8 +12,8 @@ QSize CentralWidget::sizeHint() const {
 CentralWidget::CentralWidget() : QWidget() {
     layout_a = new QVBoxLayout();
 
-	// Make sure this comes before construction of tables
-	status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));	
+    // Make sure this comes before construction of tables
+    status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));
 
     // Tables
     layout_a1 = new QHBoxLayout();
@@ -23,8 +23,8 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_a1->addLayout(simulation_vbox, 1);
     layout_a->addLayout(layout_a1);
 
-	// Status bar
-	layout_a->addWidget(status_bar);
+    // Status bar
+    layout_a->addWidget(status_bar);
 
     // Bottom panel
     layout_a2 = new QHBoxLayout();

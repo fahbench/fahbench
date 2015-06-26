@@ -2,25 +2,23 @@
 #include "CentralWidget.h"
 #include <exception>
 
-const static int NCOLUMNS = 4;
+const static int NCOLUMNS = 6;
 
 DeviceTableModel::DeviceTableModel(CentralWidget & parent) :
     _entries() {
-	try{
-		auto opencl_devices = GPUInfo::getOpenCLDevices();
-		_entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
-	}
-	catch (const std::exception & err) {
-		parent.message_update(err.what());
-	}
-	try {
-		auto cuda_devices = GPUInfo::getCUDADevices();
-		_entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
-	}
-	catch (const std::exception & err){
-		parent.message_update(err.what());
-	}
-    
+    try {
+        auto opencl_devices = GPUInfo::getOpenCLDevices();
+        _entries.insert(_entries.end(), opencl_devices.begin(), opencl_devices.end());
+    } catch (const std::exception & err) {
+        parent.message_update(err.what());
+    }
+    try {
+        auto cuda_devices = GPUInfo::getCUDADevices();
+        _entries.insert(_entries.end(), cuda_devices.begin(), cuda_devices.end());
+    } catch (const std::exception & err) {
+        parent.message_update(err.what());
+    }
+
 }
 
 const std::vector< Device > & DeviceTableModel::entries() const {
@@ -60,6 +58,10 @@ QVariant DeviceTableModel::data(const QModelIndex & index, int role) const {
             return item.platform_id();
         else
             return QVariant();
+    case 4:
+        return QString::fromStdString(item.platform_version);
+    case 5:
+        return QString::fromStdString(item.device_version);
     default:
         return QVariant();
     }
@@ -81,6 +83,10 @@ QVariant DeviceTableModel::headerData(int section, Qt::Orientation orientation, 
             return QString("Device ID");
         case 3:
             return QString("Platform ID");
+        case 4:
+            return QString("Platform version");
+        case 5:
+            return QString("Device version");
         default:
             return QVariant();
         }

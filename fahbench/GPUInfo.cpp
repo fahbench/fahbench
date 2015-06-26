@@ -33,14 +33,29 @@ vector<Device> GPUInfo::getOpenCLDevices() {
         if (error)
             throw std::runtime_error("OpenCL Error: Cannot get devices.");
 
+        char plat_version_buffer[10240];
+        error = clGetPlatformInfo(platforms[j], CL_PLATFORM_VERSION, sizeof(plat_version_buffer), plat_version_buffer, NULL);
+        if (error)
+            throw std::runtime_error("OpenCL Error: Cannot get platform version.");
+        string platform_version = plat_version_buffer;
+
         for (int i = 0; i < n_devices; i++) {
             char buffer[10240];
             error = clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(buffer), buffer, NULL);
             if (error)
-                throw std::runtime_error("OpenCL Error: Cannot get device info.");
+                throw std::runtime_error("OpenCL Error: Cannot get device name.");
             string device_name = buffer;
 
-            openCLdevices.push_back(Device("OpenCL", device_name, i, j));
+            error = clGetDeviceInfo(devices[i], CL_DEVICE_VERSION, sizeof(buffer), buffer, NULL);
+            if (error)
+                throw std::runtime_error("OpenCL Error: Cannot get device version.");
+            string device_version = buffer;
+
+            auto device = Device("OpenCL", device_name, i, j);
+            device.platform_version = platform_version;
+            device.device_version = device_version;
+
+            openCLdevices.push_back(device);
         }
     }
     return openCLdevices;
@@ -67,7 +82,7 @@ HMODULE loadCudaLibrary() {
 #if _WIN64
     return LoadLibraryA("cudart64_65.dll");
 #else
-	return loadLibraryA("cudart32_65.dll");
+    return loadLibraryA("cudart32_65.dll");
 #endif
 #else
     return dlopen("libcudart.so", RTLD_NOW);

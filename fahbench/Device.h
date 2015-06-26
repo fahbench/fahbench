@@ -13,6 +13,9 @@ public:
     int platform_id() const;
     const std::string & platform() const;
 
+    std::string platform_version;
+    std::string device_version;
+
 private:
     std::string _device;
     std::string _platform;
