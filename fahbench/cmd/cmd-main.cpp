@@ -13,7 +13,6 @@
 #include "CommandLineUpdater.h"
 
 namespace po = boost::program_options;
-namespace mm = OpenMM;
 using std::string;
 using std::map;
 
@@ -87,7 +86,7 @@ int main(int argc, char ** argv) {
 
     if (vm.count("version")) {
         std::cout << "FAHBench version " << getVersion() << std::endl;
-        std::cout << "OpenMM version " << mm::Platform::getOpenMMVersion() << std::endl;
+        std::cout << "OpenMM version " << getOpenMMVersion() << std::endl;
         return 1;
     }
 
