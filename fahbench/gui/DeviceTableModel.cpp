@@ -2,7 +2,7 @@
 #include "CentralWidget.h"
 #include <exception>
 
-const static int NCOLUMNS = 4;
+const static int NCOLUMNS = 6;
 
 DeviceTableModel::DeviceTableModel(CentralWidget & parent) :
     _entries() {
@@ -58,6 +58,10 @@ QVariant DeviceTableModel::data(const QModelIndex & index, int role) const {
             return item.platform_id();
         else
             return QVariant();
+    case 4:
+        return QString::fromStdString(item.platform_version);
+    case 5:
+        return QString::fromStdString(item.device_version);
     default:
         return QVariant();
     }
@@ -79,6 +83,10 @@ QVariant DeviceTableModel::headerData(int section, Qt::Orientation orientation, 
             return QString("Device ID");
         case 3:
             return QString("Platform ID");
+        case 4:
+            return QString("Platform version");
+        case 5:
+            return QString("Device version");
         default:
             return QVariant();
         }
