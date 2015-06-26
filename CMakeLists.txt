@@ -1,12 +1,16 @@
 cmake_minimum_required (VERSION 2.8.11)
 project(FAHBench)
 
+# Cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+
+include(GetGitRevisionDescription)
+get_git_head_revision(FAHBench_VERSION_REFSPEC FAHBench_VERSION_SHA)
+
 set(FAHBench_VERSION_MAJOR 2)
 set(FAHBench_VERSION_MINOR 2)
 set(FAHBench_VERSION_REVIS 1)
-
-# Cmake modules
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+set(FAHBench_VERSION_ISRELEASE OFF)
 
 # For QT
 set(CMAKE_AUTOMOC ON)
