@@ -116,7 +116,7 @@ vector<Device> GPUInfo::getCUDADevices() {
     cudaGetDeviceProperties_pt my_cuGetDeviceProperties;
 
     if ((cu_rt = loadCudaLibrary()) == nullptr)
-        throw std::runtime_error("CUDA ERROR: could not load cuda runtime");
+        throw std::runtime_error("I couldn't find the Cuda runtime. Disabling CUDA.");
     if ((my_cuGetDeviceCount = (cudaGetDeviceCount_pt) getProcAddress(cu_rt, "cudaGetDeviceCount")) == nullptr)
         throw std::runtime_error("CUDA ERROR: could not load cudaGetDeviceCount");
     if ((my_cuGetDeviceProperties = (cudaGetDeviceProperties_pt) getProcAddress(cu_rt, "cudaGetDeviceProperties")) == nullptr)
