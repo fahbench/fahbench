@@ -89,9 +89,16 @@ void MainWindow::simulation_finished(const double & score) {
 }
 
 void MainWindow::about() {
-    QString about_text("Folding @ Home Benchmark\n");
-    about_text += "version " + QString::fromStdString(getVersion()) + " \n";
-    QMessageBox::about(this, "FAHBench", about_text);
+    QString about_text(
+        "<h1>FAHBench</h1>"
+        "<h3>GPU Benchmarking for Folding@home</h3>"
+    );
+    about_text += "<p>";
+    about_text += "Version " + QString::fromStdString(getVersion());
+    about_text += "<br />";
+    about_text += "OpenMM version " + QString::fromStdString(getOpenMMVersion());
+    about_text += "</p>";
+    QMessageBox::about(this, "About FAHBench", about_text);
 }
 
 

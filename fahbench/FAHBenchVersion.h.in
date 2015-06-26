@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <OpenMM.h>
 
 #define FAHBench_VERSION_MAJOR @FAHBench_VERSION_MAJOR@
 #define FAHBench_VERSION_MINOR @FAHBench_VERSION_MINOR@
@@ -14,6 +15,10 @@ inline std::string getVersion() {
 	std::stringstream ss;
 	ss << FAHBench_VERSION_MAJOR << "." << FAHBench_VERSION_MINOR << "." << FAHBench_VERSION_REVIS;
 	return ss.str();
+}
+
+inline std::string getOpenMMVersion() {
+    return OpenMM::Platform::getOpenMMVersion();
 }
 
 #endif
