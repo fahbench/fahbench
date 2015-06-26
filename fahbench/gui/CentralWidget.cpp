@@ -41,6 +41,7 @@ void CentralWidget::make_device_table() {
     device_table_view = new DeviceTableView();
     device_table_model = new DeviceTableModel(*this);
     device_table_view->setModel(device_table_model);
+    connect(device_table_view, &DeviceTableView::clicked, device_table_model, &DeviceTableModel::device_clicked);
 
     device_vbox = new QVBoxLayout();
     device_vbox->addWidget(new QLabel("Devices"));

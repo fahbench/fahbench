@@ -2,7 +2,7 @@
 #include "CentralWidget.h"
 #include <exception>
 
-const static int NCOLUMNS = 6;
+const static int NCOLUMNS = 7;
 
 DeviceTableModel::DeviceTableModel(CentralWidget & parent) :
     _entries() {
@@ -48,19 +48,21 @@ QVariant DeviceTableModel::data(const QModelIndex & index, int role) const {
     auto & item = _entries.at(index.row());
     switch (index.column()) {
     case 0:
-        return QString::fromStdString(item.device());
+        return QString("Add");
     case 1:
-        return QString::fromStdString(item.platform());
+        return QString::fromStdString(item.device());
     case 2:
-        return item.device_id();
+        return QString::fromStdString(item.platform());
     case 3:
+        return item.device_id();
+    case 4:
         if (item.platform() == "OpenCL")
             return item.platform_id();
         else
             return QVariant();
-    case 4:
-        return QString::fromStdString(item.platform_version);
     case 5:
+        return QString::fromStdString(item.platform_version);
+    case 6:
         return QString::fromStdString(item.device_version);
     default:
         return QVariant();
@@ -76,16 +78,18 @@ QVariant DeviceTableModel::headerData(int section, Qt::Orientation orientation, 
     if (orientation == Qt::Horizontal) {
         switch (section) {
         case 0:
-            return QString("Device");
+            return QString("");
         case 1:
-            return QString("Platform");
+            return QString("Device");
         case 2:
-            return QString("Device ID");
+            return QString("Platform");
         case 3:
-            return QString("Platform ID");
+            return QString("Device ID");
         case 4:
-            return QString("Platform version");
+            return QString("Platform ID");
         case 5:
+            return QString("Platform version");
+        case 6:
             return QString("Device version");
         default:
             return QVariant();
@@ -94,5 +98,14 @@ QVariant DeviceTableModel::headerData(int section, Qt::Orientation orientation, 
         return QString("%1").arg(section);
     }
 }
+
+#include <QDebug> // TODO
+
+void DeviceTableModel::device_clicked(const QModelIndex & index) {
+    if (index.column() == 0) {
+        qDebug() << QString::fromStdString(entries()[index.row()].device());
+    }
+}
+
 
 #include "DeviceTableModel.moc"

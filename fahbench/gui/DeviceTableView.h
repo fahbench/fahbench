@@ -17,6 +17,7 @@ class DeviceTableView : public QTableView {
 public:
     void setModel(QAbstractItemModel * model);
 
+
 };
 
 #endif // DEVICETABLEVIEW_H
