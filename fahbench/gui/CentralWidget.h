@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QTableView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QProgressBar>
@@ -11,6 +10,7 @@
 
 #include "SimulationTableModel.h"
 #include "DeviceTableModel.h"
+#include "DeviceTableView.h"
 
 
 class CentralWidget :  public QWidget {

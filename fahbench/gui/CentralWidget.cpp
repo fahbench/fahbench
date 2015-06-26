@@ -38,15 +38,9 @@ CentralWidget::CentralWidget() : QWidget() {
 }
 
 void CentralWidget::make_device_table() {
-    device_table_view = new QTableView();
+    device_table_view = new DeviceTableView();
     device_table_model = new DeviceTableModel(*this);
     device_table_view->setModel(device_table_model);
-
-    auto tv = device_table_view;
-    tv->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tv->setShowGrid(false);
-    tv->resizeColumnsToContents();
-    tv->resizeRowsToContents();
 
     device_vbox = new QVBoxLayout();
     device_vbox->addWidget(new QLabel("Devices"));
