@@ -17,6 +17,7 @@ add_executable(FAHBench-gui WIN32
     MainWindow.cpp
     CentralWidget.cpp
     SimulationTableModel.cpp
+    SimulationTableView.cpp
     DeviceTableModel.cpp
     DeviceTableView.cpp
     SimulationWorker.cpp

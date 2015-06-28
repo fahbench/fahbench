@@ -49,6 +49,20 @@ QVariant SimulationTableModel::data(const QModelIndex & index, int role) const {
     }
 }
 
+bool SimulationTableModel::setData(const QModelIndex & index, const QVariant & value, int role) {
+    return false;
+}
+
+Qt::ItemFlags SimulationTableModel::flags(const QModelIndex & index) const {
+    auto flags =  Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (index.column() == 2) {
+        return flags | Qt::ItemIsEditable;
+    }
+
+    return flags;
+}
+
+
 
 QVariant SimulationTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role != Qt::DisplayRole) {
@@ -74,6 +88,15 @@ QVariant SimulationTableModel::headerData(int section, Qt::Orientation orientati
         return QString("%1").arg(section);
     }
 }
+
+#include <QDebug> // TODO
+
+void SimulationTableModel::simulation_clicked(const QModelIndex & index) {
+    if (index.column() == 3) {
+        qDebug() << "Advanced clicked" << index.row();
+    }
+}
+
 
 bool SimulationTableModel::has_next() const {
     return current_entry >= 0;

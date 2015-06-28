@@ -9,6 +9,7 @@
 #include <QPushButton>
 
 #include "SimulationTableModel.h"
+#include "SimulationTableView.h"
 #include "DeviceTableModel.h"
 #include "DeviceTableView.h"
 
@@ -21,9 +22,9 @@ public:
     QSize sizeHint() const;
 
     DeviceTableModel * device_table_model;
-    QTableView * device_table_view;
+    DeviceTableView * device_table_view;
     SimulationTableModel * simulation_table_model;
-    QTableView * simulation_table_view;
+    SimulationTableView * simulation_table_view;
 
     QLabel * status_bar;
 

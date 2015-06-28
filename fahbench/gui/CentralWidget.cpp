@@ -49,11 +49,10 @@ void CentralWidget::make_device_table() {
 }
 
 void CentralWidget::make_simulation_table() {
-    simulation_table_view = new QTableView();
+    simulation_table_view = new SimulationTableView();
     simulation_table_model = new SimulationTableModel(device_table_model);
     simulation_table_view->setModel(simulation_table_model);
-    simulation_table_view->resizeColumnsToContents();
-    simulation_table_view->resizeRowsToContents();
+    connect(simulation_table_view, &SimulationTableView::clicked, simulation_table_model, &SimulationTableModel::simulation_clicked);
 
     simulation_vbox = new QVBoxLayout();
     simulation_vbox->addWidget(new QLabel("Benchmarking runs"));
