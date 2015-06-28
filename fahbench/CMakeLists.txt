@@ -1,5 +1,6 @@
 
 # Find boost and CUDA using CMake
+include(BuildBoost)
 if(${WIN32})
 set(Boost_USE_STATIC_LIBS ON)
 endif(${WIN32})
