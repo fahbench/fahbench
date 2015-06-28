@@ -42,29 +42,37 @@ QVariant DeviceTableModel::data(const QModelIndex & index, int role) const {
     if (index.row() < 0 || ((unsigned)index.row() >= _entries.size()))
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    auto & item = _entries.at(index.row());
-    switch (index.column()) {
-    case 0:
-        return QString("Add");
-    case 1:
-        return QString::fromStdString(item.device());
-    case 2:
-        return QString::fromStdString(item.platform());
-    case 3:
-        return item.device_id();
-    case 4:
-        if (item.platform() == "OpenCL")
-            return item.platform_id();
-        else
+    if (role == Qt::DisplayRole) {
+        auto & item = _entries.at(index.row());
+        switch (index.column()) {
+        case 0:
+            return QString("Add");
+        case 1:
+            return QString::fromStdString(item.device());
+        case 2:
+            return QString::fromStdString(item.platform());
+        case 3:
+            return item.device_id();
+        case 4:
+            if (item.platform() == "OpenCL")
+                return item.platform_id();
+            else
+                return QVariant();
+        case 5:
+            return QString::fromStdString(item.platform_version);
+        case 6:
+            return QString::fromStdString(item.device_version);
+        default:
             return QVariant();
-    case 5:
-        return QString::fromStdString(item.platform_version);
-    case 6:
-        return QString::fromStdString(item.device_version);
-    default:
+        }
+    } else if (role == Qt::ToolTipRole) {
+        switch (index.column()) {
+        case 0:
+            return QString("Queue this device");
+        default:
+            return QVariant();
+        }
+    } else {
         return QVariant();
     }
 }
