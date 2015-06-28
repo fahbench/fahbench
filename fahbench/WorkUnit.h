@@ -40,7 +40,7 @@ public:
     string & fullname() const;
     string & description() const;
 
-    static vector<string> available_wus();
+    vector<string> available_wus();
 
 };
 

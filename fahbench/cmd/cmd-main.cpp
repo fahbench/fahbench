@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
      "Precision (single or double)")
     ("workunit,w",
      po::value<string>()->default_value("dhfr")->notifier(setWu),
-     "Work unit (WU) name. default: dhfr")
+     "Work unit (WU) name.")
     ("system",
      po::value<string>()->default_value("")->notifier(setSys),
      "Path to system xml file")
@@ -128,7 +128,10 @@ int main(int argc, char ** argv) {
     }
 
     if (vm.count("list-wus")) {
-        //TODO
+        for (auto & wuname : wu.available_wus()) {
+            std::cout << "WU: " << wuname << std::endl;
+        }
+        return 1;
     }
 
     if (vm.count("disable-accuracy-check")) {
