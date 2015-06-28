@@ -1,0 +1,9 @@
+{
+    "codename": dhfr,
+    "projnum": 0,
+    "protein": {
+        "name": "Dihydrofolate reductase",
+        "notes": "A common system for benchmarking molecular dynamics"
+    },
+    "steps": 9000
+}
