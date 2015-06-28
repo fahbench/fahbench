@@ -10,9 +10,9 @@
 
 #include "DLLDefines.h"
 #include "Updater.h"
+#include "WorkUnit.h"
 
-#define NUMSTEPSEXPLICIT 1.5e4;
-#define NUMSTEPSIMPLICIT 1e5;
+
 
 using std::string;
 using std::map;
@@ -32,28 +32,16 @@ public:
     int nan_check_freq;
     int numSteps;
 
-    string solvent;
-
-    void setSysFile(const string & sysFile);
-    void setIntFile(const string & intFile);
-    void setStateFile(const string & stateFile);
-
     map<string, string> getPropertiesMap() const;
     string getPluginDir() const;
-    string getSysFile() const;
-    string getIntFile() const;
-    string getStateFile() const;
 
     std::string summary() const;
 
     double run(Updater & update) const;
 
 private:
-    bool use_built_in() const;
 
-    string sysFile;
-    string intFile;
-    string stateFile;
+    WorkUnit _work_unit;
 
     string openmm_data_dir;
     string openmm_plugin_dir;

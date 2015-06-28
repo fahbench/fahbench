@@ -25,7 +25,7 @@ using std::map;
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
 Simulation::Simulation() {
-    openmm_data_dir = getExecutableDir() + "/../share/openmm_data";
+
     openmm_plugin_dir = getExecutableDir() + "/../lib/plugins";
 }
 
@@ -43,22 +43,9 @@ map< string, string > Simulation::getPropertiesMap() const {
     return properties;
 }
 
-void Simulation::setSysFile(const std::string & sysFile) {
-    this->sysFile = sysFile;
-}
 
-void Simulation::setIntFile(const std::string & intFile) {
-    this->intFile = intFile;
-}
 
-void Simulation::setStateFile(const std::string & stateFile) {
-    this->stateFile = stateFile;
-}
-
-inline bool Simulation::use_built_in() const {
-    return (sysFile == "" && intFile == "" && stateFile == "");
-}
-
+/*
 std::string Simulation::getSysFile() const {
     if (use_built_in()) {
         return boost::str(data_fmt % openmm_data_dir % "system" % solvent);
@@ -79,6 +66,7 @@ std::string Simulation::getStateFile() const {
     }
     return stateFile;
 }
+*/
 
 std::string Simulation::getPluginDir() const {
     return openmm_plugin_dir;
@@ -91,9 +79,9 @@ string Simulation::summary() const {
     ss << "-----------------" << std::endl << std::endl;
 
     ss << "Plugin directory: " << getPluginDir() << std::endl;
-    ss << "System XML: " << getSysFile() << std::endl;
-    ss << "Integrator XML: " << getIntFile() << std::endl;
-    ss << "State XML: " << getStateFile() << std::endl;
+    ss << "System XML: " << _work_unit.system_fn() << std::endl;
+    ss << "Integrator XML: " << _work_unit.integrator_fn() << std::endl;
+    ss << "State XML: " << _work_unit.state_fn() << std::endl;
     ss << "Steps: " << numSteps << std::endl;
     // TODO: more
     return ss.str();
@@ -108,19 +96,19 @@ double Simulation::run(Updater & update) const {
     Platform & platform = Platform::getPlatformByName(this->platform);
 
     update.message("Deserializing system...");
-    System * sys = loadObject<System>(getSysFile());
+    System * sys = loadObject<System>(_work_unit.system_fn());
     update.message("Deserializing state...");
-    State * state = loadObject<State>(getStateFile());
+    State * state = loadObject<State>(_work_unit.state_fn());
 
     update.message("Deserializing integrator...");
-    Integrator * intg = loadObject<Integrator>(getIntFile());
+    Integrator * intg = loadObject<Integrator>(_work_unit.integrator_fn());
     update.message("Creating context...");
     Context context = Context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
 
     if (verifyAccuracy) {
         update.message("Checking for accuracy...");
-        Integrator * refIntg = loadObject<Integrator>(getIntFile());
+        Integrator * refIntg = loadObject<Integrator>(_work_unit.integrator_fn());
         update.message("Creating reference context...");
         Context refContext = Context(*sys, *refIntg, Platform::getPlatformByName("Reference"));
         refContext.setState(*state);

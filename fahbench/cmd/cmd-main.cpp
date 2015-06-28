@@ -8,6 +8,7 @@
 
 #include "../FAHBenchVersion.h"
 #include "../Simulation.h"
+#include "../WorkUnit.h"
 #include "../GPUInfo.h"
 #include "../Utils.h"
 #include "CommandLineUpdater.h"
@@ -45,28 +46,57 @@ string getGpuDesc() {
 
 int main(int argc, char ** argv) {
     Simulation simulation;
-    auto setSys = std::bind(&Simulation::setSysFile, &simulation, std::placeholders::_1);
-    auto setInt = std::bind(&Simulation::setIntFile, &simulation, std::placeholders::_1);
-    auto setState = std::bind(&Simulation::setStateFile, &simulation, std::placeholders::_1);
+    WorkUnit wu;
+    auto setSys = std::bind(&WorkUnit::set_system_fn, &wu, std::placeholders::_1);
+    auto setInt = std::bind(&WorkUnit::set_integrator_fn, &wu, std::placeholders::_1);
+    auto setState = std::bind(&WorkUnit::set_state_fn, &wu, std::placeholders::_1);
+    auto setNSteps = std::bind(&WorkUnit::set_n_steps, &wu, std::placeholders::_1);
+    auto setWu = std::bind(&WorkUnit::set_by_name, &wu, std::placeholders::_1);
 
     po::options_description desc("FAHBench options");
     desc.add_options()
-    ("help,h", "produce help message")
-    ("version,v", "version information")
-    ("device-id", po::value<int>()->default_value(0), "GPU Device index")
-    ("platform", po::value<string>(&simulation.platform)->default_value("OpenCL"), "Platform name (CPU, OpenCL, or CUDA)")
-    ("platform-id", po::value<int>()->default_value(0), "Platform index (OpenCL only)")
-    ("precision", po::value<string>(&simulation.precision)->default_value("single"), "Precision (single or double)")
-    ("system", po::value<string>()->default_value("")->notifier(setSys), "Path to system xml file")
-    ("state", po::value<string>()->default_value("")->notifier(setState), "Path to state xml file")
-    ("integrator", po::value<string>()->default_value("")->notifier(setInt), "Path to integrator xml file")
-    ("steps", po::value<int>(&simulation.numSteps)->default_value(9000), "Number of steps to take")
-    ("solvent", po::value<string>(&simulation.solvent)->default_value("explicit"), "Use explicit or implicit solvent")
-    ("disable-accuracy-check", "Don't check against the reference platform")
-    ("enable-accuracy-check", "Check against the reference platform (default)")
-    ("nan-check", po::value<int>(&simulation.nan_check_freq)->default_value(0),
+    ("help,h",
+     "produce help message")
+    ("version,v",
+     "version information")
+    ("device-info,d",
+     "List GPU device information")
+    ("list-wus,l",
+     "List available work units (WUs)")
+    ("device-id",
+     po::value<int>()->default_value(0),
+     "GPU Device index")
+    ("platform-id",
+     po::value<int>()->default_value(0),
+     "Platform index (OpenCL only)")
+    ("platform",
+     po::value<string>(&simulation.platform)->default_value("OpenCL"),
+     "Platform name (CPU, OpenCL, or CUDA)")
+    ("precision",
+     po::value<string>(&simulation.precision)->default_value("single"),
+     "Precision (single or double)")
+    ("workunit,w",
+     po::value<string>()->default_value("dhfr")->notifier(setWu),
+     "Work unit (WU) name. default: dhfr")
+    ("system",
+     po::value<string>()->default_value("")->notifier(setSys),
+     "Path to system xml file")
+    ("state",
+     po::value<string>()->default_value("")->notifier(setState),
+     "Path to state xml file")
+    ("integrator",
+     po::value<string>()->default_value("")->notifier(setInt),
+     "Path to integrator xml file")
+    ("steps",
+     po::value<int>()->default_value(9000)->notifier(setNSteps),
+     "Number of steps to take")
+    ("disable-accuracy-check",
+     "Don't check against the reference platform")
+    ("enable-accuracy-check",
+     "Check against the reference platform (default)")
+    ("nan-check",
+     po::value<int>(&simulation.nan_check_freq)->default_value(0),
      "Frequency to perform NaN checks during benchmark. 0 - disable.")
-    ("device-info,d", "List GPU device information")
     ;
 
     po::variables_map vm;
@@ -95,6 +125,10 @@ int main(int argc, char ** argv) {
         std::cout << "-----------------" << std::endl << std::endl;
         std::cout << getGpuDesc() << std::endl;
         return 1;
+    }
+
+    if (vm.count("list-wus")) {
+        //TODO
     }
 
     if (vm.count("disable-accuracy-check")) {

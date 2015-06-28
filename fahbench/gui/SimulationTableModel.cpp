@@ -109,8 +109,6 @@ void SimulationTableEntry::configure_simulation(Simulation & sim) {
     sim.nan_check_freq = _nan_check_freq;
     sim.numSteps = _num_steps;
 
-    // TODO: figure out how to pass xml files.
-    sim.solvent = "explicit";
 }
 
 QString ProteinSystem::summary() const {
