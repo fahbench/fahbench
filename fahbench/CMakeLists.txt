@@ -1,13 +1,9 @@
 
-# Find boost and CUDA using CMake
+# Install boost from source
 include(BuildBoost)
-if(${WIN32})
-set(Boost_USE_STATIC_LIBS ON)
-endif(${WIN32})
-set(Boost_USE_MULTITHREADED ON)
-find_package(Boost REQUIRED COMPONENTS program_options filesystem system)
-find_package(CUDA QUIET)
 
+# Find cuda
+find_package(CUDA QUIET)
 IF(CUDA_FOUND)
     set(USE_CUDA ON
     CACHE BOOL "Include CUDA")
@@ -27,10 +23,11 @@ find_package(OpenCL)
 # Configure version information
 configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
+# Specify includes
 include_directories(
     "${OPENMM_INCLUDE_PATH}"
     ${OPENCL_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS}
+    ${BOOST_INCLUDE_DIR}
 )
 if(${USE_CUDA})
     include_directories(${CUDA_INCLUDE_DIRS})
@@ -47,11 +44,12 @@ add_library(fahbench SHARED
         Device.cpp
         Utils.cpp
 )
+add_dependencies(fahbench boost)
 
 # Link
 target_link_libraries(fahbench
+    ${BOOST_LIBRARIES}
     "${OPENMM_LIB}"
-    ${Boost_LIBRARIES}
     ${OPENCL_LIBRARIES}
 )
 
@@ -84,21 +82,13 @@ INSTALL(FILES ${OPENMM_PLUGIN_FILES} DESTINATION lib/plugins)
 # For linux, put libOpenMM.so in the lib/ directory
 if(${UNIX})
   INSTALL(FILES "${OPENMM_LIB}" DESTINATION lib)
-  
-  # Find real path to boost libraries
-  set (_resolvedFiles "")
-  foreach (_file ${Boost_LIBRARIES})
-    get_filename_component(_resolvedFile "${_file}" REALPATH)
-    list (APPEND _resolvedFiles "${_resolvedFile}")
-  endforeach()
-  INSTALL(FILES ${_resolvedFiles} DESTINATION lib)
 endif(${UNIX})
 
 # Windows requires dll's to be installed alongside the executable
 if(${WIN32})
   INSTALL(FILES
-          ${OPENMM_LIB_DIR}/OpenMM.dll
-          ${OPENMM_LIB_DIR}/pthreadVC2_x64.dll
-  DESTINATION bin)
+    ${OPENMM_LIB_DIR}/OpenMM.dll
+    ${OPENMM_LIB_DIR}/pthreadVC2_x64.dll
+    DESTINATION bin)
 endif(${WIN32})
 
