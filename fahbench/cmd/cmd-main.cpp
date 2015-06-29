@@ -46,12 +46,6 @@ string getGpuDesc() {
 
 int main(int argc, char ** argv) {
     Simulation simulation;
-    WorkUnit wu;
-    auto setSys = std::bind(&WorkUnit::set_system_fn, &wu, std::placeholders::_1);
-    auto setInt = std::bind(&WorkUnit::set_integrator_fn, &wu, std::placeholders::_1);
-    auto setState = std::bind(&WorkUnit::set_state_fn, &wu, std::placeholders::_1);
-    auto setNSteps = std::bind(&WorkUnit::set_n_steps, &wu, std::placeholders::_1);
-    auto setWu = std::bind(&WorkUnit::set_by_name, &wu, std::placeholders::_1);
 
     po::options_description desc("FAHBench options");
     desc.add_options()
@@ -76,19 +70,19 @@ int main(int argc, char ** argv) {
      po::value<string>(&simulation.precision)->default_value("single"),
      "Precision (single or double)")
     ("workunit,w",
-     po::value<string>()->default_value("dhfr")->notifier(setWu),
+     po::value<string>()->default_value("dhfr"),
      "Work unit (WU) name.")
     ("system",
-     po::value<string>()->default_value("")->notifier(setSys),
+     po::value<string>()->default_value(""),
      "Path to system xml file")
     ("state",
-     po::value<string>()->default_value("")->notifier(setState),
+     po::value<string>()->default_value(""),
      "Path to state xml file")
     ("integrator",
-     po::value<string>()->default_value("")->notifier(setInt),
+     po::value<string>()->default_value(""),
      "Path to integrator xml file")
     ("steps",
-     po::value<int>()->default_value(9000)->notifier(setNSteps),
+     po::value<int>()->default_value(9000),
      "Number of steps to take")
     ("disable-accuracy-check",
      "Don't check against the reference platform")
@@ -128,8 +122,9 @@ int main(int argc, char ** argv) {
     }
 
     if (vm.count("list-wus")) {
-        for (auto & wuname : wu.available_wus()) {
-            std::cout << "WU: " << wuname << std::endl;
+        for (auto & wu : WorkUnit::available_wus()) {
+            std::cout << boost::format("WU: %1$-16s %2%")
+                      % wu.codename() % wu.description() << std::endl;
         }
         return 1;
     }

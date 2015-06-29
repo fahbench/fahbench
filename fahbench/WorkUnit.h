@@ -16,37 +16,31 @@ class WorkUnit {
 private:
     static const fs::path _data_dir;
 
-    string _system_fn;
-    string _integrator_fn;
-    string _state_fn;
+    const string _system_fn;
+    const string _integrator_fn;
+    const string _state_fn;
     int _n_steps;
 
-    string _codename;
-    string _fullname;
-    string _description;
+    const string _codename;
+    const string _fullname;
+    const string _description;
 
 
 public:
-    WorkUnit();
+    WorkUnit(const fs::path & wu_path);
 
 
-    void set_by_name(const string & sys_fn);
-    void set_system_fn(const string & sys_fn);
-    void set_integrator_fn(const string & int_fn);
-    void set_state_fn(const string & state_fn);
-    void set_n_steps(int n_steps);
-
-    string & system_fn() const;
-    string & integrator_fn() const;
-    string & state_fn() const;
+    const string & system_fn() const;
+    const string & integrator_fn() const;
+    const string & state_fn() const;
 
     int n_steps() const;
 
-    string & codename() const;
-    string & fullname() const;
-    string & description() const;
+    const string & codename() const;
+    const string & fullname() const;
+    const string & description() const;
 
-    vector<string> available_wus();
+    static vector<WorkUnit> available_wus();
 
 };
 
