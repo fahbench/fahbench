@@ -55,7 +55,7 @@ Building
 
 FAHBench is built with [CMake] and requires the following libraries:
 
- - [Boost]
+ - [Boost] - *automatically downloaded and built*
  - [OpenMM] - molecular dynamics calculations.
  - OpenCL - linked to find OpenCL devices.
  - CUDA runtime - *optional* - linked to find CUDA devices.
@@ -73,12 +73,11 @@ FAHBench is built with [CMake] and requires the following libraries:
 
     ```bash
     sudo apt-get install \
-        libboost-dev libboost-program-options-dev libboost-filesystem-dev \
         qt5-default \
-        nvidia-cuda-dev nvidia-opencl-dev
+        nvidia-cuda-dev nvidia-opencl-dev # are there generic packages for opencl?
     ```
 
- 1. Get OpenMM. TODO: Further instructions
+ 1. Configure an OpenMM build with CMake.
 
  1. From a clean build directory
 
@@ -100,21 +99,12 @@ FAHBench is built with [CMake] and requires the following libraries:
 
 	These all have nice GUI installers.
 
- 2. Download Boost. You actually have to extract the archive, and build it
-    from the command line. We use some modules that are not header-only.
-
-	```batch
-	bootstrap
-	.\b2 address-model=64  
-	REM need 64 bit ^^. 
-	```
-
- 3. Download OpenMM and build with CMake. I don't think the provided
+ 1. Download OpenMM and build with CMake. I don't think the provided
     binaries (VC2010) will work. Build the release configuration. You can
     disable building the python bindings (which may be a source of build
     errors). Build the `INSTALL` project to install OpenMM.
 
- 4. Run CMake on the fahbench source directory. Finagle it until it has
+ 1. Run CMake on the fahbench source directory. Finagle it until it has
     found all of the dependencies you just spent so long getting in order.
     Start by setting:
 	 
@@ -122,6 +112,6 @@ FAHBench is built with [CMake] and requires the following libraries:
 	 - `BOOST_ROOT` to where you compiled Boost.
 	 - `OPENMM_xxx` to where you installed OpenMM.
 
- 5. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to
+ 1. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to
     the `bin/` install directory.
 
