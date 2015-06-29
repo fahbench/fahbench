@@ -25,8 +25,7 @@ using std::map;
 
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
-Simulation::Simulation()
-    : _work_unit("temp") { //TODO
+Simulation::Simulation() {
     openmm_plugin_dir = getExecutableDir() / fs::path("../lib/plugins");
 }
 

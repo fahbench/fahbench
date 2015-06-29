@@ -44,6 +44,15 @@ string getGpuDesc() {
     return ss.str();
 }
 
+string listWus() {
+    std::stringstream ss;
+    for (auto & wu : WorkUnit::available_wus()) {
+        ss << boost::format("%1$-16s %2$-30s %3$7d %4%")
+           % wu.codename() %  wu.fullname() % wu.n_steps() % wu.description() << std::endl;
+    }
+    return ss.str();
+}
+
 int main(int argc, char ** argv) {
     Simulation simulation;
 
@@ -116,16 +125,16 @@ int main(int argc, char ** argv) {
 
     if (vm.count("device-info")) {
         std::cout << "Available devices" << std::endl;
-        std::cout << "-----------------" << std::endl << std::endl;
+        std::cout << string(80, '-') << std::endl;
         std::cout << getGpuDesc() << std::endl;
         return 1;
     }
 
     if (vm.count("list-wus")) {
-        for (auto & wu : WorkUnit::available_wus()) {
-            std::cout << boost::format("WU: %1$-16s %2%")
-                      % wu.codename() % wu.description() << std::endl;
-        }
+        std::cout << boost::format("%1$-16s %2$-30s %3$7d %4%")
+                  % "WU" % "Full name" % "Steps" % "Description" << std::endl;
+        std::cout << string(80, '-') << std::endl;
+        std::cout << listWus() << std::endl;
         return 1;
     }
 

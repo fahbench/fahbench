@@ -7,6 +7,7 @@
 #include <boost/format.hpp>
 
 
+
 const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("../share/fahbench/workunits");
 
 
@@ -15,15 +16,24 @@ WorkUnit::WorkUnit(const fs::path & wu_path)
     , _integrator_fn("integrator.xml")
     , _state_fn("state.xml")
     , _codename(wu_path.filename().native())
-    , _description("Hi mom")
 
 {
+    auto meta_path = wu_path / "wu.json";
+    pt::ptree tree;
+    pt::read_json(meta_path.native(), tree);
+    _fullname = tree.get<std::string>("protein.name", "No full name provided");
+    _description = tree.get<std::string>("protein.description", "No description provided");
+    _n_steps = tree.get<int>("steps", 1000);
+}
+
+WorkUnit::WorkUnit() {
 
 }
 
 
-int WorkUnit::n_steps() const {
 
+int WorkUnit::n_steps() const {
+    return _n_steps;
 }
 const string & WorkUnit::state_fn() const {
     return _state_fn;

@@ -2,6 +2,8 @@
 #define WORKUNIT_H
 
 #include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <string>
 #include <vector>
 
@@ -10,6 +12,7 @@
 using std::string;
 using std::vector;
 namespace fs = boost::filesystem;
+namespace pt = boost::property_tree;
 
 class WorkUnit {
 
@@ -22,11 +25,12 @@ private:
     int _n_steps;
 
     const string _codename;
-    const string _fullname;
-    const string _description;
+    string _fullname;
+    string _description;
 
 
 public:
+    WorkUnit();
     WorkUnit(const fs::path & wu_path);
 
 
