@@ -35,7 +35,7 @@ private:
     QAction * about_action;
 
 signals:
-    void start_new_simulation(Simulation);
+    void start_new_simulation(Simulation *);
     void continue_simulation_queue();
 
 private slots:

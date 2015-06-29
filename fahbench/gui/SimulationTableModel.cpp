@@ -100,18 +100,15 @@ void SimulationTableModel::finish(double score) {
 
 
 void SimulationTableEntry::configure_simulation(Simulation & sim) {
-
     sim.platform = _device.platform();
     sim.deviceId = _device.device_id();
     sim.platformId = _device.platform_id();
     sim.precision = _precision.toStdString();
     sim.verifyAccuracy = _verifyAccuracy;
     sim.nan_check_freq = _nan_check_freq;
-
-}
-
-QString ProteinSystem::summary() const {
-    return QString("Explicit solvent");
+    auto wu = new WorkUnit(std::string("dhfr-implicit"));
+    wu->set_n_steps(500); // TODO: this is small for debugging
+    sim.work_unit = wu;
 }
 
 
@@ -128,7 +125,7 @@ QString SimulationTableEntry::platform() const {
     return QString::fromStdString(_device.platform());
 }
 QString SimulationTableEntry::protein() const {
-    return _protein.summary();
+    return QString("Placeholder");
 }
 QString SimulationTableEntry::result() const {
     if (_result > 0) {
