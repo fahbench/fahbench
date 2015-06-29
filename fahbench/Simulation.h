@@ -23,6 +23,8 @@ class FAHBENCH_EXPORT Simulation {
 
 public:
     Simulation();
+    ~Simulation();
+    WorkUnit * work_unit;
 
     std::string platform;
     std::string precision;
@@ -32,7 +34,6 @@ public:
 
     bool verifyAccuracy;
     int nan_check_freq;
-    int numSteps;
 
     map<string, string> getPropertiesMap() const;
 
@@ -41,9 +42,6 @@ public:
     double run(Updater & update) const;
 
 private:
-
-    WorkUnit _work_unit;
-
     fs::path openmm_data_dir;
     fs::path openmm_plugin_dir;
 

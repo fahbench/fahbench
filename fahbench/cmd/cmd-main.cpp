@@ -67,10 +67,10 @@ int main(int argc, char ** argv) {
     ("list-wus,l",
      "List available work units (WUs)")
     ("device-id",
-     po::value<int>()->default_value(0),
+     po::value<int>(&simulation.deviceId)->default_value(0),
      "GPU Device index")
     ("platform-id",
-     po::value<int>()->default_value(0),
+     po::value<int>(&simulation.platformId)->default_value(0),
      "Platform index (OpenCL only)")
     ("platform",
      po::value<string>(&simulation.platform)->default_value("OpenCL"),
@@ -91,7 +91,7 @@ int main(int argc, char ** argv) {
      po::value<string>()->default_value(""),
      "Path to integrator xml file")
     ("steps",
-     po::value<int>()->default_value(9000),
+     po::value<int>(),
      "Number of steps to take")
     ("disable-accuracy-check",
      "Don't check against the reference platform")
@@ -109,25 +109,28 @@ int main(int argc, char ** argv) {
     } catch (const po::error & e) {
         std::cerr << "Invalid command line arguments:" << std::endl;
         std::cerr << e.what() << std::endl;
-        return 1;
+        return -1;
     }
 
+    int show_info_instead = 0;
+
     if (vm.count("help")) {
-        std::cout << desc << "\n";
-        return 1;
+        std::cout << desc << std::endl;
+        show_info_instead += 1;
     }
 
     if (vm.count("version")) {
         std::cout << "FAHBench version " << getVersion() << std::endl;
         std::cout << "OpenMM version " << getOpenMMVersion() << std::endl;
-        return 1;
+        std::cout << std::endl;
+        show_info_instead += 1;
     }
 
     if (vm.count("device-info")) {
         std::cout << "Available devices" << std::endl;
         std::cout << string(80, '-') << std::endl;
         std::cout << getGpuDesc() << std::endl;
-        return 1;
+        show_info_instead += 1;
     }
 
     if (vm.count("list-wus")) {
@@ -135,7 +138,11 @@ int main(int argc, char ** argv) {
                   % "WU" % "Full name" % "Steps" % "Description" << std::endl;
         std::cout << string(80, '-') << std::endl;
         std::cout << listWus() << std::endl;
-        return 1;
+        show_info_instead += 1;
+    }
+
+    if (show_info_instead > 0) {
+        return show_info_instead;
     }
 
     if (vm.count("disable-accuracy-check")) {
@@ -144,6 +151,33 @@ int main(int argc, char ** argv) {
 
     if (vm.count("enable_accuracy-check")) {
         simulation.verifyAccuracy = true;
+    }
+
+    if (
+        vm["system"].as<string>() != "" ||
+        vm["integrator"].as<string>() != "" ||
+        vm["state"].as<string>() != ""
+    ) {
+        if (!(
+                    vm["system"].as<string>() != "" &&
+                    vm["integrator"].as<string>() != "" &&
+                    vm["state"].as<string>() != "" &&
+                    vm.count("steps")
+                )) {
+            std::cerr << "Please specify all of system, integrator, state, steps" << std::endl;
+            return -2;
+        }
+        simulation.work_unit = new WorkUnit(vm["system"].as<string>() ,
+                                            vm["integrator"].as<string>() ,
+                                            vm["state"].as<string>(),
+                                            vm["steps"].as<int>()
+                                           );
+    } else {
+        auto wu =  new WorkUnit(vm["workunit"].as<string>());
+        if (vm.count("steps")) {
+            wu->set_n_steps(vm["steps"].as<int>());
+        }
+        simulation.work_unit = wu;
     }
 
     std::cout << simulation.summary() << std::endl;
