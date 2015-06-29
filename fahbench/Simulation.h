@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <boost/format.hpp>
+#include <boost/filesystem.hpp>
 
 #include <OpenMM.h>
 
@@ -16,6 +17,7 @@
 
 using std::string;
 using std::map;
+namespace fs = boost::filesystem;
 
 class FAHBENCH_EXPORT Simulation {
 
@@ -33,7 +35,6 @@ public:
     int numSteps;
 
     map<string, string> getPropertiesMap() const;
-    string getPluginDir() const;
 
     std::string summary() const;
 
@@ -43,8 +44,8 @@ private:
 
     WorkUnit _work_unit;
 
-    string openmm_data_dir;
-    string openmm_plugin_dir;
+    fs::path openmm_data_dir;
+    fs::path openmm_plugin_dir;
 
     template<class T>
     T * loadObject(const string & fname) const;

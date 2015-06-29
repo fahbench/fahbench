@@ -1,16 +1,21 @@
 #ifndef WORKUNIT_H
 #define WORKUNIT_H
 
+#include <boost/filesystem.hpp>
 #include <string>
 #include <vector>
 
+#include "Utils.h"
+
 using std::string;
 using std::vector;
+namespace fs = boost::filesystem;
 
 class WorkUnit {
 
 private:
-    string _data_dir;
+    static const fs::path _data_dir;
+
     string _system_fn;
     string _integrator_fn;
     string _state_fn;
@@ -23,6 +28,7 @@ private:
 
 public:
     WorkUnit();
+
 
     void set_by_name(const string & sys_fn);
     void set_system_fn(const string & sys_fn);

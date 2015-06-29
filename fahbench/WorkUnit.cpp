@@ -6,10 +6,11 @@
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
-namespace fs = boost::filesystem;
+
+const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("../share/fahbench/workunits");
+
 
 WorkUnit::WorkUnit() {
-    _data_dir = getExecutableDir() + "/../share/fahbench/workunits";
 }
 
 void WorkUnit::set_by_name(const string & sys_fn) {

@@ -22,11 +22,11 @@ using namespace OpenMM;
 using std::string;
 using std::map;
 
+
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
 Simulation::Simulation() {
-
-    openmm_plugin_dir = getExecutableDir() + "/../lib/plugins";
+    openmm_plugin_dir = getExecutableDir() / fs::path("../lib/plugins");
 }
 
 
@@ -68,17 +68,13 @@ std::string Simulation::getStateFile() const {
 }
 */
 
-std::string Simulation::getPluginDir() const {
-    return openmm_plugin_dir;
-
-}
 
 string Simulation::summary() const {
     std::stringstream ss;
     ss << "OpenMM Simulation" << std::endl;
     ss << "-----------------" << std::endl << std::endl;
 
-    ss << "Plugin directory: " << getPluginDir() << std::endl;
+    ss << "Plugin directory: " << openmm_plugin_dir << std::endl;
     ss << "System XML: " << _work_unit.system_fn() << std::endl;
     ss << "Integrator XML: " << _work_unit.integrator_fn() << std::endl;
     ss << "State XML: " << _work_unit.state_fn() << std::endl;
@@ -89,9 +85,8 @@ string Simulation::summary() const {
 
 
 double Simulation::run(Updater & update) const {
-    string plugin_dir = getPluginDir();
-    update.message(boost::format("Loading plugins from %1%") % plugin_dir);
-    Platform::loadPluginsFromDirectory(plugin_dir);
+    update.message(boost::format("Loading plugins from %1%") % openmm_plugin_dir);
+    Platform::loadPluginsFromDirectory(openmm_plugin_dir.native());
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
     Platform & platform = Platform::getPlatformByName(this->platform);
 
