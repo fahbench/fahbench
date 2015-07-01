@@ -77,27 +77,32 @@ double Simulation::run(Updater & update) const {
     System * sys = loadObject<System>(work_unit->system_fn());
     update.message("Deserializing state...");
     State * state = loadObject<State>(work_unit->state_fn());
-
     update.message("Deserializing integrator...");
     Integrator * intg = loadObject<Integrator>(work_unit->integrator_fn());
+    
     update.message("Creating context...");
-    Context context = Context(*sys, *intg, platform, getPropertiesMap());
+    Context context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
 
     if (verifyAccuracy) {
         update.message("Checking for accuracy...");
         Integrator * refIntg = loadObject<Integrator>(work_unit->integrator_fn());
         update.message("Creating reference context...");
-        Context refContext = Context(*sys, *refIntg, Platform::getPlatformByName("Reference"));
+        Context refContext(*sys, *refIntg, Platform::getPlatformByName("Reference"));
         refContext.setState(*state);
         update.message("Comparing forces and energy...");
         StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy), context.getState(State::Forces | State::Energy));
+        delete refIntg;
     }
-    delete state;
 
     update.message("Starting Benchmark");
     double score = benchmark(context, update);
     update.message("Benchmarking finished.");
+    
+    delete sys;
+    delete state;
+    delete intg;
+    
     return score;
 }
 
@@ -142,7 +147,7 @@ T * Simulation::loadObject(const string & fname) const {
 }
 
 Simulation::~Simulation() {
-    if (work_unit) delete(work_unit);
+    if (work_unit) delete work_unit;
 }
 
 
