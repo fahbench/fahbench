@@ -13,6 +13,7 @@ using namespace std;
 
 MainWindow::MainWindow() : QMainWindow() {
     qRegisterMetaType<Simulation>();
+    qRegisterMetaType<SimulationResult>();
 
     // Set up SimulationWorker on another thread and connect signals and slots
     worker = new SimulationWorker();
@@ -76,7 +77,7 @@ void MainWindow::start_button_clicked() {
     emit start_new_simulation(sim);
 }
 
-void MainWindow::simulation_finished(const double & score) {
+void MainWindow::simulation_finished(const SimulationResult & score) {
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;
     pbar->setMinimum(0);

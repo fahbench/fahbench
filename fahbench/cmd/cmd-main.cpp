@@ -8,6 +8,7 @@
 
 #include "../FAHBenchVersion.h"
 #include "../Simulation.h"
+#include "../SimulationResult.h"
 #include "../WorkUnit.h"
 #include "../GPUInfo.h"
 #include "../Utils.h"
@@ -183,6 +184,9 @@ int main(int argc, char ** argv) {
     std::cout << simulation.summary() << std::endl;
 
     CommandLineUpdater updater;
-    double score = simulation.run(updater);
-    updater.message(boost::format("Final score: %1$.4f") % score);
+    SimulationResult result = simulation.run(updater);
+    updater.message(boost::format(
+                        "Final score:  %1$8.4f\n"
+                        "Scaled score: %2$8.4f (%3% atoms)\n"
+                    ) % result.score() % result.scaled_score() % result.n_atoms());
 }

@@ -24,7 +24,7 @@ public slots:
     void run_simulation(Simulation * simulation);
 
 signals:
-    void simulation_finished(const double & score);
+    void simulation_finished(const SimulationResult & score);
     void progress_update(const int &, const int &, const double &);
     void message_update(const QString &);
 };

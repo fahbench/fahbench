@@ -39,7 +39,7 @@ signals:
     void continue_simulation_queue();
 
 private slots:
-    void simulation_finished(const double & score);
+    void simulation_finished(const SimulationResult & score);
     void start_button_clicked();
 
     void about();

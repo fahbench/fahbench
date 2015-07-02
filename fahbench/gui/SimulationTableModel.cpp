@@ -82,12 +82,12 @@ bool SimulationTableModel::has_next() const {
 
 const SimulationTableEntry & SimulationTableModel::get_next() {
     auto & entry = _entries[current_entry];
-    entry.set_result(0.0);
+    entry.set_result(SimulationResult(ResultStatus::INPROGRESS));
     emit dataChanged(index(current_entry, RESULTS_COL), index(current_entry, RESULTS_COL));
     return _entries.at(current_entry);
 }
 
-void SimulationTableModel::finish(double score) {
+void SimulationTableModel::finish(SimulationResult score) {
     SimulationTableEntry & entry = _entries[current_entry];
     entry.set_result(score);
     emit dataChanged(index(current_entry, RESULTS_COL), index(current_entry, RESULTS_COL));
@@ -128,16 +128,19 @@ QString SimulationTableEntry::protein() const {
     return QString("Placeholder");
 }
 QString SimulationTableEntry::result() const {
-    if (_result > 0) {
-        return QString("%1 ns/day").arg(_result);
-    } else if (_result < 0) {
+    switch (_result.status()) {
+    case ResultStatus::PENDING:
         return QString("(Pending)");
-    } else {
+    case ResultStatus::INPROGRESS:
         return QString("(Benchmarking...)");
+    case ResultStatus::FINISHED:
+        return QString("%1 ns/day").arg(_result.score());
+    default:
+        return QString("Problem!");
     }
 }
 
-void SimulationTableEntry::set_result(double result) {
+void SimulationTableEntry::set_result(SimulationResult result) {
     _result = result;
 }
 

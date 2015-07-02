@@ -12,6 +12,7 @@
 #include "DLLDefines.h"
 #include "Updater.h"
 #include "WorkUnit.h"
+#include "SimulationResult.h"
 
 
 
@@ -39,7 +40,7 @@ public:
 
     std::string summary() const;
 
-    double run(Updater & update) const;
+    SimulationResult run(Updater & update) const;
 
 private:
     fs::path openmm_data_dir;
@@ -48,7 +49,7 @@ private:
     template<class T>
     T * loadObject(const string & fname) const;
 
-    double benchmark(OpenMM::Context & context, Updater & update) const;
+    float benchmark(OpenMM::Context & context, Updater & update) const;
 };
 
 

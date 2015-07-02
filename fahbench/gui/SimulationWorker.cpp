@@ -23,16 +23,17 @@ using std::map;
 
 SimulationWorker::SimulationWorker(): QObject() {
     qRegisterMetaType<Simulation>();
+    qRegisterMetaType<SimulationResult>();
 }
 
 
 void SimulationWorker::run_simulation(Simulation * simulation) {
     try {
-        float score = simulation->run(*this);
+        SimulationResult score = simulation->run(*this);
         emit simulation_finished(score);
     } catch (std::exception & e) {
         message(e.what());
-        emit simulation_finished(0.0);
+        emit simulation_finished(SimulationResult(ResultStatus::FAILED));
     }
     delete(simulation);
 }

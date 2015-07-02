@@ -67,7 +67,7 @@ string Simulation::summary() const {
 }
 
 
-double Simulation::run(Updater & update) const {
+SimulationResult Simulation::run(Updater & update) const {
     update.message(boost::format("Loading plugins from plugin directory"));
     Platform::loadPluginsFromDirectory(openmm_plugin_dir.native());
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
@@ -79,7 +79,7 @@ double Simulation::run(Updater & update) const {
     State * state = loadObject<State>(work_unit->state_fn());
     update.message("Deserializing integrator...");
     Integrator * intg = loadObject<Integrator>(work_unit->integrator_fn());
-    
+
     update.message("Creating context...");
     Context context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
@@ -96,17 +96,19 @@ double Simulation::run(Updater & update) const {
     }
 
     update.message("Starting Benchmark");
-    double score = benchmark(context, update);
+    float score = benchmark(context, update);
     update.message("Benchmarking finished.");
-    
+
+    SimulationResult result(score, sys->getNumParticles());
+
     delete sys;
     delete state;
     delete intg;
-    
-    return score;
+
+    return result;
 }
 
-double Simulation::benchmark(Context & context, Updater & update) const {
+float Simulation::benchmark(Context & context, Updater & update) const {
     double stepSize = context.getIntegrator().getStepSize();
     const int rep_interval = 50; // TODO: configurable
     // This step call ensures everything has been JIT compiled
@@ -129,8 +131,8 @@ double Simulation::benchmark(Context & context, Updater & update) const {
     // last getState makes sure everything in the queue has been flushed.
     State finalState = context.getState(State::Positions | State::Velocities | State::Forces | State::Energy);
     clock_t endClock = clock();
-    double timeInSec = (double)(endClock - startClock) / (double) CLOCKS_PER_SEC;
-    double nsPerDay = (86400.0 / timeInSec) * work_unit->n_steps() * stepSize / 1000.0;
+    float timeInSec = (float)(endClock - startClock) / (float) CLOCKS_PER_SEC;
+    float nsPerDay = (86400.0 / timeInSec) * work_unit->n_steps() * stepSize / 1000.0;
     StateTests::checkForNans(finalState);
     StateTests::checkForDiscrepancies(finalState);
     return nsPerDay;
