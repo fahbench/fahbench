@@ -16,6 +16,7 @@ WorkUnit::WorkUnit(const fs::path & wu_path)
     , _integrator_fn(wu_path / "integrator.xml")
     , _state_fn(wu_path / "state.xml")
     , _codename(wu_path.filename().native())
+    , _user_n_steps(0)
 
 {
     auto meta_path = wu_path / "wu.json";

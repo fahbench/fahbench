@@ -19,10 +19,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Use c++11
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
+add_subdirectory(workunits)
 add_subdirectory(fahbench)
-
-# Copy data to build directory
-install(DIRECTORY workunits DESTINATION share/fahbench/)
 
 # build a CPack driven installer package
 include (InstallRequiredSystemLibraries)
