@@ -15,13 +15,13 @@ WorkUnit::WorkUnit(const fs::path & wu_path)
     : _system_fn(wu_path / "system.xml")
     , _integrator_fn(wu_path / "integrator.xml")
     , _state_fn(wu_path / "state.xml")
-    , _codename(wu_path.filename().native())
+    , _codename(wu_path.filename().string())
     , _user_n_steps(0)
 
 {
     auto meta_path = wu_path / "wu.json";
     pt::ptree tree;
-    pt::read_json(meta_path.native(), tree);
+    pt::read_json(meta_path.string(), tree);
     _fullname = tree.get<std::string>("protein.name", "No full name provided");
     _description = tree.get<std::string>("protein.description", "No description provided");
     _n_steps = tree.get<int>("steps", 1000);

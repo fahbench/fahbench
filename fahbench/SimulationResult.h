@@ -1,6 +1,8 @@
 #ifndef SIMULATIONRESULT_H
 #define SIMULATIONRESULT_H
 
+#include "DLLDefines.h"
+
 enum class ResultStatus {
     PENDING,
     QUEUED,
@@ -9,7 +11,7 @@ enum class ResultStatus {
     FINISHED
 };
 
-class SimulationResult {
+class FAHBENCH_EXPORT SimulationResult {
 private:
     float _score;
     int _n_atoms;

@@ -8,13 +8,14 @@
 #include <vector>
 
 #include "Utils.h"
+#include "DLLDefines.h"
 
 using std::string;
 using std::vector;
 namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 
-class WorkUnit {
+class FAHBENCH_EXPORT WorkUnit {
 
 private:
     static const fs::path _data_dir;

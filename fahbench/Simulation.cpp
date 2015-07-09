@@ -69,7 +69,7 @@ string Simulation::summary() const {
 
 SimulationResult Simulation::run(Updater & update) const {
     update.message(boost::format("Loading plugins from plugin directory"));
-    Platform::loadPluginsFromDirectory(openmm_plugin_dir.native());
+    Platform::loadPluginsFromDirectory(openmm_plugin_dir.string());
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
     Platform & platform = Platform::getPlatformByName(this->platform);
 
