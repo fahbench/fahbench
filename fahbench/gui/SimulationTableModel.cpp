@@ -107,7 +107,6 @@ void SimulationTableEntry::configure_simulation(Simulation & sim) {
     sim.verifyAccuracy = _verifyAccuracy;
     sim.nan_check_freq = _nan_check_freq;
     auto wu = new WorkUnit(std::string("dhfr-implicit"));
-    wu->set_n_steps(500); // TODO: this is small for debugging
     sim.work_unit = wu;
 }
 

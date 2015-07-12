@@ -38,9 +38,6 @@ if(${WIN32})
   get_target_property(QtGui_location Qt5::Gui LOCATION)
   get_filename_component(Qt_DLL_ROOT "${QtCore_location}" PATH)
 
-  # TODO: Install icuin53.dll, icudt53.dll, icuuc53.dll
-  #       (or compile qt sans unicode)
-
   INSTALL(FILES
           "${QtWidgets_location}"
           "${QtCore_location}"
