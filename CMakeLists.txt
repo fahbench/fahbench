@@ -16,8 +16,9 @@ set(FAHBench_VERSION_ISRELEASE OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Use c++11
+# Configure compiler
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+include(Warnings)
 
 add_subdirectory(workunits)
 add_subdirectory(fahbench)
