@@ -12,15 +12,15 @@ GPLv2.
 Technical Overview
 ------------------
 
-The benchmark runs a number of steps of molecular dynamics (MD) simulation
-on various systems. The score is the number of steps completed per unit
+The benchmark runs a short molecular dynamics (MD) simulation
+on various systems. The score is the number of MD steps completed per unit
 time.
 
 The score depends strongly on the size of the system being simulated.
 Traditionally, explicit solvent DHFR (~20k atoms) is the benchmarking
 system of choice. FAHBench includes other systems ("workunits") for
 benchmarking. A scaled score is reported to compare results on
-different-sized systems to DHFR. Please take this with a grain of salt.
+different-sized systems to DHFR. Please take this scaled score with a grain of salt.
 
 Technical Details
 -----------------
@@ -52,8 +52,8 @@ standard Folding@Home work unit (WU):
  - integrator.xml
  - state.xml
 
-as well as FAHBench-specific file named `wu.json`. This file encodes the
-number of steps to perform, among other meta-information. To install a
+as well as a FAHBench-specific file named `wu.json`. This file encodes the
+number of steps to perform and other meta-information. To install a
 custom work unit, copy these four files into a subdirectory of
 `share/fahbench/workunits/`.
 
@@ -100,13 +100,13 @@ FAHBench is built with [CMake] and requires the following libraries:
 ### Windows
 
  1. Download and install 
-	  - Visual Studio Community 2013
-	  - Qt > 5.2
-	  - CMake > 2.8.11
+      - Visual Studio Community 2013
+      - Qt > 5.2
+      - CMake > 2.8.11
       - AMD APP SDK
-	  - (Optional) CUDA SDK = 6.5
+      - (Optional) CUDA SDK = 6.5
 
-	These all have nice GUI installers.
+    These all have nice GUI installers.
 
  1. Download OpenMM and build with CMake. I don't think the provided
     binaries (VC2010) will work. Build the release configuration. You can
@@ -116,9 +116,9 @@ FAHBench is built with [CMake] and requires the following libraries:
  1. Run CMake on the fahbench source directory. Finagle it until it has
     found all of the dependencies you just spent so long getting in order.
     Start by setting:
-	 
+     
      - `CMAKE_PREFIX_PATH` to `.../Qt/5.4/msvc2013_64/`
-	 - `OPENMM_xxx` to where you installed OpenMM.
+     - `OPENMM_xxx` to where you installed OpenMM.
 
  1. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to
     the `bin/` install directory.
