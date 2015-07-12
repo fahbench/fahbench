@@ -9,30 +9,18 @@
 #include "QSimulation.h"
 #include "DeviceTableModel.h"
 #include "../Device.h"
-
-class ProteinSystem {
-private:
-    QString _sysxml;
-    QString _intxml;
-    QString _statexml;
-
-public:
-    QString summary() const;
-
-};
+#include "../WorkUnit.h"
 
 class SimulationTableEntry {
 
 private:
     Device _device;
-    ProteinSystem _protein;
 
     QString _precision;
     bool _verifyAccuracy;
     int _nan_check_freq;
-    int _num_steps;
 
-    double _result;
+    SimulationResult _result;
 
 public:
     QString device() const;
@@ -40,16 +28,14 @@ public:
     QString protein() const;
     QString result() const;
 
-    void set_result(double result);
+    void set_result(SimulationResult result);
 
     SimulationTableEntry(const Device & device)
         : _device(device)
-        , _protein(ProteinSystem())
         , _precision("single")
         , _verifyAccuracy(true)
         , _nan_check_freq(1000)
-        , _num_steps(5000)
-        , _result(-1.0) {
+        , _result(ResultStatus::PENDING) {
     }
 
     void configure_simulation(Simulation & sim);
@@ -74,7 +60,7 @@ public:
 
     bool has_next() const;
     const SimulationTableEntry & get_next();
-    void finish(double score);
+    void finish(SimulationResult score);
 
 };
 

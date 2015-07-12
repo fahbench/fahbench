@@ -35,11 +35,11 @@ private:
     QAction * about_action;
 
 signals:
-    void start_new_simulation(Simulation);
+    void start_new_simulation(Simulation *);
     void continue_simulation_queue();
 
 private slots:
-    void simulation_finished(const double & score);
+    void simulation_finished(const SimulationResult & score);
     void start_button_clicked();
 
     void about();

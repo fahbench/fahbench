@@ -1,11 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <string>
+#include <boost/filesystem.hpp>
 
-using std::string;
+namespace fs = boost::filesystem;
 
-string getExecutablePath();
-string getExecutableDir();
+fs::path getExecutablePath();
+fs::path getExecutableDir();
 
 #endif // UTILS_H

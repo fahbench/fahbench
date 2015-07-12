@@ -82,12 +82,12 @@ bool SimulationTableModel::has_next() const {
 
 const SimulationTableEntry & SimulationTableModel::get_next() {
     auto & entry = _entries[current_entry];
-    entry.set_result(0.0);
+    entry.set_result(SimulationResult(ResultStatus::INPROGRESS));
     emit dataChanged(index(current_entry, RESULTS_COL), index(current_entry, RESULTS_COL));
     return _entries.at(current_entry);
 }
 
-void SimulationTableModel::finish(double score) {
+void SimulationTableModel::finish(SimulationResult score) {
     SimulationTableEntry & entry = _entries[current_entry];
     entry.set_result(score);
     emit dataChanged(index(current_entry, RESULTS_COL), index(current_entry, RESULTS_COL));
@@ -100,21 +100,14 @@ void SimulationTableModel::finish(double score) {
 
 
 void SimulationTableEntry::configure_simulation(Simulation & sim) {
-
     sim.platform = _device.platform();
     sim.deviceId = _device.device_id();
     sim.platformId = _device.platform_id();
     sim.precision = _precision.toStdString();
     sim.verifyAccuracy = _verifyAccuracy;
     sim.nan_check_freq = _nan_check_freq;
-    sim.numSteps = _num_steps;
-
-    // TODO: figure out how to pass xml files.
-    sim.solvent = "explicit";
-}
-
-QString ProteinSystem::summary() const {
-    return QString("Explicit solvent");
+    auto wu = new WorkUnit(std::string("dhfr-implicit"));
+    sim.work_unit = wu;
 }
 
 
@@ -131,19 +124,22 @@ QString SimulationTableEntry::platform() const {
     return QString::fromStdString(_device.platform());
 }
 QString SimulationTableEntry::protein() const {
-    return _protein.summary();
+    return QString("Placeholder");
 }
 QString SimulationTableEntry::result() const {
-    if (_result > 0) {
-        return QString("%1 ns/day").arg(_result);
-    } else if (_result < 0) {
+    switch (_result.status()) {
+    case ResultStatus::PENDING:
         return QString("(Pending)");
-    } else {
+    case ResultStatus::INPROGRESS:
         return QString("(Benchmarking...)");
+    case ResultStatus::FINISHED:
+        return QString("%1 ns/day").arg(_result.score());
+    default:
+        return QString("Problem!");
     }
 }
 
-void SimulationTableEntry::set_result(double result) {
+void SimulationTableEntry::set_result(SimulationResult result) {
     _result = result;
 }
 

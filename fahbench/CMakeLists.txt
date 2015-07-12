@@ -40,6 +40,8 @@ set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/")
 add_library(fahbench SHARED
         StateTests.cpp
         Simulation.cpp
+        SimulationResult.cpp
+        WorkUnit.cpp
         GPUInfo.cpp
         Device.cpp
         Utils.cpp

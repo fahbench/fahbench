@@ -19,12 +19,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Use c++11
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
+add_subdirectory(workunits)
 add_subdirectory(fahbench)
-
-# Copy data to build directory
-file(GLOB OPENMM_DATA_FILES openmm_data/*.xml)
-install(FILES ${OPENMM_DATA_FILES} DESTINATION share/openmm_data/)
-
 
 # build a CPack driven installer package
 include (InstallRequiredSystemLibraries)

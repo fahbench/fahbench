@@ -13,6 +13,7 @@ using namespace std;
 
 MainWindow::MainWindow() : QMainWindow() {
     qRegisterMetaType<Simulation>();
+    qRegisterMetaType<SimulationResult>();
 
     // Set up SimulationWorker on another thread and connect signals and slots
     worker = new SimulationWorker();
@@ -62,9 +63,9 @@ void MainWindow::start_button_clicked() {
         central_widget->message_update("No more runs to run!");
         return;
     }
-    Simulation sim;
+    Simulation * sim = new Simulation();
     auto entry = central_widget->simulation_table_model->get_next();
-    entry.configure_simulation(sim);
+    entry.configure_simulation(*sim);
 
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;
@@ -76,9 +77,11 @@ void MainWindow::start_button_clicked() {
     emit start_new_simulation(sim);
 }
 
-void MainWindow::simulation_finished(const double & score) {
+void MainWindow::simulation_finished(const SimulationResult & score) {
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;
+    pbar->setMinimum(0);
+    pbar->setMaximum(1);
     pbar->setValue(pbar->maximum());
     sbut->setEnabled(true);
     central_widget->simulation_table_model->finish(score);
