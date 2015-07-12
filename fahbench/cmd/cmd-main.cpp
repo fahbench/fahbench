@@ -187,9 +187,14 @@ int main(int argc, char ** argv) {
     std::cout << simulation.summary() << std::endl;
 
     CommandLineUpdater updater;
-    SimulationResult result = simulation.run(updater);
-    updater.message(boost::format(
-                        "Final score:  %1$8.4f\n"
-                        "Scaled score: %2$8.4f (%3% atoms)\n"
-                    ) % result.score() % result.scaled_score() % result.n_atoms());
+    try {
+        SimulationResult result = simulation.run(updater);
+        updater.message(boost::format(
+                            "Final score:  %1$8.4f\n"
+                            "Scaled score: %2$8.4f (%3% atoms)\n"
+                        ) % result.score() % result.scaled_score() % result.n_atoms());
+    } catch (const std::exception & e) {
+        std::cout << std::endl << "Something went wrong:" << std::endl;
+        std::cout << e.what() << std::endl << std::endl;
+    }
 }
