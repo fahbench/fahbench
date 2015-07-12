@@ -25,10 +25,17 @@ using std::map;
 
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
-Simulation::Simulation() {
-    openmm_plugin_dir = fs::canonical(getExecutableDir() / fs::path("../lib/plugins"));
-    work_unit = nullptr;
-}
+Simulation::Simulation()
+    : work_unit(nullptr)
+    , platform("OpenCL")
+    , precision("single")
+    , deviceId(0)
+    , platformId(0)
+    , verifyAccuracy(true)
+    , nan_check_freq(0)
+    , openmm_plugin_dir(fs::canonical(getExecutableDir() / fs::path("../lib/plugins")))
+
+{ }
 
 
 map< string, string > Simulation::getPropertiesMap() const {
@@ -59,6 +66,12 @@ string Simulation::summary() const {
     ss << "Steps: " << work_unit->n_steps();
     if (work_unit->user_n_steps()) {
         ss << " (user specified)" << std::endl;
+    } else {
+        ss << std::endl;
+    }
+    ss << "Device ID " << deviceId << "; Platform " << platform;
+    if (platform == "OpenCL") {
+        ss << "; Platform ID " << platformId << std::endl;
     } else {
         ss << std::endl;
     }

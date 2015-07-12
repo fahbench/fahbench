@@ -146,11 +146,14 @@ int main(int argc, char ** argv) {
         return show_info_instead;
     }
 
+    simulation.verifyAccuracy = true; // default
+
     if (vm.count("disable-accuracy-check")) {
         simulation.verifyAccuracy = false;
     }
 
     if (vm.count("enable_accuracy-check")) {
+        // override
         simulation.verifyAccuracy = true;
     }
 
