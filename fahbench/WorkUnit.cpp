@@ -15,8 +15,9 @@ WorkUnit::WorkUnit(const fs::path & wu_path)
     : _system_fn(wu_path / "system.xml")
     , _integrator_fn(wu_path / "integrator.xml")
     , _state_fn(wu_path / "state.xml")
-    , _codename(wu_path.filename().string())
     , _user_n_steps(0)
+    , _codename(wu_path.filename().string())
+
 
 {
     auto meta_path = wu_path / "wu.json";
@@ -35,10 +36,11 @@ WorkUnit::WorkUnit(const string & system, const string & integrator, const strin
     : _system_fn(system)
     , _integrator_fn(integrator)
     , _state_fn(state)
+    , _n_steps(steps)
+    , _user_n_steps(0)
     , _codename("custom")
     , _fullname("Custom WU")
     , _description("User-specified xml files.")
-    , _n_steps(steps)
 
 { }
 

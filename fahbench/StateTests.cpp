@@ -46,7 +46,6 @@ void StateTests::checkForNans(const State & state) {
 
 
 void StateTests::checkForDiscrepancies(const State & state) {
-    const vector<Vec3> & positions = state.getPositions();
     const vector<Vec3> & velocities = state.getVelocities();
     const vector<Vec3> & forces = state.getForces();
     Vec3 a, b, c;

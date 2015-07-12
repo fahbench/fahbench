@@ -39,7 +39,7 @@ QVariant DeviceTableModel::data(const QModelIndex & index, int role) const {
     if (!index.isValid())
         return QVariant();
 
-    if (index.row() >= _entries.size())
+    if (index.row() < 0 || ((unsigned)index.row() >= _entries.size()))
         return QVariant();
 
     if (role != Qt::DisplayRole)

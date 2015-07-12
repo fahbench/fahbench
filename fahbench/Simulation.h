@@ -43,7 +43,6 @@ public:
     SimulationResult run(Updater & update) const;
 
 private:
-    fs::path openmm_data_dir;
     fs::path openmm_plugin_dir;
 
     template<class T>

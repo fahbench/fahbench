@@ -24,7 +24,7 @@ vector<Device> GPUInfo::getOpenCLDevices() {
         throw std::runtime_error("OpenCL Error: Cannot get platforms.");
 
     vector<Device> openCLdevices;
-    for (int j = 0; j < n_platforms; j++) {
+    for (cl_uint j = 0; j < n_platforms; j++) {
 
         // Get devices for each platform
         cl_device_id devices[MAXDEVICES];
@@ -39,7 +39,7 @@ vector<Device> GPUInfo::getOpenCLDevices() {
             throw std::runtime_error("OpenCL Error: Cannot get platform version.");
         string platform_version = plat_version_buffer;
 
-        for (int i = 0; i < n_devices; i++) {
+        for (cl_uint i = 0; i < n_devices; i++) {
             char buffer[10240];
             error = clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(buffer), buffer, NULL);
             if (error)
