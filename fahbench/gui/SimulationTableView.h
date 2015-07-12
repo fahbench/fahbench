@@ -4,7 +4,14 @@
 #include <QTableView>
 #include <QStyledItemDelegate>
 
+class SimulationTableItemDelegate : public QStyledItemDelegate {
+    Q_OBJECT
 
+public:
+    QWidget * createEditor(QWidget * parent,
+                           const QStyleOptionViewItem & option,
+                           const QModelIndex & index) const;
+};
 
 class SimulationTableView : public QTableView {
     Q_OBJECT
