@@ -25,12 +25,13 @@ configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 
 # Specify includes
 include_directories(
+    SYSTEM # won't generate warnings
     "${OPENMM_INCLUDE_PATH}"
     ${OPENCL_INCLUDE_DIRS}
     "${BOOST_INCLUDE_DIR}"
 )
 if(${USE_CUDA})
-    include_directories(${CUDA_INCLUDE_DIRS})
+    include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
 endif(${USE_CUDA})
 
 # When we install, it needs to look in install_dir/lib for OpenMM
