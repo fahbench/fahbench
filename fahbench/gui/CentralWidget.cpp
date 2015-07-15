@@ -66,7 +66,7 @@ void CentralWidget::make_simulation_table() {
 }
 
 
-void CentralWidget::progress_update(const int & i, const int & numSteps, const double & score) {
+void CentralWidget::progress_update(int i, int numSteps, float score) {
     progress_bar->setMaximum(numSteps);
     progress_bar->setValue(i);
     status_bar->setText(QString("Current score: %1").arg(score));

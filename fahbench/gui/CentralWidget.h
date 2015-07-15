@@ -43,7 +43,7 @@ private:
     void make_simulation_table();
 
 public slots:
-    void progress_update(const int &, const int &, const double &);
+    void progress_update(int, int, float);
     void message_update(const QString &);
 
 };

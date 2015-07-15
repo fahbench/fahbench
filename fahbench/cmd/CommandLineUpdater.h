@@ -5,7 +5,7 @@
 
 class CommandLineUpdater : public Updater {
 public:
-    void progress(int i, int numSteps, double ns_per_day);
+    void progress(int i, int numSteps, float ns_per_day);
     void message(std::string);
     void message(boost::format);
 };

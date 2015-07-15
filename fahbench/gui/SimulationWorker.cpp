@@ -38,7 +38,7 @@ void SimulationWorker::run_simulation(Simulation * simulation) {
     delete(simulation);
 }
 
-void SimulationWorker::progress(int i, int num_steps, double score) {
+void SimulationWorker::progress(int i, int num_steps, float score) {
     emit progress_update(i, num_steps, score);
 }
 
