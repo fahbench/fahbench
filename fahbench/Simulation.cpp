@@ -54,7 +54,7 @@ map< string, string > Simulation::getPropertiesMap() const {
 string Simulation::summary() const {
     std::stringstream ss;
     ss << "FAHBench Simulation" << std::endl;
-    ss << "-----------------" << std::endl;
+    ss << "-------------------" << std::endl;
 
     ss << "Plugin directory: " << openmm_plugin_dir << std::endl;
     ss << "Work unit: " << work_unit->codename() << std::endl;
