@@ -148,6 +148,7 @@ float Simulation::benchmark(Context & context, Updater & update) const {
     float nsPerDay = (86400.0 / timeInSec) * work_unit->n_steps() * stepSize / 1000.0;
     StateTests::checkForNans(finalState);
     StateTests::checkForDiscrepancies(finalState);
+    update.progress(work_unit->n_steps(), work_unit->n_steps(), nsPerDay);
     return nsPerDay;
 }
 
