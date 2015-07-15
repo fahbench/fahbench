@@ -2,7 +2,7 @@
 #include "CommandLineUpdater.h"
 
 void CommandLineUpdater::progress(int i, int numSteps, double ns_per_day) {
-    if (i == numSteps){
+    if (i == numSteps) {
         std::cout << std::string(80, ' ') << std::endl;
         return;
     }

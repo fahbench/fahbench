@@ -33,6 +33,7 @@ Simulation::Simulation()
     , platformId(0)
     , verifyAccuracy(true)
     , nan_check_freq(0)
+    , progress_freq(1)
     , openmm_plugin_dir(fs::canonical(getExecutableDir() / fs::path("../lib/plugins")))
 
 { }
@@ -121,35 +122,62 @@ SimulationResult Simulation::run(Updater & update) const {
     return result;
 }
 
+const static int int_steps = 10;
+
 float Simulation::benchmark(Context & context, Updater & update) const {
-    double stepSize = context.getIntegrator().getStepSize();
-    const int rep_interval = 50; // TODO: configurable
+    float step_size_ns = context.getIntegrator().getStepSize() / 1000.0;
+    int n_steps = work_unit->n_steps();
+    int steps = 0;
+
+    using day = std::chrono::duration<float, std::ratio<86400>>;
+
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
 
-    // Start clock after JIT-ing. This used to be *before* in version < 2
-    clock_t startClock = clock();
+    int last_nan_check = 0;
 
-    for (int i = 0; i < work_unit->n_steps(); i++) {
-        if (i > 0 && i % rep_interval == 0) {
-            double estimateClock = clock();
-            double estimateTimeInSec = (double)(estimateClock - startClock) / (double) CLOCKS_PER_SEC;
-            double estimateNsPerDay = (86400.0 / estimateTimeInSec) * i * stepSize / 1000.0;
-            update.progress(i, work_unit->n_steps(), estimateNsPerDay);
+    std::chrono::steady_clock clock;
+    auto clock_lastrep = clock.now();
+    auto clock_start = clock.now();
+
+    while (true) {
+        context.getIntegrator().step(int_steps);
+        steps += int_steps;
+
+        if (steps == n_steps) {
+            break;
         }
-        if (nan_check_freq > 0 && i % nan_check_freq == 0)
+
+        if (steps + int_steps > n_steps) {
+            context.getIntegrator().step(n_steps - steps);
+            break;
+        }
+
+        auto clock_now = clock.now();
+        if (progress_freq.count() > 0 && clock_now - clock_lastrep > progress_freq) {
+            auto duration = clock_now - clock_start;
+            float per_day = 1.0 / std::chrono::duration_cast<day>(duration).count();
+            float ns_day = steps * step_size_ns * per_day;
+            update.progress(steps, n_steps, ns_day);
+            clock_lastrep = clock_now;
+        }
+
+        if (nan_check_freq > 0 && steps - last_nan_check >  nan_check_freq) {
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));
-        context.getIntegrator().step(1);
+            last_nan_check = steps;
+        }
     }
     // last getState makes sure everything in the queue has been flushed.
     State finalState = context.getState(State::Positions | State::Velocities | State::Forces | State::Energy);
-    clock_t endClock = clock();
-    float timeInSec = (float)(endClock - startClock) / (float) CLOCKS_PER_SEC;
-    float nsPerDay = (86400.0 / timeInSec) * work_unit->n_steps() * stepSize / 1000.0;
+
+    auto duration = clock.now() - clock_start;
+    float per_day = 1.0 / std::chrono::duration_cast<day>(duration).count();
+    float ns_day = n_steps * step_size_ns * per_day;
+
     StateTests::checkForNans(finalState);
     StateTests::checkForDiscrepancies(finalState);
-    update.progress(work_unit->n_steps(), work_unit->n_steps(), nsPerDay);
-    return nsPerDay;
+    update.progress(n_steps, n_steps, ns_day);
+    return ns_day;
 }
 
 template<class T>
