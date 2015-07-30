@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <functional>
+#include <chrono>
 #include <boost/program_options.hpp>
 #include <boost/function.hpp>
 #include <boost/format.hpp>
@@ -56,6 +56,7 @@ string listWus() {
 
 int main(int argc, char ** argv) {
     Simulation simulation;
+    int progress_freq_sec;
 
     po::options_description desc("FAHBench options");
     desc.add_options()
@@ -101,6 +102,9 @@ int main(int argc, char ** argv) {
     ("nan-check",
      po::value<int>(&simulation.nan_check_freq)->default_value(0),
      "Frequency to perform NaN checks during benchmark. 0 - disable.")
+    ("progress",
+     po::value<int>(&progress_freq_sec)->default_value(1),
+     "Frequency to update progress estimates in seconds. 0 - disable.")
     ;
 
     po::variables_map vm;
@@ -146,6 +150,7 @@ int main(int argc, char ** argv) {
         return show_info_instead;
     }
 
+    simulation.progress_freq = std::chrono::seconds(progress_freq_sec);
     simulation.verifyAccuracy = true; // default
 
     if (vm.count("disable-accuracy-check")) {

@@ -16,7 +16,7 @@ class SimulationWorker : public QObject, public Updater {
 
 public:
     SimulationWorker();
-    void progress(int i, int num_steps, double score);
+    void progress(int i, int num_steps, float score);
     void message(std::string);
     void message(boost::format);
 
@@ -25,7 +25,7 @@ public slots:
 
 signals:
     void simulation_finished(const SimulationResult & score);
-    void progress_update(const int &, const int &, const double &);
+    void progress_update(const int &, const int &, const float &);
     void message_update(const QString &);
 };
 

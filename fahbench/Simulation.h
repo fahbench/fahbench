@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <chrono>
 #include <boost/format.hpp>
 #include <boost/filesystem.hpp>
 
@@ -35,6 +36,7 @@ public:
 
     bool verifyAccuracy;
     int nan_check_freq;
+    std::chrono::seconds progress_freq;
 
     map<string, string> getPropertiesMap() const;
 
