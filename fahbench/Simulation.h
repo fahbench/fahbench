@@ -36,7 +36,7 @@ public:
 
     bool verifyAccuracy;
     int nan_check_freq;
-    std::chrono::seconds progress_freq;
+    std::chrono::seconds run_length;
 
     map<string, string> getPropertiesMap() const;
 
