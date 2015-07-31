@@ -33,6 +33,7 @@ Simulation::Simulation()
     , platformId(0)
     , verifyAccuracy(true)
     , nan_check_freq(0)
+    , run_length(60)
     , openmm_plugin_dir(fs::canonical(getExecutableDir() / fs::path("../lib/plugins")))
 
 { }
