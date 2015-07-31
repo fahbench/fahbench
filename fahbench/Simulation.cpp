@@ -124,6 +124,8 @@ float Simulation::benchmark(Context & context, Updater & update) const {
     int step_chunk = work_unit->step_chunk();
 
     using day = std::chrono::duration<float, std::ratio<86400>>;
+    using ms = std::chrono::milliseconds;
+    auto run_length_ms = std::chrono::duration_cast<ms>(run_length);
 
     // This step call ensures everything has been JIT compiled
     context.getIntegrator().step(1);
@@ -145,8 +147,8 @@ float Simulation::benchmark(Context & context, Updater & update) const {
 
         float per_day = 1.0 / std::chrono::duration_cast<day>(duration).count();
         float ns_day = steps * step_size_ns * per_day;
-        update.progress(std::chrono::duration_cast<std::chrono::seconds>(duration).count(),
-                        run_length.count(), ns_day);
+        update.progress(std::chrono::duration_cast<ms>(duration).count(),
+                        run_length_ms.count(), ns_day);
 
         if (nan_check_freq > 0 && steps - last_nan_check >  nan_check_freq) {
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));
@@ -162,7 +164,7 @@ float Simulation::benchmark(Context & context, Updater & update) const {
 
     StateTests::checkForNans(finalState);
     StateTests::checkForDiscrepancies(finalState);
-    update.progress(run_length.count(), run_length.count(), ns_day);
+    update.progress(run_length_ms.count(), run_length_ms.count(), ns_day);
     return ns_day;
 }
 
