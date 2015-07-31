@@ -49,14 +49,14 @@ string listWus() {
     std::stringstream ss;
     for (auto & wu : WorkUnit::available_wus()) {
         ss << boost::format("%1$-16s %2$-30s %3$7d %4%")
-           % wu.codename() %  wu.fullname() % wu.n_steps() % wu.description() << std::endl;
+           % wu.codename() %  wu.fullname() % wu.step_chunk() % wu.description() << std::endl;
     }
     return ss.str();
 }
 
 int main(int argc, char ** argv) {
     Simulation simulation;
-    int progress_freq_sec;
+    int run_length_sec;
 
     po::options_description desc("FAHBench options");
     desc.add_options()
@@ -92,9 +92,6 @@ int main(int argc, char ** argv) {
     ("integrator",
      po::value<string>()->default_value(""),
      "Path to integrator xml file")
-    ("steps",
-     po::value<int>(),
-     "Number of steps to take")
     ("disable-accuracy-check",
      "Don't check against the reference platform")
     ("enable-accuracy-check",
@@ -102,9 +99,12 @@ int main(int argc, char ** argv) {
     ("nan-check",
      po::value<int>(&simulation.nan_check_freq)->default_value(0),
      "Frequency to perform NaN checks during benchmark. 0 - disable.")
-    ("progress",
-     po::value<int>(&progress_freq_sec)->default_value(1),
-     "Frequency to update progress estimates in seconds. 0 - disable.")
+    ("run-length",
+     po::value<int>(&run_length_sec)->default_value(60),
+     "Benchmark for this many seconds")
+    ("step-chunk",
+     po::value<int>(),
+     "Run this many steps at a time before updating progress.")
     ;
 
     po::variables_map vm;
@@ -150,7 +150,7 @@ int main(int argc, char ** argv) {
         return show_info_instead;
     }
 
-    simulation.progress_freq = std::chrono::seconds(progress_freq_sec);
+    simulation.run_length = std::chrono::seconds(run_length_sec);
     simulation.verifyAccuracy = true; // default
 
     if (vm.count("disable-accuracy-check")) {
@@ -171,20 +171,20 @@ int main(int argc, char ** argv) {
                     vm["system"].as<string>() != "" &&
                     vm["integrator"].as<string>() != "" &&
                     vm["state"].as<string>() != "" &&
-                    vm.count("steps")
+                    vm.count("step-chunk")
                 )) {
-            std::cerr << "Please specify all of system, integrator, state, steps" << std::endl;
+            std::cerr << "Please specify all of system, integrator, state, step-chunk" << std::endl;
             return -2;
         }
         simulation.work_unit = new WorkUnit(vm["system"].as<string>() ,
                                             vm["integrator"].as<string>() ,
                                             vm["state"].as<string>(),
-                                            vm["steps"].as<int>()
+                                            vm["step_chunk"].as<int>()
                                            );
     } else {
         auto wu =  new WorkUnit(vm["workunit"].as<string>());
-        if (vm.count("steps")) {
-            wu->set_n_steps(vm["steps"].as<int>());
+        if (vm.count("step-chunk")) {
+            wu->set_step_chunk(vm["step-chunk"].as<int>());
         }
         simulation.work_unit = wu;
     }

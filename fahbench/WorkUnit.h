@@ -23,8 +23,7 @@ private:
     const fs::path _system_fn;
     const fs::path _integrator_fn;
     const fs::path _state_fn;
-    int _n_steps;
-    int _user_n_steps;
+    int _step_chunk;
 
     const string _codename;
     string _fullname;
@@ -32,18 +31,16 @@ private:
 
 
 public:
-    WorkUnit(const string & system, const string & integrator, const string & state, int steps);
+    WorkUnit(const string & system, const string & integrator, const string & state, int step_chunk);
     WorkUnit(const string & wu_name);
     WorkUnit(const fs::path & wu_path);
 
+    int step_chunk() const;
+    void set_step_chunk(const int step_chunk);
 
     const string system_fn() const;
     const string integrator_fn() const;
     const string state_fn() const;
-
-    int n_steps() const;
-    void set_n_steps(int steps);
-    bool user_n_steps() const;
 
     const string & codename() const;
     const string & fullname() const;

@@ -91,9 +91,9 @@ HMODULE loadCudaLibrary() {
 
 void (*getProcAddress(HMODULE lib, const char * name))(void) {
 #ifdef _WIN32
-    return (void (*)(void)) GetProcAddress(lib, name);
+    return (void ( *)(void)) GetProcAddress(lib, name);
 #else
-    return (void (*)(void)) dlsym(lib, (const char *)name);
+    return (void ( *)(void)) dlsym(lib, (const char *)name);
 #endif
 }
 
