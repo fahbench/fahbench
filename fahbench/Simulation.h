@@ -25,8 +25,7 @@ class FAHBENCH_EXPORT Simulation {
 
 public:
     Simulation();
-    ~Simulation();
-    WorkUnit * work_unit;
+    WorkUnit work_unit;
 
     std::string platform;
     std::string precision;

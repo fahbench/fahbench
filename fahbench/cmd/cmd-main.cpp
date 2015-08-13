@@ -176,15 +176,15 @@ int main(int argc, char ** argv) {
             std::cerr << "Please specify all of system, integrator, state, step-chunk" << std::endl;
             return -2;
         }
-        simulation.work_unit = new WorkUnit(vm["system"].as<string>() ,
-                                            vm["integrator"].as<string>() ,
-                                            vm["state"].as<string>(),
-                                            vm["step_chunk"].as<int>()
-                                           );
+        simulation.work_unit = WorkUnit(vm["system"].as<string>() ,
+                                        vm["integrator"].as<string>() ,
+                                        vm["state"].as<string>(),
+                                        vm["step_chunk"].as<int>()
+                                       );
     } else {
-        auto wu =  new WorkUnit(vm["workunit"].as<string>());
+        WorkUnit wu(vm["workunit"].as<string>());
         if (vm.count("step-chunk")) {
-            wu->set_step_chunk(vm["step-chunk"].as<int>());
+            wu.set_step_chunk(vm["step-chunk"].as<int>());
         }
         simulation.work_unit = wu;
     }

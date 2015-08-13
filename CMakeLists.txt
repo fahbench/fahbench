@@ -23,6 +23,10 @@ include(Warnings)
 add_subdirectory(workunits)
 add_subdirectory(fahbench)
 
+
+# This is a hack to get CLion to install
+ADD_CUSTOM_TARGET(run_install COMMAND ${CMAKE_MAKE_PROGRAM} install)
+
 # build a CPack driven installer package
 include (InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
