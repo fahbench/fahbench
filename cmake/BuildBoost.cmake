@@ -1,16 +1,16 @@
 include(ExternalProject)
 
+set(BOOST_COMPILE_OPTIONS "")
+
 IF(${WIN32})
     set(SHELL_SCRIPT_EXT "bat")
     IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(BOOST_COMPILE_OPTIONS "address-model=64")
-    ELSE()
-        set(BOOST_COMPILE_OPTIONS "")
+        set(BOOST_COMPILE_OPTIONS ${BOOST_COMPILE_OPTIONS} "address-model=64")
     ENDIF()
     set(BOOST_COMPILE_OPTIONS ${BOOST_COMPILE_OPTIONS} "variant=release")
 ELSE()
     set(SHELL_SCRIPT_EXT "sh")
-    set(BOOST_COMPILE_OPTIONS "cxxflags=-fPIC")
+    set(BOOST_COMPILE_OPTIONS ${BOOST_COMPILE_OPTIONS} "cxxflags=-fPIC")
 ENDIF()
 
 ExternalProject_Add(boost
