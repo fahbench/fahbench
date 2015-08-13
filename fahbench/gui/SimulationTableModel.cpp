@@ -106,8 +106,6 @@ void SimulationTableEntry::configure_simulation(Simulation & sim) {
     sim.precision = _precision.toStdString();
     sim.verifyAccuracy = _verifyAccuracy;
     sim.nan_check_freq = _nan_check_freq;
-    auto wu = new WorkUnit(std::string("dhfr"));
-    sim.work_unit = wu;
 }
 
 

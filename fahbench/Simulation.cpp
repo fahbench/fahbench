@@ -26,7 +26,7 @@ using std::map;
 static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
 
 Simulation::Simulation()
-    : work_unit(nullptr)
+    : work_unit(std::string("dhfr"))
     , platform("OpenCL")
     , precision("single")
     , deviceId(0)
@@ -58,13 +58,13 @@ string Simulation::summary() const {
     ss << "-------------------" << std::endl;
 
     ss << "Plugin directory: " << openmm_plugin_dir << std::endl;
-    ss << "Work unit: " << work_unit->codename() << std::endl;
-    ss << "WU Name: " << work_unit->fullname() << std::endl;
-    ss << "WU Description: " << work_unit->description() << std::endl;
-    ss << "System XML: " << work_unit->system_fn() << std::endl;
-    ss << "Integrator XML: " << work_unit->integrator_fn() << std::endl;
-    ss << "State XML: " << work_unit->state_fn() << std::endl;
-    ss << "Step chunk: " << work_unit->step_chunk() << std::endl;
+    ss << "Work unit: " << work_unit.codename() << std::endl;
+    ss << "WU Name: " << work_unit.fullname() << std::endl;
+    ss << "WU Description: " << work_unit.description() << std::endl;
+    ss << "System XML: " << work_unit.system_fn() << std::endl;
+    ss << "Integrator XML: " << work_unit.integrator_fn() << std::endl;
+    ss << "State XML: " << work_unit.state_fn() << std::endl;
+    ss << "Step chunk: " << work_unit.step_chunk() << std::endl;
     ss << "Device ID " << deviceId << "; Platform " << platform;
     if (platform == "OpenCL") {
         ss << "; Platform ID " << platformId << std::endl;
@@ -84,11 +84,11 @@ SimulationResult Simulation::run(Updater & update) const {
     Platform & platform = Platform::getPlatformByName(this->platform);
 
     update.message("Deserializing system...");
-    System * sys = loadObject<System>(work_unit->system_fn());
+    System * sys = loadObject<System>(work_unit.system_fn());
     update.message("Deserializing state...");
-    State * state = loadObject<State>(work_unit->state_fn());
+    State * state = loadObject<State>(work_unit.state_fn());
     update.message("Deserializing integrator...");
-    Integrator * intg = loadObject<Integrator>(work_unit->integrator_fn());
+    Integrator * intg = loadObject<Integrator>(work_unit.integrator_fn());
 
     update.message("Creating context...");
     Context context(*sys, *intg, platform, getPropertiesMap());
@@ -96,7 +96,7 @@ SimulationResult Simulation::run(Updater & update) const {
 
     if (verifyAccuracy) {
         update.message("Checking for accuracy...");
-        Integrator * refIntg = loadObject<Integrator>(work_unit->integrator_fn());
+        Integrator * refIntg = loadObject<Integrator>(work_unit.integrator_fn());
         update.message("Creating reference context...");
         Context refContext(*sys, *refIntg, Platform::getPlatformByName("Reference"));
         refContext.setState(*state);
@@ -121,7 +121,7 @@ SimulationResult Simulation::run(Updater & update) const {
 float Simulation::benchmark(Context & context, Updater & update) const {
     float step_size_ns = context.getIntegrator().getStepSize() / 1000.0;
     int steps = 0;
-    int step_chunk = work_unit->step_chunk();
+    int step_chunk = work_unit.step_chunk();
 
     using day = std::chrono::duration<float, std::ratio<86400>>;
     using ms = std::chrono::milliseconds;
@@ -178,9 +178,6 @@ T * Simulation::loadObject(const string & fname) const {
     return XmlSerializer::deserialize<T>(s);
 }
 
-Simulation::~Simulation() {
-    if (work_unit) delete work_unit;
-}
 
 
 

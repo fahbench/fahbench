@@ -20,12 +20,12 @@ class FAHBENCH_EXPORT WorkUnit {
 private:
     static const fs::path _data_dir;
 
-    const fs::path _system_fn;
-    const fs::path _integrator_fn;
-    const fs::path _state_fn;
+    fs::path _system_fn;
+    fs::path _integrator_fn;
+    fs::path _state_fn;
     int _step_chunk;
 
-    const string _codename;
+    string _codename;
     string _fullname;
     string _description;
 
