@@ -23,6 +23,7 @@ add_executable(FAHBench-gui WIN32
 	FahIcon.rc
 )
 
+set_target_properties(FAHBench-gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
 target_link_libraries(FAHBench-gui fahbench Qt5::Widgets)
 
 INSTALL(TARGETS FAHBench-gui

@@ -34,9 +34,6 @@ if(${USE_CUDA})
     include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
 endif(${USE_CUDA})
 
-# When we install, it needs to look in install_dir/lib for OpenMM
-set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/")
-
 # Make library
 set(fahbench_sources
     StateTests.cpp
@@ -55,6 +52,7 @@ endif()
 
 add_library(fahbench SHARED ${fahbench_sources})
 add_dependencies(fahbench boost)
+set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
 
 # Link
 target_link_libraries(fahbench
@@ -85,8 +83,7 @@ else()
         "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCPU${CMAKE_SHARED_LIBRARY_SUFFIX}"        
     )
     if(${USE_CUDA})
-    set(OPENMM_PLUGIN_FILES
-        ${OPENMM_PLUGIN_FILES}
+    set(OPENMM_PLUGIN_FILES ${OPENMM_PLUGIN_FILES}
         "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCUDA${CMAKE_SHARED_LIBRARY_SUFFIX}"        
     )
     endif(${USE_CUDA})

@@ -3,6 +3,7 @@ add_executable(FAHBench-cmd
     CommandLineUpdater.cpp
 )
 
+set_target_properties(FAHBench-cmd PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
 target_link_libraries(FAHBench-cmd fahbench)
 
 INSTALL(TARGETS FAHBench-cmd
