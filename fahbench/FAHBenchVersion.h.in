@@ -13,7 +13,6 @@
 #define FAHBench_VERSION_SHA "@FAHBench_VERSION_SHA@"
 
 #cmakedefine FAHBench_VERSION_ISRELEASE
-#cmakedefine USE_CUDA
 
 inline std::string getVersion() {
     std::stringstream ss;

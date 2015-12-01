@@ -38,15 +38,22 @@ endif(${USE_CUDA})
 set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/")
 
 # Make library
-add_library(fahbench SHARED
-        StateTests.cpp
-        Simulation.cpp
-        SimulationResult.cpp
-        WorkUnit.cpp
-        GPUInfo.cpp
-        Device.cpp
-        Utils.cpp
+set(fahbench_sources
+    StateTests.cpp
+    Simulation.cpp
+    SimulationResult.cpp
+    WorkUnit.cpp
+    GPUInfo-OpenCL.cpp
+    Device.cpp
+    Utils.cpp
 )
+if(${USE_CUDA})
+    set(fahbench_sources ${fahbench_sources} GPUInfo-CUDA.cpp)
+else()
+    set(fahbench_sources ${fahbench_sources} GPUInfo-No-CUDA.cpp)
+endif()
+
+add_library(fahbench SHARED ${fahbench_sources})
 add_dependencies(fahbench boost)
 
 # Link
