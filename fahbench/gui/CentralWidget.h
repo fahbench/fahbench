@@ -8,6 +8,10 @@
 #include <QHBoxLayout>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QSpinBox>
 
 #include "SimulationTableModel.h"
 #include "DeviceTableModel.h"
@@ -31,12 +35,20 @@ public:
     QPushButton * start_button;
 
 private:
-    QVBoxLayout * layout_a;
-    QHBoxLayout * layout_a1;
-    QHBoxLayout * layout_a2;
+    QVBoxLayout * layout_vbox;
+    QFormLayout * layout_form;
+    QHBoxLayout * layout_bot;
 
-    QVBoxLayout * device_vbox;
-    QVBoxLayout * simulation_vbox;
+    QComboBox * device_wid;
+    QComboBox * platform_wid;
+    QComboBox * precision_wid;
+    QComboBox * wu_wid;
+    //TODO Advanced wu config with xmls
+    QCheckBox * accuracy_check_wid;
+    QSpinBox * nan_check_wid;
+    QSpinBox * run_length_wid;
+    QSpinBox * step_chunk_wid;
+
 
     // Helper functions
     void make_device_table();
