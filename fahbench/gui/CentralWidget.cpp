@@ -26,7 +26,6 @@ CentralWidget::CentralWidget() : QWidget() {
     wu_wid = new QComboBox;
     wu_wid->addItem("dhfr");
     layout_form->addRow("WU", wu_wid);
-    //TODO Advanced wu config with xmls
     accuracy_check_wid = new QCheckBox("Enabled");
     layout_form->addRow("Accuracy Check", accuracy_check_wid);
     nan_check_wid = new QSpinBox;

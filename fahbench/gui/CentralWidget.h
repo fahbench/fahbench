@@ -46,7 +46,6 @@ private:
     QComboBox * device_wid;
     QComboBox * precision_wid;
     QComboBox * wu_wid;
-    //TODO Advanced wu config with xmls
     QCheckBox * accuracy_check_wid;
     QSpinBox * nan_check_wid;
     QSpinBox * run_length_wid;
