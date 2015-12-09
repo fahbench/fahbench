@@ -1,22 +1,8 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-
-#include <stdexcept>
-#include <boost/format.hpp>
-
-#include <QString>
 
 #include "SimulationWorker.h"
+#include <exception>
 
-#ifdef WIN32
-#include <float.h>
-#define isnan(x) _isnan(x)
-#endif
 
-using namespace std;
-using namespace OpenMM;
 
 using std::string;
 using std::map;
@@ -27,15 +13,14 @@ SimulationWorker::SimulationWorker(): QObject() {
 }
 
 
-void SimulationWorker::run_simulation(Simulation * simulation) {
+void SimulationWorker::run_simulation(const Simulation & simulation) {
     try {
-        SimulationResult score = simulation->run(*this);
+        SimulationResult score = simulation.run(*this);
         emit simulation_finished(score);
     } catch (std::exception & e) {
         message(e.what());
         emit simulation_finished(SimulationResult(ResultStatus::FAILED));
     }
-    delete(simulation);
 }
 
 void SimulationWorker::progress(int i, int num_steps, float score) {
