@@ -2,10 +2,6 @@
 #include "MainWindow.h"
 #include "../FAHBenchVersion.h"
 
-#include <sstream>
-#include <QThread>
-#include <OpenMM.h>
-
 #include <QMessageBox>
 
 using namespace std;
