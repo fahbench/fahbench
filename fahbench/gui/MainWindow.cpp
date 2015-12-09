@@ -59,6 +59,7 @@ void MainWindow::start_button_clicked() {
     Simulation sim;
 
     sim.verifyAccuracy = false;
+    sim.run_length = std::chrono::seconds(10);
     //TODO: Configure simulation
 
 
