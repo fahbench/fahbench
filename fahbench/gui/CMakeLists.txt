@@ -16,7 +16,6 @@ if(${MAKE_QT_GUI})
 add_executable(FAHBench-gui WIN32
     MainWindow.cpp
     CentralWidget.cpp
-	SimulationTableModel.cpp
 	DeviceTableModel.cpp
     SimulationWorker.cpp
     gui-main.cpp

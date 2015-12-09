@@ -13,7 +13,6 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include "SimulationTableModel.h"
 #include "DeviceTableModel.h"
 
 
@@ -26,9 +25,6 @@ public:
 
     DeviceTableModel  * device_table_model;
     QTableView * device_table_view;
-
-    // TODO: remove this (currently MainWindow draws from it)
-    SimulationTableModel * simulation_table_model;
 
     QLabel * status_bar;
 
