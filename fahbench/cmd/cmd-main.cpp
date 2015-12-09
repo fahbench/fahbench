@@ -21,12 +21,16 @@ using std::map;
 string getGpuDesc() {
     std::stringstream ss;
 
+
+    boost::format fmt("%1$-25s %2$-10s %3$4d %4$4d  %5$-28s %6$-28s\n");
+    ss << fmt % "Device" % "Type" % "Dev" % "Plat" % "Platform version" % "Device version";
+    ss << string(100, '-') << std::endl;
+
     try {
         // OpenCL
         auto opencl_devices = GPUInfo::getOpenCLDevices();
         for (auto const & kv : opencl_devices) {
-            ss << boost::format("OpenCL Device:\t%1%\tDevice id: %3%\tPlatform id: %2%\tPlatform version: %4%\tDevice version: %5%\t")
-               % kv.device() % kv.platform_id() % kv.device_id() % kv.platform_version % kv.device_version << std::endl;
+            ss << fmt % kv.device() % "OpenCL" % kv.device_id() % kv.platform_id() % kv.platform_version % kv.device_version;
         }
     } catch (const std::exception & err) {
         ss << err.what() << std::endl;
@@ -36,7 +40,7 @@ string getGpuDesc() {
         // Cuda
         auto cuda_devices = GPUInfo::getCUDADevices();
         for (auto const & kv : cuda_devices) {
-            ss << boost::format("CUDA Device:\t%1%\tDevice id: %2%") % kv.device() % kv.device_id() << std::endl;
+            ss << fmt % kv.device() % "CUDA" % kv.device_id() % "" % "" % "";
         }
     } catch (const std::exception & err) {
         ss << err.what() << std::endl;
@@ -47,9 +51,11 @@ string getGpuDesc() {
 
 string listWus() {
     std::stringstream ss;
+    boost::format fmt("%1$-16s %2$-30s %3$7d %4%");
+    ss << fmt % "WU" % "Full name" % "Chunk" % "Description" << std::endl;
+    ss << string(80, '-') << std::endl;
     for (auto & wu : WorkUnit::available_wus()) {
-        ss << boost::format("%1$-16s %2$-30s %3$7d %4%")
-           % wu.codename() %  wu.fullname() % wu.step_chunk() % wu.description() << std::endl;
+        ss << fmt % wu.codename() %  wu.fullname() % wu.step_chunk() % wu.description() << std::endl;
     }
     return ss.str();
 }
@@ -132,16 +138,11 @@ int main(int argc, char ** argv) {
     }
 
     if (vm.count("device-info")) {
-        std::cout << "Available devices" << std::endl;
-        std::cout << string(80, '-') << std::endl;
         std::cout << getGpuDesc() << std::endl;
         show_info_instead += 1;
     }
 
     if (vm.count("list-wus")) {
-        std::cout << boost::format("%1$-16s %2$-30s %3$7d %4%")
-                  % "WU" % "Full name" % "Steps" % "Description" << std::endl;
-        std::cout << string(80, '-') << std::endl;
         std::cout << listWus() << std::endl;
         show_info_instead += 1;
     }

@@ -3,9 +3,7 @@
 
 #include <stdexcept>
 
-#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
-
 
 
 const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("../share/fahbench/workunits");

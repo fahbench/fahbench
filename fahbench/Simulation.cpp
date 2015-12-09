@@ -23,8 +23,6 @@ using std::string;
 using std::map;
 
 
-static boost::format data_fmt("%1%/dhfr.%2%.%3%.xml");
-
 Simulation::Simulation()
     : work_unit(std::string("dhfr"))
     , platform("OpenCL")
