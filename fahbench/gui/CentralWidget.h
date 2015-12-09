@@ -24,10 +24,11 @@ public:
     CentralWidget();
     QSize sizeHint() const;
 
-    DeviceTableModel * device_table_model;
+    DeviceTableModel  * device_table_model;
     QTableView * device_table_view;
+
+    // TODO: remove this (currently MainWindow draws from it)
     SimulationTableModel * simulation_table_model;
-    QTableView * simulation_table_view;
 
     QLabel * status_bar;
 

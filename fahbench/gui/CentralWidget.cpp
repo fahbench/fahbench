@@ -8,12 +8,16 @@ QSize CentralWidget::sizeHint() const {
 
 
 CentralWidget::CentralWidget() : QWidget() {
+    device_table_model = new DeviceTableModel();
+    device_table_view = new QTableView();
+
     layout_vbox = new QVBoxLayout;
     layout_leftright = new QHBoxLayout;
 
     layout_form = new QFormLayout;
     device_wid = new QComboBox;
-    device_wid->addItem("Device 1");
+    device_wid->setModel(device_table_model);
+    device_wid->setView(device_table_view);
     layout_form->addRow("Device", device_wid);
     platform_wid = new QComboBox;
     platform_wid->addItem("OpenCL");
