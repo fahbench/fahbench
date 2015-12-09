@@ -30,11 +30,18 @@ CentralWidget::CentralWidget() : QWidget() {
     accuracy_check_wid = new QCheckBox("Enabled");
     layout_form->addRow("Accuracy Check", accuracy_check_wid);
     nan_check_wid = new QSpinBox;
+    nan_check_wid->setValue(0);
+    nan_check_wid->setMinimum(0);
+    nan_check_wid->setSpecialValueText("0 - Disabled");
+    nan_check_wid->setSingleStep(10);
+    nan_check_wid->setSuffix(" steps");
     layout_form->addRow("NaN Check", nan_check_wid);
     run_length_wid = new QSpinBox;
-    layout_form->addRow("Run length (s)", run_length_wid);
-    step_chunk_wid = new QSpinBox;
-    layout_form->addRow("Step chunk", step_chunk_wid);
+    run_length_wid->setValue(60);
+    run_length_wid ->setMinimum(1);
+    run_length_wid -> setSingleStep(10);
+    run_length_wid->setSuffix(" s");
+    layout_form->addRow("Run length", run_length_wid);
     layout_leftright->addLayout(layout_form);
 
     layout_rightpanel = new QVBoxLayout;

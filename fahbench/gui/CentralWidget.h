@@ -50,7 +50,6 @@ private:
     QCheckBox * accuracy_check_wid;
     QSpinBox * nan_check_wid;
     QSpinBox * run_length_wid;
-    QSpinBox * step_chunk_wid;
 
     // Right panel stuff
     QLabel * placeholder_wid;
