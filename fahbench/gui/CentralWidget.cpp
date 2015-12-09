@@ -19,9 +19,6 @@ CentralWidget::CentralWidget() : QWidget() {
     device_wid->setModel(device_table_model);
     device_wid->setView(device_table_view);
     layout_form->addRow("Device", device_wid);
-    platform_wid = new QComboBox;
-    platform_wid->addItem("OpenCL");
-    layout_form->addRow("Platform", platform_wid);
     precision_wid = new QComboBox;
     precision_wid->addItem("single");
     precision_wid->addItem("double");

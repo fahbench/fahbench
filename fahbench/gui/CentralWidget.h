@@ -44,7 +44,6 @@ private:
 
     // Config stuff to be put in `layout_form`
     QComboBox * device_wid;
-    QComboBox * platform_wid;
     QComboBox * precision_wid;
     QComboBox * wu_wid;
     //TODO Advanced wu config with xmls
