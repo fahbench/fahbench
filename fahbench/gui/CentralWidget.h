@@ -36,9 +36,12 @@ public:
 
 private:
     QVBoxLayout * layout_vbox;
+    QHBoxLayout * layout_leftright;
     QFormLayout * layout_form;
+    QVBoxLayout * layout_rightpanel;
     QHBoxLayout * layout_bot;
 
+    // Config stuff to be put in `layout_form`
     QComboBox * device_wid;
     QComboBox * platform_wid;
     QComboBox * precision_wid;
@@ -49,10 +52,8 @@ private:
     QSpinBox * run_length_wid;
     QSpinBox * step_chunk_wid;
 
-
-    // Helper functions
-    void make_device_table();
-    void make_simulation_table();
+    // Right panel stuff
+    QLabel * placeholder_wid;
 
 public slots:
     void progress_update(int, int, float);
