@@ -1,6 +1,7 @@
 #include "CentralWidget.h"
 #include "../FAHBenchVersion.h"
 
+#include <QMessageBox>
 
 QSize CentralWidget::sizeHint() const {
     return QSize(850, 450);
@@ -8,7 +9,12 @@ QSize CentralWidget::sizeHint() const {
 
 
 CentralWidget::CentralWidget() : QWidget() {
-    device_table_model = new DeviceTableModel();
+
+    try {
+        device_table_model = new DeviceTableModel();
+    } catch (const std::runtime_error & e) {
+        QMessageBox::warning(this, "Device error", e.what());
+    }
     device_table_view = new QTableView();
 
     layout_vbox = new QVBoxLayout;
