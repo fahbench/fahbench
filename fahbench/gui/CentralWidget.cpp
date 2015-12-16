@@ -57,8 +57,9 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_form->addRow("NaN Check", nan_check_wid);
     run_length_wid = new QSpinBox;
     run_length_wid->setValue(60);
-    run_length_wid ->setMinimum(1);
-    run_length_wid -> setSingleStep(10);
+    run_length_wid->setMinimum(1);
+    run_length_wid->setMaximum(60*60);
+    run_length_wid->setSingleStep(10);
     run_length_wid->setSuffix(" s");
     layout_form->addRow("Run length", run_length_wid);
     layout_leftright->addLayout(layout_form);
