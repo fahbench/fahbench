@@ -2,6 +2,7 @@
 #include "../FAHBenchVersion.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 QSize CentralWidget::sizeHint() const {
     return QSize(850, 450);
@@ -31,6 +32,7 @@ CentralWidget::CentralWidget() : QWidget() {
     openmm_platform_wid = new QComboBox;
     openmm_platform_wid->addItem("OpenCL");
     openmm_platform_wid->addItem("CPU");
+    connect(openmm_platform_wid, SIGNAL(currentIndexChanged(int)), this, SLOT(openmm_platform_changed(int)));
     layout_form->addRow("Compute", openmm_platform_wid);
     precision_wid = new QComboBox;
     precision_wid->addItem("single");
@@ -40,6 +42,7 @@ CentralWidget::CentralWidget() : QWidget() {
     wu_wid->addItem("dhfr");
     layout_form->addRow("WU", wu_wid);
     accuracy_check_wid = new QCheckBox("Enabled");
+    accuracy_check_wid->setChecked(true);
     layout_form->addRow("Accuracy Check", accuracy_check_wid);
     nan_check_wid = new QSpinBox;
     nan_check_wid->setValue(0);
@@ -77,6 +80,11 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_bot->addWidget(start_button);
     layout_vbox->addLayout(layout_bot);
 
+    // TODO: Remove these. They just make testing faster
+    accuracy_check_wid->setChecked(false);
+    run_length_wid->setValue(10);
+    openmm_platform_wid->setCurrentIndex(1); // CPU on laptop
+
     setLayout(layout_vbox);
 }
 
@@ -89,6 +97,22 @@ void CentralWidget::progress_update(int i, int numSteps, float score) {
 
 void CentralWidget::message_update(const QString & s) {
     status_bar->setText(s);
+}
+
+void CentralWidget::openmm_platform_changed(int index) {
+    qDebug() << "OpenMM platform changed";
+    switch (index) {
+    //TODO: Enum
+    case OPENMM_PLATFORMS::OpenCL:
+        device_wid->setEnabled(true);
+        break;
+    case OPENMM_PLATFORMS::CPU:
+        device_wid->setEnabled(false);
+        break;
+    default:
+        throw std::runtime_error("Unknown openmm platform selection");
+    }
+
 }
 
 

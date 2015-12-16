@@ -15,6 +15,11 @@
 
 #include "DeviceTableModel.h"
 
+enum OPENMM_PLATFORMS {
+    OpenCL = 0,
+    CPU = 1
+};
+
 
 class CentralWidget :  public QWidget {
     Q_OBJECT
@@ -50,9 +55,15 @@ private:
     // Right panel stuff
     QLabel * placeholder_wid;
 
+
+
 public slots:
     void progress_update(int, int, float);
     void message_update(const QString &);
+
+private slots:
+    void openmm_platform_changed(int);
+
 
 };
 
