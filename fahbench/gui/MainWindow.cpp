@@ -80,6 +80,7 @@ void MainWindow::simulation_finished(const SimulationResult & score) {
     // TODO: Update result
     qDebug() << score.score();
     qDebug() << score.scaled_score();
+    central_widget->results_wid->set_result(score);
 }
 
 void MainWindow::about() {

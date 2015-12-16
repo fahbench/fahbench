@@ -35,6 +35,8 @@ public:
     QProgressBar * progress_bar;
     QPushButton * start_button;
 
+    ResultsWidget * results_wid;
+
     void configure_simulation(Simulation & sim) const;
 
 private:
@@ -59,7 +61,6 @@ private:
     QSpinBox * run_length_wid;
 
     // Right panel stuff
-    ResultsWidget * results_wid;
 
 
 
