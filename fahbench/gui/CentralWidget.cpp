@@ -71,8 +71,9 @@ CentralWidget::CentralWidget() : QWidget() {
 
     layout_vbox->addLayout(layout_leftright);
 
-    // Make sure this comes before construction of tables
-    status_bar = new QLabel(QString("FAHBench v%1").arg(QString::fromStdString(getVersion())));
+    status_bar = new QLabel(QString("FAHBench %1 with OpenMM %2")
+                            .arg(QString::fromStdString(getVersion()))
+                            .arg(QString::fromStdString(getOpenMMVersion())));
     layout_vbox->addWidget(status_bar);
 
 
