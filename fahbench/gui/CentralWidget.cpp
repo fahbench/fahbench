@@ -10,10 +10,13 @@ QSize CentralWidget::sizeHint() const {
 
 CentralWidget::CentralWidget() : QWidget() {
 
-    try {
-        device_table_model = new DeviceTableModel();
-    } catch (const std::runtime_error & e) {
-        QMessageBox::warning(this, "Device error", e.what());
+    device_table_model = new DeviceTableModel();
+    for (const auto & e : device_table_model->errors()) {
+        QString msg;
+        msg += "There was a problem getting compatible GPU devices. ";
+        msg += "The following error code may be helpful:\n";
+        msg += e.what();
+        QMessageBox::warning(this, "Device error", msg);
     }
     device_table_view = new QTableView();
 
@@ -25,6 +28,10 @@ CentralWidget::CentralWidget() : QWidget() {
     device_wid->setModel(device_table_model);
     device_wid->setView(device_table_view);
     layout_form->addRow("Device", device_wid);
+    openmm_platform_wid = new QComboBox;
+    openmm_platform_wid->addItem("OpenCL");
+    openmm_platform_wid->addItem("CPU");
+    layout_form->addRow("Compute", openmm_platform_wid);
     precision_wid = new QComboBox;
     precision_wid->addItem("single");
     precision_wid->addItem("double");

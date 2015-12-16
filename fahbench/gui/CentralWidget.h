@@ -40,6 +40,7 @@ private:
 
     // Config stuff to be put in `layout_form`
     QComboBox * device_wid;
+    QComboBox * openmm_platform_wid;
     QComboBox * precision_wid;
     QComboBox * wu_wid;
     QCheckBox * accuracy_check_wid;

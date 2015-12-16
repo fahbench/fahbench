@@ -13,6 +13,7 @@ class DeviceTableModel : public QAbstractTableModel {
 
 private:
     std::vector<Device> _entries;
+    std::vector<std::runtime_error> _errors;
 
 public:
     DeviceTableModel();
@@ -22,6 +23,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     const std::vector<Device> & entries() const;
+    const std::vector<std::runtime_error> & errors() const;
+
 
 };
 
