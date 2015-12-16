@@ -57,11 +57,7 @@ void MainWindow::make_menu_bar() {
 
 void MainWindow::start_button_clicked() {
     Simulation sim;
-
-    sim.verifyAccuracy = false;
-    sim.run_length = std::chrono::seconds(10);
-    //TODO: Configure simulation
-
+    central_widget->configure_simulation(sim);
 
     auto pbar = central_widget->progress_bar;
     auto sbut = central_widget->start_button;

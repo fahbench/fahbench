@@ -88,6 +88,36 @@ CentralWidget::CentralWidget() : QWidget() {
     setLayout(layout_vbox);
 }
 
+void CentralWidget::configure_simulation(Simulation & sim) const {
+    switch (openmm_platform_wid->currentIndex()) {
+    case OPENMM_PLATFORMS::OpenCL: {
+        sim.platform = "OpenCL";
+        auto sel_device = device_table_model->entries().at(device_wid->currentIndex());
+        sim.deviceId = sel_device.device_id();
+        sim.platformId = sel_device.platform_id();
+    }
+    break;
+    case OPENMM_PLATFORMS::CPU:
+        sim.platform = "CPU";
+        break;
+    default:
+        throw std::runtime_error("Unknown OpenMM Platform");
+    }
+
+    // Maybe seperate display text from actual text passed to OpenMM?
+    sim.precision = precision_wid->currentText().toStdString();
+
+    WorkUnit wu(wu_wid->currentText().toStdString());
+    sim.work_unit = wu;
+
+    sim.verifyAccuracy = accuracy_check_wid->isChecked();
+    sim.nan_check_freq = nan_check_wid->value();
+
+    sim.run_length = std::chrono::seconds(run_length_wid->value());
+
+    qDebug() << QString::fromStdString(sim.summary());
+}
+
 
 void CentralWidget::progress_update(int i, int numSteps, float score) {
     progress_bar->setMaximum(numSteps);
