@@ -58,17 +58,15 @@ CentralWidget::CentralWidget() : QWidget() {
     run_length_wid = new QSpinBox;
     run_length_wid->setValue(60);
     run_length_wid->setMinimum(1);
-    run_length_wid->setMaximum(60*60);
+    run_length_wid->setMaximum(60 * 60);
     run_length_wid->setSingleStep(10);
     run_length_wid->setSuffix(" s");
     layout_form->addRow("Run length", run_length_wid);
     layout_leftright->addLayout(layout_form);
+    layout_leftright->setStretchFactor(layout_form, Qt::MaximumSize);
 
-    layout_rightpanel = new QVBoxLayout;
-    placeholder_wid = new QLabel("Placeholder");
-    layout_rightpanel->addWidget(placeholder_wid);
-
-    layout_leftright->addLayout(layout_rightpanel);
+    results_wid = new ResultsWidget;
+    layout_leftright->addWidget(results_wid);
 
     layout_vbox->addLayout(layout_leftright);
 

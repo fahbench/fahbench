@@ -10,6 +10,7 @@
 
 
 class DeviceTableModel : public QAbstractTableModel {
+    Q_OBJECT
 
 private:
     std::vector<Device> _entries;

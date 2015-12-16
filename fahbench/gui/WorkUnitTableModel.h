@@ -17,6 +17,7 @@ enum WUTABLE_COLS {
 const static int WUTABLE_NCOLS = 4;
 
 class WorkUnitTableModel  : public QAbstractTableModel {
+    Q_OBJECT
 
 private:
     std::vector<WorkUnit> _entries;

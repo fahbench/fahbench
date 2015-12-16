@@ -64,3 +64,5 @@ QVariant WorkUnitTableModel::headerData(int section, Qt::Orientation orientation
         return QString("%1").arg(section);
     }
 }
+
+#include "WorkUnitTableModel.moc"

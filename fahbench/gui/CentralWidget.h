@@ -2,7 +2,6 @@
 #define CENTRALWIDGET_H
 
 #include <QWidget>
-#include <QLabel>
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -16,6 +15,7 @@
 #include "DeviceTableModel.h"
 #include "WorkUnitTableModel.h"
 #include "QSimulation.h"
+#include "ResultsWidget.h"
 
 enum OPENMM_PLATFORMS {
     OpenCL = 0,
@@ -47,7 +47,6 @@ private:
     QVBoxLayout * layout_vbox;
     QHBoxLayout * layout_leftright;
     QFormLayout * layout_form;
-    QVBoxLayout * layout_rightpanel;
     QHBoxLayout * layout_bot;
 
     // Config stuff to be put in `layout_form`
@@ -60,7 +59,7 @@ private:
     QSpinBox * run_length_wid;
 
     // Right panel stuff
-    QLabel * placeholder_wid;
+    ResultsWidget * results_wid;
 
 
 
