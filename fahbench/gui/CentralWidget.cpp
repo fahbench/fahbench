@@ -11,7 +11,7 @@ QSize CentralWidget::sizeHint() const {
 
 CentralWidget::CentralWidget() : QWidget() {
 
-    device_table_model = new DeviceTableModel();
+    device_table_model = new DeviceTableModel;
     for (const auto & e : device_table_model->errors()) {
         QString msg;
         msg += "There was a problem getting compatible GPU devices. ";
@@ -19,7 +19,10 @@ CentralWidget::CentralWidget() : QWidget() {
         msg += e.what();
         QMessageBox::warning(this, "Device error", msg);
     }
-    device_table_view = new QTableView();
+    device_table_view = new QTableView;
+
+    wu_table_model = new WorkUnitTableModel;
+    wu_table_view = new QTableView;
 
     layout_vbox = new QVBoxLayout;
     layout_leftright = new QHBoxLayout;
@@ -39,7 +42,8 @@ CentralWidget::CentralWidget() : QWidget() {
     precision_wid->addItem("double");
     layout_form->addRow("Precision", precision_wid);
     wu_wid = new QComboBox;
-    wu_wid->addItem("dhfr");
+    wu_wid->setModel(wu_table_model);
+    wu_wid->setView(wu_table_view);
     layout_form->addRow("WU", wu_wid);
     accuracy_check_wid = new QCheckBox("Enabled");
     accuracy_check_wid->setChecked(true);

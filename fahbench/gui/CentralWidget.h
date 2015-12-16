@@ -14,6 +14,7 @@
 #include <QSpinBox>
 
 #include "DeviceTableModel.h"
+#include "WorkUnitTableModel.h"
 #include "QSimulation.h"
 
 enum OPENMM_PLATFORMS {
@@ -39,6 +40,9 @@ public:
 private:
     DeviceTableModel  * device_table_model;
     QTableView * device_table_view;
+
+    WorkUnitTableModel * wu_table_model;
+    QTableView * wu_table_view;
 
     QVBoxLayout * layout_vbox;
     QHBoxLayout * layout_leftright;
