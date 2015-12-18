@@ -90,6 +90,14 @@ CentralWidget::CentralWidget() : QWidget() {
     openmm_platform_wid->setCurrentIndex(1); // CPU on laptop
 
     setLayout(layout_vbox);
+
+    device_table_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    device_table_view->resizeColumnsToContents();
+    device_table_view->resizeRowsToContents();
+
+    wu_table_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    wu_table_view->resizeColumnsToContents();
+    wu_table_view->resizeRowsToContents();
 }
 
 void CentralWidget::configure_simulation(Simulation & sim) const {
