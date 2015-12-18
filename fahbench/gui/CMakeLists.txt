@@ -21,7 +21,8 @@ add_executable(FAHBench-gui WIN32
     WorkUnitTableModel.cpp
     SimulationWorker.cpp
     gui-main.cpp
-	FahIcon.rc
+    Resources.qrc
+    FahIcon.rc
 )
 
 set_target_properties(FAHBench-gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
