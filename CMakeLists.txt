@@ -14,6 +14,7 @@ set(FAHBench_VERSION_ISRELEASE OFF)
 
 # For QT
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Configure compiler
