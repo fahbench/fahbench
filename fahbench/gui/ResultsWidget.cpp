@@ -11,10 +11,9 @@ const static QString RESULTS_HEADER("<h1>FAHBench Results</h1>");
 ResultsWidget::ResultsWidget() {
     layout = new QVBoxLayout;
 
-    results_label = new QLabel(
-        "<h1>FAHBench Results</h1><br />"
-        "<em>Click start to benchmark your machine</em>"
-    );
+    QString text(RESULTS_HEADER);
+    text += "<em>Click start to benchmark your machine.</em>";
+    results_label = new QLabel(text);
 
     layout->addWidget(results_label);
     layout->addStretch();
@@ -24,7 +23,7 @@ ResultsWidget::ResultsWidget() {
 void ResultsWidget::set_result(const SimulationResult & result) {
     QString text(RESULTS_HEADER);
     QString row("<tr><td>%1</td><td>%2</td></tr>");
-    text += "<table>";
+    text += "<table width='100%'>";
     text += row.arg("Score").arg(result.score());
     text += row.arg("Scaled Score").arg(result.scaled_score());
     text += row.arg("Atoms").arg(result.n_atoms());
