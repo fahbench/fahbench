@@ -3,6 +3,9 @@
 
 #include "../Simulation.h"
 #include "../SimulationResult.h"
+
+#include <QMetaType>
+
 Q_DECLARE_METATYPE(Simulation)
 Q_DECLARE_METATYPE(SimulationResult)
 

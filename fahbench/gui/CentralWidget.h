@@ -2,15 +2,25 @@
 #define CENTRALWIDGET_H
 
 #include <QWidget>
-#include <QLabel>
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QSpinBox>
 
-#include "SimulationTableModel.h"
 #include "DeviceTableModel.h"
+#include "WorkUnitTableModel.h"
+#include "QSimulation.h"
+#include "ResultsWidget.h"
+
+enum OPENMM_PLATFORMS {
+    OpenCL = 0,
+    CPU = 1
+};
 
 
 class CentralWidget :  public QWidget {
@@ -20,31 +30,47 @@ public:
     CentralWidget();
     QSize sizeHint() const;
 
-    DeviceTableModel * device_table_model;
-    QTableView * device_table_view;
-    SimulationTableModel * simulation_table_model;
-    QTableView * simulation_table_view;
-
     QLabel * status_bar;
 
     QProgressBar * progress_bar;
     QPushButton * start_button;
 
+    ResultsWidget * results_wid;
+
+    void configure_simulation(Simulation & sim) const;
+
 private:
-    QVBoxLayout * layout_a;
-    QHBoxLayout * layout_a1;
-    QHBoxLayout * layout_a2;
+    DeviceTableModel  * device_table_model;
+    QTableView * device_table_view;
 
-    QVBoxLayout * device_vbox;
-    QVBoxLayout * simulation_vbox;
+    WorkUnitTableModel * wu_table_model;
+    QTableView * wu_table_view;
 
-    // Helper functions
-    void make_device_table();
-    void make_simulation_table();
+    QVBoxLayout * layout_vbox;
+    QHBoxLayout * layout_leftright;
+    QFormLayout * layout_form;
+    QHBoxLayout * layout_bot;
+
+    // Config stuff to be put in `layout_form`
+    QComboBox * device_wid;
+    QComboBox * openmm_platform_wid;
+    QComboBox * precision_wid;
+    QComboBox * wu_wid;
+    QCheckBox * accuracy_check_wid;
+    QSpinBox * nan_check_wid;
+    QSpinBox * run_length_wid;
+
+    // Right panel stuff
+
+
 
 public slots:
     void progress_update(int, int, float);
     void message_update(const QString &);
+
+private slots:
+    void openmm_platform_changed(int);
+
 
 };
 

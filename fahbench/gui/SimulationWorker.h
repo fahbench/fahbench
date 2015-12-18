@@ -1,14 +1,15 @@
 #ifndef SIMULATION_WORKER_H_
 #define SIMULATION_WORKER_H_
 
+#include "../Updater.h"
+#include "QSimulation.h"
+
 #include <string>
 #include <boost/format.hpp>
 
 #include <QObject>
-#include <OpenMM.h>
+#include <QString>
 
-#include "../Updater.h"
-#include "QSimulation.h"
 
 class SimulationWorker : public QObject, public Updater {
 
@@ -21,7 +22,7 @@ public:
     void message(boost::format);
 
 public slots:
-    void run_simulation(Simulation * simulation);
+    void run_simulation(const Simulation & simulation);
 
 signals:
     void simulation_finished(const SimulationResult & score);

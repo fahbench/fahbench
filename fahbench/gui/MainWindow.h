@@ -1,6 +1,10 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include "CentralWidget.h"
+#include "SimulationWorker.h"
+#include "QSimulation.h"
+
 #include <string>
 #include <map>
 #include <queue>
@@ -10,9 +14,6 @@
 #include <QMenuBar>
 #include <QAction>
 
-#include "CentralWidget.h"
-#include "SimulationWorker.h"
-#include "QSimulation.h"
 
 
 class MainWindow : public QMainWindow {
@@ -35,8 +36,7 @@ private:
     QAction * about_action;
 
 signals:
-    void start_new_simulation(Simulation *);
-    void continue_simulation_queue();
+    void start_new_simulation(const Simulation &);
 
 private slots:
     void simulation_finished(const SimulationResult & score);
