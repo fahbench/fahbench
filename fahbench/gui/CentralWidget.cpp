@@ -84,11 +84,6 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_bot->addWidget(start_button);
     layout_vbox->addLayout(layout_bot);
 
-    // TODO: Remove these. They just make testing faster
-    accuracy_check_wid->setChecked(false);
-    run_length_wid->setValue(10);
-    openmm_platform_wid->setCurrentIndex(1); // CPU on laptop
-
     setLayout(layout_vbox);
 
     device_table_view->setSelectionBehavior(QAbstractItemView::SelectRows);

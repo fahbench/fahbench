@@ -70,7 +70,6 @@ string Simulation::summary() const {
         ss << std::endl;
     }
     ss << "Run length: " << run_length.count() << "s" << std::endl;
-    // TODO: more
     return ss.str();
 }
 
