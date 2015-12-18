@@ -48,8 +48,6 @@ typedef cudaError_t (*cudaGetDeviceCount_pt)(int * count);
 typedef cudaError_t (*cudaGetDeviceProperties_pt)(cudaDeviceProp *, int i);
 
 vector<Device> GPUInfo::getCUDADevices() {
-    // TODO: custom exception
-
     HMODULE cu_rt;
     cudaGetDeviceCount_pt my_cuGetDeviceCount;
     cudaGetDeviceProperties_pt my_cuGetDeviceProperties;

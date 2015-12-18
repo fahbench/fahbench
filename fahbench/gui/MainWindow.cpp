@@ -4,7 +4,6 @@
 
 #include <QMessageBox>
 #include <QDebug>
-//TODO: remove debug
 
 using namespace std;
 
