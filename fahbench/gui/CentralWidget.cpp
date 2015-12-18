@@ -38,15 +38,10 @@ CentralWidget::CentralWidget() : QWidget() {
 }
 
 void CentralWidget::make_device_table() {
-    device_table_view = new QTableView();
+    device_table_view = new DeviceTableView();
     device_table_model = new DeviceTableModel(*this);
     device_table_view->setModel(device_table_model);
-
-    auto tv = device_table_view;
-    tv->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tv->setShowGrid(false);
-    tv->resizeColumnsToContents();
-    tv->resizeRowsToContents();
+    connect(device_table_view, &DeviceTableView::clicked, device_table_model, &DeviceTableModel::device_clicked);
 
     device_vbox = new QVBoxLayout();
     device_vbox->addWidget(new QLabel("Devices"));
@@ -54,11 +49,10 @@ void CentralWidget::make_device_table() {
 }
 
 void CentralWidget::make_simulation_table() {
-    simulation_table_view = new QTableView();
+    simulation_table_view = new SimulationTableView();
     simulation_table_model = new SimulationTableModel(device_table_model);
     simulation_table_view->setModel(simulation_table_model);
-    simulation_table_view->resizeColumnsToContents();
-    simulation_table_view->resizeRowsToContents();
+    connect(simulation_table_view, &SimulationTableView::clicked, simulation_table_model, &SimulationTableModel::simulation_clicked);
 
     simulation_vbox = new QVBoxLayout();
     simulation_vbox->addWidget(new QLabel("Benchmarking runs"));

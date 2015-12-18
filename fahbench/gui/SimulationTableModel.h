@@ -56,11 +56,16 @@ public:
     int rowCount(const QModelIndex & parent) const;
     int columnCount(const QModelIndex & parent) const;
     QVariant data(const QModelIndex & index, int role) const;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
 
     bool has_next() const;
     const SimulationTableEntry & get_next();
     void finish(SimulationResult score);
+
+public slots:
+    void simulation_clicked(const QModelIndex & index);
 
 };
 

@@ -25,6 +25,9 @@ public:
 
     const std::vector< Device > & entries() const;
 
+public slots:
+    void device_clicked(const QModelIndex & index);
+
 };
 
 #endif // DEVICE_TABLE_MODEL_H_

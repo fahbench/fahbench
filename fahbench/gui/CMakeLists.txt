@@ -16,11 +16,13 @@ if(${MAKE_QT_GUI})
 add_executable(FAHBench-gui WIN32
     MainWindow.cpp
     CentralWidget.cpp
-	SimulationTableModel.cpp
-	DeviceTableModel.cpp
+    SimulationTableModel.cpp
+    SimulationTableView.cpp
+    DeviceTableModel.cpp
+    DeviceTableView.cpp
     SimulationWorker.cpp
     gui-main.cpp
-	FahIcon.rc
+    FahIcon.rc
 )
 
 set_target_properties(FAHBench-gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
