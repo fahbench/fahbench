@@ -8,6 +8,7 @@ enum class ResultStatus {
     QUEUED,
     INPROGRESS,
     FAILED,
+    CANCELLED,
     FINISHED
 };
 

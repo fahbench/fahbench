@@ -41,6 +41,7 @@ signals:
 private slots:
     void simulation_finished(const SimulationResult & score);
     void start_button_clicked();
+    void interrupt_simulation();
 
     void about();
 

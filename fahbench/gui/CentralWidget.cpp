@@ -82,6 +82,9 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_bot->addWidget(progress_bar);
     start_button = new QPushButton("Start");
     layout_bot->addWidget(start_button);
+    cancel_button = new QPushButton("Cancel");
+    cancel_button->setEnabled(false);
+    layout_bot->addWidget(cancel_button);
     layout_vbox->addLayout(layout_bot);
 
     setLayout(layout_vbox);

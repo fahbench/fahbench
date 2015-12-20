@@ -1,6 +1,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <memory>
 
 #include <stdexcept>
 #include <boost/format.hpp>
@@ -74,48 +75,55 @@ string Simulation::summary() const {
 }
 
 
-SimulationResult Simulation::run(Updater & update) const {
+SimulationResult Simulation::run(const Updater & update) const {
     update.message(boost::format("Loading plugins from plugin directory"));
     Platform::loadPluginsFromDirectory(openmm_plugin_dir.string());
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
     Platform & platform = Platform::getPlatformByName(this->platform);
 
     update.message("Deserializing system...");
-    System * sys = loadObject<System>(work_unit.system_fn());
+    std::unique_ptr<System> sys(loadObject<System>(work_unit.system_fn()));
     update.message("Deserializing state...");
-    State * state = loadObject<State>(work_unit.state_fn());
+    std::unique_ptr<State> state(loadObject<State>(work_unit.state_fn()));
     update.message("Deserializing integrator...");
-    Integrator * intg = loadObject<Integrator>(work_unit.integrator_fn());
+    std::unique_ptr<Integrator> intg(loadObject<Integrator>(work_unit.integrator_fn()));
+    if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
+
 
     update.message("Creating context...");
     Context context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
+    if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
+
 
     if (verifyAccuracy) {
         update.message("Checking for accuracy...");
-        Integrator * refIntg = loadObject<Integrator>(work_unit.integrator_fn());
+        std::unique_ptr<Integrator> refIntg(loadObject<Integrator>(work_unit.integrator_fn()));
         update.message("Creating reference context...");
         Context refContext(*sys, *refIntg, Platform::getPlatformByName("Reference"));
         refContext.setState(*state);
+        if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
         update.message("Comparing forces and energy...");
-        StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy), context.getState(State::Forces | State::Energy));
-        delete refIntg;
+        StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy),
+                                             context.getState(State::Forces | State::Energy));
+        if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
     }
 
     update.message("Starting Benchmark");
     float score = benchmark(context, update);
-    update.message("Benchmarking finished.");
 
-    SimulationResult result(score, sys->getNumParticles());
-
-    delete sys;
-    delete state;
-    delete intg;
-
-    return result;
+    // This still uses try_lock which returns "false" if it can't get the lock
+    // So it is theoretically possible for it to return "Finished" even if it should have been cancelled.
+    if (update.cancelled()) {
+        return SimulationResult(ResultStatus::CANCELLED);
+    } else {
+        update.message("Benchmarking finished.");
+        SimulationResult result(score, sys->getNumParticles());
+        return result;
+    }
 }
 
-float Simulation::benchmark(Context & context, Updater & update) const {
+float Simulation::benchmark(Context & context, const Updater & update) const {
     float step_size_ns = context.getIntegrator().getStepSize() / 1000.0;
     int steps = 0;
     int step_chunk = work_unit.step_chunk();
@@ -131,7 +139,7 @@ float Simulation::benchmark(Context & context, Updater & update) const {
     std::chrono::steady_clock clock;
     auto clock_start = clock.now();
 
-    while (true) {
+    while (!update.cancelled()) {
         context.getIntegrator().step(step_chunk);
         steps += step_chunk;
 
@@ -147,7 +155,7 @@ float Simulation::benchmark(Context & context, Updater & update) const {
         update.progress(std::chrono::duration_cast<ms>(duration).count(),
                         run_length_ms.count(), ns_day);
 
-        if (nan_check_freq > 0 && steps - last_nan_check >  nan_check_freq) {
+        if (nan_check_freq > 0 && steps - last_nan_check > nan_check_freq) {
             StateTests::checkForNans(context.getState(State::Positions | State::Velocities | State::Forces));
             last_nan_check = steps;
         }
@@ -159,8 +167,10 @@ float Simulation::benchmark(Context & context, Updater & update) const {
     float per_day = 1.0 / std::chrono::duration_cast<day>(duration).count();
     float ns_day = steps * step_size_ns * per_day;
 
-    StateTests::checkForNans(finalState);
-    StateTests::checkForDiscrepancies(finalState);
+    if (!update.cancelled()) {
+        StateTests::checkForNans(finalState);
+        StateTests::checkForDiscrepancies(finalState);
+    }
     update.progress(run_length_ms.count(), run_length_ms.count(), ns_day);
     return ns_day;
 }
@@ -174,7 +184,6 @@ T * Simulation::loadObject(const string & fname) const {
     std::istream & s = f;
     return XmlSerializer::deserialize<T>(s);
 }
-
 
 
 
