@@ -79,7 +79,7 @@ SimulationResult Simulation::run(const Updater & update) const {
     update.message(boost::format("Loading plugins from plugin directory"));
     Platform::loadPluginsFromDirectory(openmm_plugin_dir.string());
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
-    Platform &platform = Platform::getPlatformByName(this->platform);
+    Platform & platform = Platform::getPlatformByName(this->platform);
 
     update.message("Deserializing system...");
     std::unique_ptr<System> sys(loadObject<System>(work_unit.system_fn()));
@@ -116,7 +116,7 @@ SimulationResult Simulation::run(const Updater & update) const {
     // So it is theoretically possible for it to return "Finished" even if it should have been cancelled.
     if (update.cancelled()) {
         return SimulationResult(ResultStatus::CANCELLED);
-    } else{
+    } else {
         update.message("Benchmarking finished.");
         SimulationResult result(score, sys->getNumParticles());
         return result;

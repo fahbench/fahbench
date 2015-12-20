@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#include <mutex>
+
 using namespace std;
 
 
@@ -22,8 +24,7 @@ MainWindow::MainWindow() : QMainWindow() {
     connect(&thread, &QThread::finished, worker, &QObject::deleteLater);
     connect(this, &MainWindow::start_new_simulation, worker, &SimulationWorker::run_simulation);
     connect(worker, &SimulationWorker::simulation_finished, this, &MainWindow::simulation_finished);
-    connect(this, &MainWindow::interrupt_simulation, worker, &SimulationWorker::interrupt_simulation);
-    connect(central_widget->cancel_button, SIGNAL(clicked()), worker, SLOT(interrupt_simulation()));
+    connect(central_widget->cancel_button, SIGNAL(clicked()), this, SLOT(interrupt_simulation()));
     connect(central_widget->start_button, &QAbstractButton::clicked, this, &MainWindow::start_button_clicked);
     connect(worker, &SimulationWorker::progress_update, central_widget, &CentralWidget::progress_update);
     connect(worker, &SimulationWorker::message_update, central_widget, &CentralWidget::message_update);
@@ -37,7 +38,7 @@ MainWindow::MainWindow() : QMainWindow() {
 }
 
 MainWindow::~MainWindow() {
-    emit interrupt_simulation();
+    interrupt_simulation();
     thread.quit();
     thread.wait();
 }
@@ -67,6 +68,9 @@ void MainWindow::start_button_clicked() {
     auto sbut = central_widget->start_button;
     auto cbut = central_widget->cancel_button;
 
+    std::lock_guard<std::mutex> lock(worker->cancelled_mutex);
+    worker->is_cancelled = false;
+
     pbar->reset();
     // Show "busy" bar
     pbar->setMinimum(0);
@@ -85,10 +89,20 @@ void MainWindow::simulation_finished(const SimulationResult & score) {
     pbar->setValue(pbar->maximum());
     sbut->setEnabled(true);
     cbut->setEnabled(false);
+    cbut->setText("Cancel");
 
     qDebug() << score.score();
     qDebug() << score.scaled_score();
     central_widget->results_wid->set_result(score);
+}
+
+void MainWindow::interrupt_simulation() {
+    auto cbut = central_widget->cancel_button;
+    cbut->setEnabled(false);
+    cbut->setText("Cancelling...");
+
+    std::lock_guard<std::mutex> lock(worker->cancelled_mutex);
+    worker->is_cancelled = true;
 }
 
 void MainWindow::about() {

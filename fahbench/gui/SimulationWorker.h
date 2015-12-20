@@ -18,11 +18,13 @@ class SimulationWorker : public QObject, public Updater {
 
 
 private:
-    bool _cancelled;
-    mutable std::mutex cancelled_mutex;
 
 public:
     SimulationWorker();
+
+    bool is_cancelled;
+    mutable std::mutex cancelled_mutex;
+
     void progress(int i, int num_steps, float score) const;
     void message(std::string) const;
     void message(boost::format) const;
@@ -30,7 +32,6 @@ public:
 
 public slots:
     void run_simulation(const Simulation & simulation);
-    void interrupt_simulation();
 
 signals:
     void simulation_finished(const SimulationResult & score);

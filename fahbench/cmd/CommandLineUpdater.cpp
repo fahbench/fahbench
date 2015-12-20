@@ -20,6 +20,6 @@ void CommandLineUpdater::message(boost::format f) const {
 
 }
 
-bool CommandLineUpdater::cancelled() const{
+bool CommandLineUpdater::cancelled() const {
     return false;
 }

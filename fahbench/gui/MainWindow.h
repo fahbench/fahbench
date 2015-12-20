@@ -37,11 +37,11 @@ private:
 
 signals:
     void start_new_simulation(const Simulation &);
-    void interrupt_simulation();
 
 private slots:
     void simulation_finished(const SimulationResult & score);
     void start_button_clicked();
+    void interrupt_simulation();
 
     void about();
 

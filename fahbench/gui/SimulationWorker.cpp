@@ -8,10 +8,9 @@ using std::string;
 using std::map;
 
 SimulationWorker::SimulationWorker()
-        : QObject()
-        , _cancelled(false)
-        , cancelled_mutex()
-{
+    : QObject()
+    , is_cancelled(false)
+    , cancelled_mutex() {
     qRegisterMetaType<Simulation>();
     qRegisterMetaType<SimulationResult>();
 }
@@ -27,9 +26,6 @@ void SimulationWorker::run_simulation(const Simulation & simulation) {
     }
 }
 
-void SimulationWorker::interrupt_simulation(){
-    qDebug() << "Interrupt requested";
-}
 
 void SimulationWorker::progress(int i, int num_steps, float score) const {
     emit progress_update(i, num_steps, score);
@@ -44,11 +40,14 @@ void SimulationWorker::message(boost::format f) const {
     emit message_update(QString::fromStdString(f.str()));
 }
 
-bool SimulationWorker::cancelled() const{
+bool SimulationWorker::cancelled() const {
     bool ret = false;
-    if(cancelled_mutex.try_lock()){
-        ret = _cancelled;
+    if (cancelled_mutex.try_lock()) {
+        ret = is_cancelled;
         cancelled_mutex.unlock();
+    }
+    if (ret) {
+        emit message_update("Cancelled!");
     }
     return ret;
 }
