@@ -1,7 +1,7 @@
 #include <iostream>
 #include "CommandLineUpdater.h"
 
-void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) {
+void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) const {
     if (i == numSteps) {
         std::cout << std::string(80, ' ') << std::endl;
         return;
@@ -11,11 +11,15 @@ void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) {
 }
 
 
-void CommandLineUpdater::message(std::string s) {
+void CommandLineUpdater::message(std::string s) const {
     std::cout << s << std::endl << std::flush;
 }
 
-void CommandLineUpdater::message(boost::format f) {
+void CommandLineUpdater::message(boost::format f) const {
     std::cout << f << std::endl << std::flush;
 
+}
+
+bool CommandLineUpdater::cancelled() const{
+    return false;
 }

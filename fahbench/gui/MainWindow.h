@@ -37,6 +37,7 @@ private:
 
 signals:
     void start_new_simulation(const Simulation &);
+    void interrupt_simulation();
 
 private slots:
     void simulation_finished(const SimulationResult & score);

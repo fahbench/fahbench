@@ -34,6 +34,7 @@ public:
 
     QProgressBar * progress_bar;
     QPushButton * start_button;
+    QPushButton * cancel_button;
 
     ResultsWidget * results_wid;
 

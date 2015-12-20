@@ -41,7 +41,8 @@ public:
 
     std::string summary() const;
 
-    SimulationResult run(Updater & update) const;
+    SimulationResult run(const Updater & update) const;
+
 
 private:
     fs::path openmm_plugin_dir;
@@ -49,7 +50,8 @@ private:
     template<class T>
     T * loadObject(const string & fname) const;
 
-    float benchmark(OpenMM::Context & context, Updater & update) const;
+    float benchmark(OpenMM::Context & context, const Updater & update) const;
+
 };
 
 

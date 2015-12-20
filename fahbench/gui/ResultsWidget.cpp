@@ -43,6 +43,8 @@ QString ResultsWidget::status_string(const ResultStatus status) const {
         return "In Progress";
     case ResultStatus::FAILED:
         return "Failed";
+    case ResultStatus::CANCELLED:
+        return "Cancelled";
     case ResultStatus::FINISHED:
         return "Finished";
     }

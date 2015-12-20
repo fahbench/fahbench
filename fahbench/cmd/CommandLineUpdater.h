@@ -5,9 +5,10 @@
 
 class CommandLineUpdater : public Updater {
 public:
-    void progress(int i, int numSteps, float ns_per_day);
-    void message(std::string);
-    void message(boost::format);
+    void progress(int i, int numSteps, float ns_per_day) const;
+    void message(std::string) const;
+    void message(boost::format) const;
+    bool cancelled() const;
 };
 
 #endif // COMMANDLINEUPDATER_H
