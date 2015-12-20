@@ -2,8 +2,6 @@
 #include "SimulationWorker.h"
 #include <exception>
 
-#include <QDebug>
-
 using std::string;
 using std::map;
 

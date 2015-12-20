@@ -16,9 +16,6 @@ class SimulationWorker : public QObject, public Updater {
 
     Q_OBJECT
 
-
-private:
-
 public:
     SimulationWorker();
 
