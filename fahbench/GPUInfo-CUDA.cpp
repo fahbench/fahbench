@@ -21,7 +21,7 @@ HMODULE loadCudaLibrary() {
 #if _WIN64
     return LoadLibraryA("cudart64_65.dll");
 #else
-    return loadLibraryA("cudart32_65.dll");
+    return LoadLibraryA("cudart32_65.dll");
 #endif
 #else
     return dlopen("libcudart.so", RTLD_NOW);
