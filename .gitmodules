@@ -1,0 +1,3 @@
+[submodule "openmm"]
+	path = openmm
+	url = https://github.com/foldingathome/openmm.git

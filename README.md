@@ -123,3 +123,15 @@ FAHBench is built with [CMake] and requires the following libraries:
  1. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to
     the `bin/` install directory.
 
+### Vagrant
+
+ 1. Make sure your git submodules are initialized (openmm)
+
+ 1. Download a `.tar.bz2` release of the AMDAPPSDK into this directory.
+    The provisioning script can't download it because you have to accept
+    a license agreement through a web browser. The file has to be of the form
+    `AMD-APP-SDK-*.tar.bz2`
+
+ 1. Run `vagrant up`. The rest should be automatically provisioned!
+
+
