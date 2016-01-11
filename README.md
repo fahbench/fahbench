@@ -132,6 +132,11 @@ FAHBench is built with [CMake] and requires the following libraries:
     a license agreement through a web browser. The file has to be of the form
     `AMD-APP-SDK-*.tar.bz2`
 
- 1. Run `vagrant up`. The rest should be automatically provisioned!
+ 1. Run `vagrant up`.
+
+ 1. Enter the virtual machine with `vagrant ssh`
+
+ 1. Run `install-openmm.sh`, then `install-fahbench.sh`. Build artifacts
+    will be copied to the `dist/` directory in this repository.
 
 
