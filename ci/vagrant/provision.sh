@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-apt-get update
 apt-get install -y python-software-properties     # apt-add-repository
 apt-add-repository -y ppa:ubuntu-toolchain-r/test # newer gcc
-apt-add-repository -y ppa:ubuntu-sdk-team/ppa     # qt5
 apt-get update
 # Install below packages for following reasons, resp.
 #   c++11, `make`, opengl headers not in amdappsdk,
@@ -14,24 +12,27 @@ apt-get install -y      \
     mesa-common-dev     \
     fftw3-dev           \
     qt5-default
+apt-get dist-upgrade -y
+apt-get autoremove -y
 
 # cmake
-wget --no-check-certificate https://cmake.org/files/v3.4/cmake-3.4.1-Linux-x86_64.sh
-mkdir cmake && bash cmake-3.4.1-Linux-x86_64.sh --prefix=cmake --skip-license
+cmake='cmake-3.4.1-Linux-x86_64.sh'
+if [ ! -e $cmake ]; then
+    wget -q --no-check-certificate https://cmake.org/files/v3.4/$cmake
+fi
+rm -rf cmake
+mkdir cmake && bash $cmake --prefix=cmake --skip-license
 
 # Install AMD APP SDK
 # There's no wget link, so make sure you have the tar.bz2 in the
 # fahbench source directory (which is /vagrant)
+rm -rf AMD-APP-SDK*
+rm -rf /opt/AMDAPPSDK*
 amdtar=`find /vagrant/* -maxdepth 0 -name "AMD-APP-SDK-*.tar.bz2" | tail -1`
 tar -xf $amdtar
 amdsh=`find * -maxdepth 0 -name "AMD-APP-SDK-*.sh" | tail -1`
-bash $amdsh -- --silent --acceptEULA=yes
+bash $amdsh -- --silent --acceptEULA=yes > $amdsh.log
+ln -sf /opt/AMDAPPSDK-* .
 
-
-# Install OpenMM
-bash /vagrant/ci/vagrant/install-openmm.sh
-
-
-# Install FAHBench
-bash /vagrant/ci/vagrant/install-fahbench.sh
-
+ln -sf /vagrant/ci/vagrant/install-openmm.sh .
+ln -sf /vagrant/ci/vagrant/install-fahbench.sh .

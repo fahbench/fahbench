@@ -17,5 +17,7 @@ CXX=g++-4.9 \
         -DENABLE_WARNINGS=ON                                 \
         -DMAKE_QT_GUI=ON                                     \
 
-make -j4 && make install
-$HOME/cmake/bin/cpack
+make -j4                      \
+    && make install           \
+    && $HOME/cmake/bin/cpack  \
+    && cp fahbench-*.tar.gz /vagrant/dist/
