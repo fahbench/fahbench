@@ -1,11 +1,14 @@
-//
-// Created by harrigan on 12/16/15.
-//
-
+#include <algorithm>
 #include "WorkUnitTableModel.h"
+
+bool put_dhfr_first(const WorkUnit & a, const WorkUnit & b) {
+    return a.codename() == "dhfr";
+}
+
 
 WorkUnitTableModel::WorkUnitTableModel()
     : _entries(WorkUnit::available_wus()) {
+    std::sort(_entries.begin(), _entries.end(), put_dhfr_first);
 
 }
 
