@@ -51,7 +51,7 @@ else()
 endif()
 
 add_library(fahbench SHARED ${fahbench_sources})
-add_dependencies(fahbench boost)
+add_dependencies(fahbench boost workunits)
 set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
 
 # Link
