@@ -20,7 +20,7 @@ ExternalProject_Add(wu-dhfr-implicit
 
 ExternalProject_Add(wu-nav
     URL "${CMAKE_CURRENT_SOURCE_DIR}/nav.tar.bz2"
-    URL_MD5 37fa8d9ae719d0561cc1dc0237ff0b4c
+    URL_MD5 15551db7d643904a0168ec49be5f7bea
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND "${CMAKE_COMMAND}" -E copy_directory <SOURCE_DIR> "${CMAKE_CURRENT_BINARY_DIR}/workunits/nav"
