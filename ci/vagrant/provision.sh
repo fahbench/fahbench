@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
-apt-get install -y python-software-properties     # apt-add-repository
-apt-add-repository -y ppa:ubuntu-toolchain-r/test # newer gcc
 apt-get update
 # Install below packages for following reasons, resp.
-#   c++11, `make`, opengl headers not in amdappsdk,
+#   `make`, opengl headers not in amdappsdk,
 #   for pme cpu, for qt gui (resp)
 apt-get install -y      \
-    g++-4.9             \
     build-essential     \
     mesa-common-dev     \
     fftw3-dev           \
