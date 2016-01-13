@@ -15,5 +15,6 @@ $HOME/cmake/bin/cmake /vagrant/openmm         \
     -DOPENMM_BUILD_PME_PLUGIN=ON              \
     -DOPENCL_INCLUDE_DIR=$amdroot/include              \
     -DOPENCL_LIBRARY=$amdroot/lib/x86_64/libOpenCL.so  \
+    -DCMAKE_BUILD_TYPE=Release
 
 make -j4 && make install

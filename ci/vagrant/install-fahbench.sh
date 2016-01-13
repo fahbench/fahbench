@@ -12,6 +12,7 @@ $HOME/cmake/bin/cmake /vagrant/                          \
     -DOPENMM_LIB=$HOME/openmm/lib/libOpenMM.so           \
     -DENABLE_WARNINGS=ON                                 \
     -DMAKE_QT_GUI=ON                                     \
+    -DCMAKE_BUILD_TYPE=Release
 
 make -j4                      \
     && make install           \
