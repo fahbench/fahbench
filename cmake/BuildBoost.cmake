@@ -14,8 +14,8 @@ ELSE()
 ENDIF()
 
 ExternalProject_Add(boost
-    URL http://downloads.sourceforge.net/project/boost/boost/1.58.0/boost_1_58_0.tar.gz
-    URL_MD5 5a5d5614d9a07672e1ab2a250b5defc5
+    URL http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.gz
+    URL_MD5 28f58b9a33469388302110562bdf6188
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND ./bootstrap.${SHELL_SCRIPT_EXT}
     BUILD_COMMAND ""
