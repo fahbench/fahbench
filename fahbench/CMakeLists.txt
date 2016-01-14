@@ -117,7 +117,6 @@ endif(${UNIX})
 if(${WIN32})
   INSTALL(FILES
     ${OPENMM_LIB_DIR}/OpenMM.dll
-    ${OPENMM_LIB_DIR}/pthreadVC2_x64.dll
     DESTINATION bin)
 endif(${WIN32})
 
