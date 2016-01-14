@@ -66,6 +66,9 @@ add_subdirectory(gui)
 add_subdirectory(cmd)
 
 # Mock install structure in build directory
+if(${WIN32})
+    # CMake can't do symlinks on windows
+else()
 add_custom_command(TARGET fahbench
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E make_directory share/
@@ -77,6 +80,7 @@ add_custom_command(TARGET fahbench
                    COMMAND ${CMAKE_COMMAND} -E make_directory lib/
                    COMMAND ${CMAKE_COMMAND} -E create_symlink "${OPENMM_LIB_DIR}/plugins" lib/plugins
 )
+endif()
 
 # Install
 INSTALL(TARGETS fahbench
