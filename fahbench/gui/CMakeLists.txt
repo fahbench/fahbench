@@ -45,9 +45,9 @@ if(${WIN32})
           "${QtWidgets_location}"
           "${QtCore_location}"
           "${QtGui_location}"
-          "${Qt_DLL_ROOT}/icudt53.dll"
-          "${Qt_DLL_ROOT}/icuin53.dll"
-          "${Qt_DLL_ROOT}/icuuc53.dll"
+          "${Qt_DLL_ROOT}/icudt54.dll"
+          "${Qt_DLL_ROOT}/icuin54.dll"
+          "${Qt_DLL_ROOT}/icuuc54.dll"
   DESTINATION bin)
   INSTALL(FILES
 	      "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"
