@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.11)
+cmake_minimum_required (VERSION 3.0)
 project(FAHBench)
 
 # Cmake modules
@@ -36,19 +36,31 @@ set(CPACK_PACKAGE_VERSION_MINOR "${FAHBench_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${FAHBench_VERSION_REVIS}")
 set(CPACK_PACKAGE_NAME "fahbench")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Folding@Home GPU Benchmarking")
-set(CPACK_PACKAGE_DESCRIPTION "This package uses OpenMM to run GPU simulations of protein folding. The reported speed can be used as a benchmark for evaluating Folding@Home hardware.")
+set(CPACK_PACKAGE_DESCRIPTION "\
+This package uses OpenMM to run GPU simulations of protein folding. \
+The reported speed can be used as a benchmark for evaluating Folding@Home hardware.\
+")
 set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
 
+# .deb
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-program-options1.54.0 libboost-filesystem1.54.0 libqt5widgets5")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5")
 set(CPACK_BINARY_DEB "ON")
+
+# nsis windows installer
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/fahbench/gui/FahIcon.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CPACK_NSIS_MUI_ICON}")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "${CPACK_NSIS_MUI_ICON}")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\vcredist_x86.exe\\\" /q:a'")
+set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
+set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\bin\\${PROJECT_NAME}-gui.exe'") 
 
 if(${UNIX})
   set(CPACK_GENERATOR "TGZ")
 endif(${UNIX})
 
 if(${WIN32})
-  SET(CPACK_GENERATOR "ZIP")
+  SET(CPACK_GENERATOR "ZIP" "NSIS")
 endif(${WIN32})
 
 
