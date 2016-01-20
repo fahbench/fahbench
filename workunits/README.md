@@ -1,16 +1,16 @@
 Work Units (WUs)
 ================
 
-This directory contains several sample work-units to run benchmarking.
-
 Each WU must have:
-    - system.xml
-    - state.xml
-    - integrator.xml
-    - wu.json
+ - system.xml
+ - state.xml
+ - integrator.xml
+ - wu.json
 
 Workunits are installed uncompressed to
-[prefix]/share/fahbench/workunits/[wuname]/{*.xml, *.json}
+`[prefix]/share/fahbench/workunits/[wuname]/{*.xml, *.json}`.
+To install your own workunit, dump the four required files
+there.
 
 `wu.json` fields
 ----------------
