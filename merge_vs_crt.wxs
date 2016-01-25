@@ -4,14 +4,18 @@
     <Fragment>
 
         <DirectoryRef Id="TARGETDIR">
-            <Merge Id="VCRedist" 
+            <Merge Id="VCRedist1" 
                 SourceFile="%PROGRAMFILES(x86)%\Common Files\Merge Modules\Microsoft_VC140_CRT_x64.msm"
+                DiskId="1" Language="0"/>
+            <Merge Id="VCRedist2" 
+                SourceFile="%PROGRAMFILES(x86)%\Common Files\Merge Modules\Microsoft_VC140_CXXAMP_x64.msm"
                 DiskId="1" Language="0"/>
         </DirectoryRef>
 
-        <Feature Id="VCRedist" Title="Visual C++ 14.0 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
-            <MergeRef Id="VCRedist"/>
+        <Feature Id="VCRedist" Title="Visual C++ 14.0 Runtime" AllowAdvertise="no" Display="expand" Level="1">
+            <MergeRef Id="VCRedist1"/>
+            <MergeRef Id="VCRedist2"/>
         </Feature>
-
+        
     </Fragment>
 </Wix>
