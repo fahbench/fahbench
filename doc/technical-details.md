@@ -1,5 +1,6 @@
 ---
 title: Technical Details
+permalink: /technical-details.html
 layout: page
 ---
 
