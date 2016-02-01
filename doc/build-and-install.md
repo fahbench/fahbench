@@ -1,6 +1,5 @@
 ---
 title: Building and Installing
-permalink: /build-and-install.html
 layout: page
 ---
 

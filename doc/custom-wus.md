@@ -1,6 +1,5 @@
 ---
 title: Custom work units
-permalink: /custom-wus.html
 layout: page
 ---
 
