@@ -31,5 +31,5 @@ amdsh=`find * -maxdepth 0 -name "AMD-APP-SDK-*.sh" | tail -1`
 bash $amdsh -- --silent --acceptEULA=yes > $amdsh.log
 ln -sf /opt/AMDAPPSDK-* .
 
-ln -sf /vagrant/ci/vagrant/install-openmm.sh .
-ln -sf /vagrant/ci/vagrant/install-fahbench.sh .
+ln -sf /vagrant/packaging/vagrant/install-openmm.sh .
+ln -sf /vagrant/packaging/vagrant/install-fahbench.sh .

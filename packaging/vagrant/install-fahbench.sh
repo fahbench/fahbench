@@ -17,4 +17,4 @@ $HOME/cmake/bin/cmake /vagrant/                          \
 make -j4                      \
     && make install           \
     && $HOME/cmake/bin/cpack  \
-    && cp fahbench-*.tar.gz /vagrant/dist/
+    && cp FAHBench-*.tar.gz /vagrant/dist/
