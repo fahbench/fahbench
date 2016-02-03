@@ -13,11 +13,11 @@ apt-get dist-upgrade -y
 apt-get autoremove -y
 
 # cmake
-cmake='cmake-3.4.1-Linux-x86_64.sh'
+cmake='cmake-3.4.3-Linux-x86_64.sh'
 if [ ! -e $cmake ]; then
     wget -q --no-check-certificate https://cmake.org/files/v3.4/$cmake
 fi
-rm -rf cmake
+rm -rf cmake/
 mkdir cmake && bash $cmake --prefix=cmake --skip-license
 
 # Install AMD APP SDK
