@@ -13,12 +13,25 @@ ELSE()
 ENDIF(CUDA_FOUND)
 
 # Find openmm
-find_path(OPENMM_INCLUDE_PATH OpenMM.h HINTS ENV OPENMM_INCLUDE_PATH)
-find_library(OPENMM_LIB OpenMM PATHS ENV OPENMM_LIB_PATH)
+find_path(OPENMM_INCLUDE_PATH OpenMM.h
+        HINTS ENV OPENMM_INCLUDE_PATH
+        PATHS ~/opt/openmm-core21/include)
+find_library(OPENMM_LIB OpenMM
+        HINTS ENV OPENMM_LIB_PATH
+        PATHS ~/opt/openmm-core21/lib/)
 get_filename_component(OPENMM_LIB_DIR ${OPENMM_LIB} DIRECTORY)
 
 # Find opencl
 find_package(OpenCL)
+mark_as_advanced(CLEAR OpenCL_INCLUDE_DIR OpenCL_LIBRARY)
+
+if(NOT ${OpenCL_FOUND})
+    message(STATUS "OpenCL wasn't found! Trying to trick it into using AMDAPPSDKROOT environment var")
+    find_library(OpenCL_LIBRARY OpenCL
+            HINTS ENV AMDAPPSDKROOT
+            PATH_SUFFIXES lib/x86_64)
+endif()
+find_package(OpenCL REQUIRED)
 
 # Configure version information
 configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
@@ -27,7 +40,7 @@ configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
 include_directories(
     SYSTEM # won't generate warnings
     "${OPENMM_INCLUDE_PATH}"
-    ${OPENCL_INCLUDE_DIRS}
+    ${OpenCL_INCLUDE_DIRS}
     "${BOOST_INCLUDE_DIR}"
 )
 if(${USE_CUDA})
@@ -58,7 +71,7 @@ set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
 target_link_libraries(fahbench
     ${BOOST_LIBRARIES}
     "${OPENMM_LIB}"
-    ${OPENCL_LIBRARIES}
+    ${OpenCL_LIBRARIES}
 )
 
 # Make executables
