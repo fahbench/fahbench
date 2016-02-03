@@ -81,29 +81,29 @@ SimulationResult Simulation::run(const Updater & update) const {
     update.message(boost::format("Number of registered plugins: %1%") % Platform::getNumPlatforms());
     Platform & platform = Platform::getPlatformByName(this->platform);
 
-    update.message("Deserializing system...");
+    update.message("Deserializing input files: system");
     std::unique_ptr<System> sys(loadObject<System>(work_unit.system_fn()));
-    update.message("Deserializing state...");
+    update.message("Deserializing input files: state");
     std::unique_ptr<State> state(loadObject<State>(work_unit.state_fn()));
-    update.message("Deserializing integrator...");
+    update.message("Deserializing input files: integrator");
     std::unique_ptr<Integrator> intg(loadObject<Integrator>(work_unit.integrator_fn()));
     if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
 
 
-    update.message("Creating context...");
+    update.message("Creating context (may take several minutes)");
     Context context(*sys, *intg, platform, getPropertiesMap());
     context.setState(*state);
     if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
 
 
     if (verifyAccuracy) {
-        update.message("Checking for accuracy...");
+        update.message("Checking accuracy against reference code");
         std::unique_ptr<Integrator> refIntg(loadObject<Integrator>(work_unit.integrator_fn()));
-        update.message("Creating reference context...");
+        update.message("Creating reference context (may take several minutes)");
         Context refContext(*sys, *refIntg, Platform::getPlatformByName("Reference"));
         refContext.setState(*state);
         if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
-        update.message("Comparing forces and energy...");
+        update.message("Comparing forces and energy");
         StateTests::compareForcesAndEnergies(refContext.getState(State::Forces | State::Energy),
                                              context.getState(State::Forces | State::Energy));
         if (update.cancelled()) return SimulationResult(ResultStatus::CANCELLED);
@@ -117,7 +117,7 @@ SimulationResult Simulation::run(const Updater & update) const {
     if (update.cancelled()) {
         return SimulationResult(ResultStatus::CANCELLED);
     } else {
-        update.message("Benchmarking finished.");
+        update.message("Benchmarking finished");
         SimulationResult result(score, sys->getNumParticles());
         return result;
     }
