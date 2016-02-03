@@ -44,7 +44,7 @@ Linux
 
  1. Download and install 
       - Visual Studio Community 2015
-      - Qt 5.6 (other releases do not include binaries for vs2015 but shoudl work)
+      - Qt 5.6 (other releases do not include binaries for vs2015 but should work)
       - CMake > 3.1
       - AMD APP SDK
       - (Optional) CUDA SDK
