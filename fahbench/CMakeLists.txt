@@ -1,7 +1,3 @@
-
-# Install boost from source
-include(BuildBoost)
-
 # Find cuda
 find_package(CUDA QUIET)
 IF(CUDA_FOUND)
@@ -41,7 +37,6 @@ include_directories(
     SYSTEM # won't generate warnings
     "${OPENMM_INCLUDE_PATH}"
     ${OpenCL_INCLUDE_DIRS}
-    "${BOOST_INCLUDE_DIR}"
 )
 if(${USE_CUDA})
     include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
@@ -64,14 +59,15 @@ else()
 endif()
 
 add_library(fahbench SHARED ${fahbench_sources})
-add_dependencies(fahbench boost workunits)
+add_dependencies(fahbench workunits)
 set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
 
 # Link
 target_link_libraries(fahbench
-    ${BOOST_LIBRARIES}
     "${OPENMM_LIB}"
     ${OpenCL_LIBRARIES}
+    boost-filesystem
+    boost-system
 )
 
 # Make executables
