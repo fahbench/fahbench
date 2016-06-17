@@ -10,14 +10,10 @@
 
 #include <OpenMM.h>
 #include <stdexcept>
+#include <cmath>
 #include <boost/format.hpp>
 
 #include "StateTests.h"
-
-#ifdef _WIN32
-#include <float.h>
-#define isnan(x) _isnan(x)
-#endif
 
 using namespace OpenMM;
 using std::vector;
@@ -30,17 +26,17 @@ void StateTests::checkForNans(const State & state) {
 
     for (unsigned i = 0; i < positions.size(); i++)
         for (int j = 0; j < 3; j++)
-            if (isnan(positions[i][j]))
+            if (std::isnan(positions[i][j]))
                 throw std::runtime_error(boost::str(boost::format("NaNs detected in positions: (%1%, %2%)") % i % j));
 
     for (unsigned i = 0; i < velocities.size(); i++)
         for (int j = 0; j < 3; j++)
-            if (isnan(velocities[i][j]))
+            if (std::isnan(velocities[i][j]))
                 throw std::runtime_error(boost::str(boost::format("NaNs detected in velocities: (%1%, %2%)") % i % j));
 
     for (unsigned i = 0; i < forces.size(); i++)
         for (int j = 0; j < 3; j++)
-            if (isnan(forces[i][j]))
+            if (std::isnan(forces[i][j]))
                 throw std::runtime_error(boost::str(boost::format("NaNs detected in forces: (%1%, %2%)") % i % j));
 }
 
