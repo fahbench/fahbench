@@ -21,6 +21,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 include(Warnings)
 
+include_directories(
+        SYSTEM # won't generate warnings
+        "${CMAKE_SOURCE_DIR}/external/boost"
+)
+add_subdirectory(external)
 add_subdirectory(workunits)
 add_subdirectory(fahbench)
 
