@@ -9,8 +9,8 @@ install:
 
 script:
     - cd ../
-    - bash fahbench/packaging/travis/install-openmm.sh
-    - bash fahbench/packaging/travis/install-fahbench.sh
-    - ~/fahbench/bin/FAHBench-cmd -hlvd
-    - ~/fahbench/bin/FAHBench-cmd
+    &&  bash fahbench/packaging/travis/install-openmm.sh
+    && bash fahbench/packaging/travis/install-fahbench.sh
+    && ~/fahbench/bin/FAHBench-cmd -hlvd
+    && ~/fahbench/bin/FAHBench-cmd
 
