@@ -1,4 +1,5 @@
 #include <mutex>
+#include <OpenMM.h>
 
 #include "MainWindow.h"
 #include "FAHBenchVersion.h"
@@ -101,6 +102,10 @@ void MainWindow::interrupt_simulation() {
 
     std::lock_guard<std::mutex> lock(worker->cancelled_mutex);
     worker->is_cancelled = true;
+}
+
+inline std::string getOpenMMVersion() {
+    return OpenMM::Platform::getOpenMMVersion();
 }
 
 void MainWindow::about() {

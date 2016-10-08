@@ -1,11 +1,17 @@
-#include "CentralWidget.h"
-#include "FAHBenchVersion.h"
+#include <OpenMM.h>
 
 #include <QMessageBox>
 #include <QDebug>
 
+#include "CentralWidget.h"
+#include "FAHBenchVersion.h"
+
 QSize CentralWidget::sizeHint() const {
     return QSize(850, 450);
+}
+
+inline std::string getOpenMMVersion() {
+    return OpenMM::Platform::getOpenMMVersion();
 }
 
 

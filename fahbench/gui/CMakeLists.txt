@@ -29,6 +29,7 @@ add_executable(FAHBench-gui WIN32
 
 set_target_properties(FAHBench-gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
 target_link_libraries(FAHBench-gui fahbench Qt5::Widgets)
+target_include_directories(FAHBench-gui PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 INSTALL(TARGETS FAHBench-gui
         RUNTIME DESTINATION bin
