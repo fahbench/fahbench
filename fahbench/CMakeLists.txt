@@ -34,7 +34,7 @@ endif()
 find_package(OpenCL REQUIRED)
 
 # Configure version information
-configure_file(FAHBenchVersion.h.in FAHBenchVersion.h)
+configure_file(FAHBenchVersion.h FAHBenchVersion.h)
 
 # Specify includes
 include_directories(
@@ -66,6 +66,13 @@ endif()
 add_library(fahbench SHARED ${fahbench_sources})
 add_dependencies(fahbench boost workunits)
 set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
+target_include_directories(fahbench PUBLIC ${OPENMM_INCLUDE_PATH})
+target_include_directories(fahbench PUBLIC ${OpenCL_INCLUDE_DIRS})
+target_include_directories(fahbench PUBLIC ${BOOST_INCLUDE_DIR})
+target_include_directories(fahbench INTERFACE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+if(${USE_CUDA})
+    target_include_directories(fahbench PUBLIC ${CUDA_INCLUDE_DIRS})
+endif(${USE_CUDA})
 
 # Link
 target_link_libraries(fahbench

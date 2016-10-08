@@ -3,20 +3,24 @@
 #include <sstream>
 #include <chrono>
 #include <boost/program_options.hpp>
-#include <boost/function.hpp>
 #include <boost/format.hpp>
+#include <OpenMM.h>
 
-#include "../FAHBenchVersion.h"
-#include "../Simulation.h"
-#include "../SimulationResult.h"
-#include "../WorkUnit.h"
-#include "../GPUInfo.h"
-#include "../Utils.h"
+#include "FAHBenchVersion.h"
+#include "Simulation.h"
+#include "SimulationResult.h"
+#include "WorkUnit.h"
+#include "GPUInfo.h"
+#include "Utils.h"
 #include "CommandLineUpdater.h"
 
 namespace po = boost::program_options;
 using std::string;
 using std::map;
+
+inline std::string getOpenMMVersion() {
+    return OpenMM::Platform::getOpenMMVersion();
+}
 
 string getGpuDesc() {
     std::stringstream ss;
