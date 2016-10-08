@@ -7,11 +7,10 @@
 #include <OpenMM.h>
 
 #include "FAHBenchVersion.h"
-#include "Simulation.h"
 #include "SimulationResult.h"
 #include "WorkUnit.h"
+#include "Simulation.h"
 #include "GPUInfo.h"
-#include "Utils.h"
 #include "CommandLineUpdater.h"
 
 namespace po = boost::program_options;
