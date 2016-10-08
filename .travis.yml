@@ -13,4 +13,3 @@ script:
     && bash fahbench/packaging/travis/install-fahbench.sh
     && ~/fahbench/bin/FAHBench-cmd -hlvd
     && ~/fahbench/bin/FAHBench-cmd
-

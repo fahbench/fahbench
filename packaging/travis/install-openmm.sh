@@ -11,5 +11,6 @@ cmake ../fahbench/openmm                      \
     -DBUILD_TESTING=OFF                       \
     -DOPENMM_BUILD_OPENCL_LIB=ON              \
     -DOPENMM_BUILD_PME_PLUGIN=ON              \
+    -DOPENMM_BUILD_OPENCL_TESTS=OFF           \
 
 make -j2 && make install
