@@ -23,11 +23,12 @@ enum OPENMM_PLATFORMS {
 };
 
 
-class CentralWidget :  public QWidget {
-    Q_OBJECT
+class CentralWidget : public QWidget {
+Q_OBJECT
 
 public:
     CentralWidget();
+
     QSize sizeHint() const;
 
     QLabel * status_bar;
@@ -41,7 +42,7 @@ public:
     void configure_simulation(Simulation & sim) const;
 
 private:
-    DeviceTableModel  * device_table_model;
+    DeviceTableModel * device_table_model;
     QTableView * device_table_view;
 
     WorkUnitTableModel * wu_table_model;
@@ -66,10 +67,13 @@ private:
 
 
 public slots:
+
     void progress_update(int, int, float);
+
     void message_update(const QString &);
 
 private slots:
+
     void openmm_platform_changed(int);
 
 

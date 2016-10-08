@@ -1,6 +1,6 @@
+#include <exception>
 
 #include "SimulationWorker.h"
-#include <exception>
 
 using std::string;
 using std::map;

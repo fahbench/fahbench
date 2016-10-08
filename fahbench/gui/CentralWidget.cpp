@@ -1,11 +1,17 @@
-#include "CentralWidget.h"
-#include "../FAHBenchVersion.h"
+#include <OpenMM.h>
 
 #include <QMessageBox>
 #include <QDebug>
 
+#include "CentralWidget.h"
+#include "FAHBenchVersion.h"
+
 QSize CentralWidget::sizeHint() const {
     return QSize(850, 450);
+}
+
+inline std::string getOpenMMVersion() {
+    return OpenMM::Platform::getOpenMMVersion();
 }
 
 
@@ -71,8 +77,8 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_vbox->addLayout(layout_leftright);
 
     status_bar = new QLabel(QString("FAHBench %1 with OpenMM %2")
-                            .arg(QString::fromStdString(getVersion()))
-                            .arg(QString::fromStdString(getOpenMMVersion())));
+                                    .arg(QString::fromStdString(getVersion()))
+                                    .arg(QString::fromStdString(getOpenMMVersion())));
     layout_vbox->addWidget(status_bar);
 
 
@@ -100,18 +106,18 @@ CentralWidget::CentralWidget() : QWidget() {
 
 void CentralWidget::configure_simulation(Simulation & sim) const {
     switch (openmm_platform_wid->currentIndex()) {
-    case OPENMM_PLATFORMS::OpenCL: {
-        sim.platform = "OpenCL";
-        auto sel_device = device_table_model->entries().at(device_wid->currentIndex());
-        sim.deviceId = sel_device.device_id();
-        sim.platformId = sel_device.platform_id();
-    }
-    break;
-    case OPENMM_PLATFORMS::CPU:
-        sim.platform = "CPU";
-        break;
-    default:
-        throw std::runtime_error("Unknown OpenMM Platform");
+        case OPENMM_PLATFORMS::OpenCL: {
+            sim.platform = "OpenCL";
+            auto sel_device = device_table_model->entries().at(device_wid->currentIndex());
+            sim.deviceId = sel_device.device_id();
+            sim.platformId = sel_device.platform_id();
+        }
+            break;
+        case OPENMM_PLATFORMS::CPU:
+            sim.platform = "CPU";
+            break;
+        default:
+            throw std::runtime_error("Unknown OpenMM Platform");
     }
 
     // Maybe seperate display text from actual text passed to OpenMM?
@@ -142,15 +148,15 @@ void CentralWidget::message_update(const QString & s) {
 void CentralWidget::openmm_platform_changed(int index) {
     qDebug() << "OpenMM platform changed";
     switch (index) {
-    //TODO: Enum
-    case OPENMM_PLATFORMS::OpenCL:
-        device_wid->setEnabled(true);
-        break;
-    case OPENMM_PLATFORMS::CPU:
-        device_wid->setEnabled(false);
-        break;
-    default:
-        throw std::runtime_error("Unknown openmm platform selection");
+        //TODO: Enum
+        case OPENMM_PLATFORMS::OpenCL:
+            device_wid->setEnabled(true);
+            break;
+        case OPENMM_PLATFORMS::CPU:
+            device_wid->setEnabled(false);
+            break;
+        default:
+            throw std::runtime_error("Unknown openmm platform selection");
     }
 
 }

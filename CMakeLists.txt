@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.6)
 project(FAHBench)
 
 # Cmake modules
@@ -11,11 +11,6 @@ set(FAHBench_VERSION_MAJOR 2)
 set(FAHBench_VERSION_MINOR 2)
 set(FAHBench_VERSION_REVIS 5)
 set(FAHBench_VERSION_ISRELEASE ON)
-
-# For QT
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Configure compiler
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")

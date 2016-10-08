@@ -1,8 +1,8 @@
 #ifndef QSIMULATION_H_
 #define QSIMULATION_H_
 
-#include "../Simulation.h"
-#include "../SimulationResult.h"
+#include "SimulationResult.h"
+#include "Simulation.h"
 
 #include <QMetaType>
 
