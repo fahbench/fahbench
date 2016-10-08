@@ -5,7 +5,7 @@
 
 #include <QAbstractTableModel>
 
-#include "../WorkUnit.h"
+#include "WorkUnit.h"
 
 enum WUTABLE_COLS {
     CodeName = 0,

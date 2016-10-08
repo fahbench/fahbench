@@ -1,14 +1,12 @@
+#include <mutex>
 
 #include "MainWindow.h"
-#include "../FAHBenchVersion.h"
+#include "FAHBenchVersion.h"
 
 #include <QMessageBox>
 #include <QDebug>
 
-#include <mutex>
-
 using namespace std;
-
 
 MainWindow::MainWindow() : QMainWindow() {
     qRegisterMetaType<Simulation>();

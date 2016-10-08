@@ -1,7 +1,3 @@
-//
-// Created by harrigan on 12/16/15.
-//
-
 #ifndef RESULTS_WIDGET_H
 #define RESULTS_WIDGET_H
 
@@ -9,7 +5,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include "../SimulationResult.h"
+#include "SimulationResult.h"
 
 
 class ResultsWidget : public QWidget {

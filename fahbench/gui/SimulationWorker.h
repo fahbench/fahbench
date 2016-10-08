@@ -1,12 +1,12 @@
 #ifndef SIMULATION_WORKER_H_
 #define SIMULATION_WORKER_H_
 
-#include "../Updater.h"
-#include "QSimulation.h"
-
 #include <string>
 #include <boost/format.hpp>
 #include <mutex>
+
+#include "Updater.h"
+#include "QSimulation.h"
 
 #include <QObject>
 #include <QString>

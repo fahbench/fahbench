@@ -1,10 +1,4 @@
-//
-// Created by harrigan on 12/16/15.
-//
-
 #include "ResultsWidget.h"
-
-#include <QString>
 
 const static QString RESULTS_HEADER("<h1>FAHBench Results</h1>");
 

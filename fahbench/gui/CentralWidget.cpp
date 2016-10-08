@@ -1,5 +1,5 @@
 #include "CentralWidget.h"
-#include "../FAHBenchVersion.h"
+#include "FAHBenchVersion.h"
 
 #include <QMessageBox>
 #include <QDebug>

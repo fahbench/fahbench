@@ -2,7 +2,7 @@
 #include <QString>
 #include <QIcon>
 
-#include "../FAHBenchVersion.h"
+#include "FAHBenchVersion.h"
 #include "MainWindow.h"
 
 int main(int argc, char * argv[]) {
