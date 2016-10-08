@@ -36,17 +36,6 @@ find_package(OpenCL REQUIRED)
 # Configure version information
 configure_file(FAHBenchVersion.h FAHBenchVersion.h)
 
-# Specify includes
-include_directories(
-        SYSTEM # won't generate warnings
-        "${OPENMM_INCLUDE_PATH}"
-        ${OpenCL_INCLUDE_DIRS}
-        "${BOOST_INCLUDE_DIR}"
-)
-if(${USE_CUDA})
-    include_directories(SYSTEM ${CUDA_INCLUDE_DIRS})
-endif(${USE_CUDA})
-
 # Make library
 set(fahbench_sources
     StateTests.cpp
