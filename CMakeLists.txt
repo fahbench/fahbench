@@ -12,11 +12,6 @@ set(FAHBench_VERSION_MINOR 2)
 set(FAHBench_VERSION_REVIS 5)
 set(FAHBench_VERSION_ISRELEASE ON)
 
-# For QT
-# TODO: Put these in GUI
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 # Configure compiler
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 include(Warnings)
