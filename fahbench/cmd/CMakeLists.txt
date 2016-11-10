@@ -4,7 +4,7 @@ add_executable(FAHBench-cmd
                )
 
 set_target_properties(FAHBench-cmd PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-target_link_libraries(FAHBench-cmd fahbench)
+target_link_libraries(FAHBench-cmd fahbench boost-program_options)
 
 install(TARGETS FAHBench-cmd
         RUNTIME DESTINATION bin

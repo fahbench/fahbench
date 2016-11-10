@@ -1,7 +1,4 @@
 
-# Install boost from source
-include(BuildBoost)
-
 # Find cuda
 find_package(CUDA QUIET)
 if(CUDA_FOUND)
@@ -11,15 +8,6 @@ else()
     set(USE_CUDA OFF
         CACHE BOOL "Include CUDA")
 endif(CUDA_FOUND)
-
-# Find openmm
-find_path(OPENMM_INCLUDE_PATH OpenMM.h
-          HINTS ENV OPENMM_INCLUDE_PATH
-          PATHS ~/opt/openmm-core21/include)
-find_library(OPENMM_LIB OpenMM
-             HINTS ENV OPENMM_LIB_PATH
-             PATHS ~/opt/openmm-core21/lib/)
-get_filename_component(OPENMM_LIB_DIR ${OPENMM_LIB} DIRECTORY)
 
 # Find opencl
 find_package(OpenCL)
@@ -53,11 +41,9 @@ else()
 endif()
 
 add_library(fahbench SHARED ${fahbench_sources})
-add_dependencies(fahbench boost workunits)
+add_dependencies(fahbench workunits)
 set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
-target_include_directories(fahbench PUBLIC ${OPENMM_INCLUDE_PATH})
 target_include_directories(fahbench PUBLIC ${OpenCL_INCLUDE_DIRS})
-target_include_directories(fahbench PUBLIC ${BOOST_INCLUDE_DIR})
 target_include_directories(fahbench INTERFACE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 if(${USE_CUDA})
     target_include_directories(fahbench PUBLIC ${CUDA_INCLUDE_DIRS})
@@ -65,8 +51,9 @@ endif(${USE_CUDA})
 
 # Link
 target_link_libraries(fahbench
-                      ${BOOST_LIBRARIES}
-                      "${OPENMM_LIB}"
+                      boost
+					  boost-filesystem
+                      openmm
                       ${OpenCL_LIBRARIES}
                       )
 
@@ -96,36 +83,3 @@ install(TARGETS fahbench
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         )
-
-# Copy OpenMM plugins
-set(INSTALL_ALL_OPENMM_PLUGINS OFF
-    CACHE BOOL "Copy all available OpenMM plugins instead of just the defaults")
-
-if(${INSTALL_ALL_OPENMM_PLUGINS})
-    file(GLOB OPENMM_PLUGIN_FILES "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMM*${CMAKE_SHARED_LIBRARY_SUFFIX}")
-else()
-    set(OPENMM_PLUGIN_FILES
-        "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMOpenCL${CMAKE_SHARED_LIBRARY_SUFFIX}"
-        "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCPU${CMAKE_SHARED_LIBRARY_SUFFIX}"
-        )
-    if(${USE_CUDA})
-        set(OPENMM_PLUGIN_FILES ${OPENMM_PLUGIN_FILES}
-            "${OPENMM_LIB_DIR}/plugins/${CMAKE_SHARED_LIBRARY_PREFIX}OpenMMCUDA${CMAKE_SHARED_LIBRARY_SUFFIX}"
-            )
-    endif(${USE_CUDA})
-endif()
-install(FILES ${OPENMM_PLUGIN_FILES} DESTINATION lib/plugins)
-
-
-# For linux, put libOpenMM.so in the lib/ directory
-if(${UNIX})
-    install(FILES "${OPENMM_LIB}" DESTINATION lib)
-endif(${UNIX})
-
-# Windows requires dll's to be installed alongside the executable
-if(${WIN32})
-    install(FILES
-            ${OPENMM_LIB_DIR}/OpenMM.dll
-            DESTINATION bin)
-endif(${WIN32})
-
