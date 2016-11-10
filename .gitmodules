@@ -3,4 +3,4 @@
 	url = https://github.com/fahbench/openmm.git
 [submodule "boost"]
 	path = boost
-	url = ./boost
+	url = https://github.com/fahbench/boost.git
