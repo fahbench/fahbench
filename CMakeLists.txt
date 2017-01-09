@@ -16,6 +16,8 @@ set(FAHBench_VERSION_ISRELEASE ON)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 include(Warnings)
 
+add_subdirectory(boost)
+add_subdirectory(openmm)
 add_subdirectory(workunits)
 add_subdirectory(fahbench)
 

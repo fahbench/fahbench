@@ -1,3 +1,6 @@
 [submodule "openmm"]
 	path = openmm
-	url = https://github.com/foldingathome/openmm.git
+	url = https://github.com/fahbench/openmm.git
+[submodule "boost"]
+	path = boost
+	url = https://github.com/fahbench/boost.git
