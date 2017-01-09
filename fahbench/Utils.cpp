@@ -13,13 +13,12 @@ namespace fs = boost::filesystem;
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <locale>
-#include <codecvt>
 
 fs::path getExecutablePath() {
     wchar_t buffer[MAX_PATH];
-    int size = GetModuleFileNameW(NULL, buffer, MAX_PATH);
+    DWORD size = GetModuleFileNameW(NULL, buffer, MAX_PATH);
     if (size <= 0)
-        throw std::exception("Could not determine path of executable");
+        throw std::runtime_error("Could not determine path of executable");
     return fs::path(buffer);
 }
 
