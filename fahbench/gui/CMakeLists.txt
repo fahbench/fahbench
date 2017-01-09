@@ -48,9 +48,9 @@ if(${MAKE_QT_GUI})
                 "${QtWidgets_location}"
                 "${QtCore_location}"
                 "${QtGui_location}"
-                "${Qt_DLL_ROOT}/icudt54.dll"
-                "${Qt_DLL_ROOT}/icuin54.dll"
-                "${Qt_DLL_ROOT}/icuuc54.dll"
+                #"${Qt_DLL_ROOT}/icudt54.dll"
+                #"${Qt_DLL_ROOT}/icuin54.dll"
+                #"${Qt_DLL_ROOT}/icuuc54.dll"
                 DESTINATION bin)
         install(FILES
                 "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"

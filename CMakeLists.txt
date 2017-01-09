@@ -57,6 +57,8 @@ if(${WIN32})
   SET(CPACK_GENERATOR "ZIP" "WIX")
 endif(${WIN32})
 
-
 include (CPack)
 
+add_custom_target(install-fahbench
+        $(MAKE) install
+        )
