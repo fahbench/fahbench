@@ -20,7 +20,7 @@ ExternalProject_Add(boost
     CONFIGURE_COMMAND ./bootstrap.${SHELL_SCRIPT_EXT}
     BUILD_COMMAND ""
     INSTALL_COMMAND
-        ./b2 install
+        ./b2 -d0 install
         --layout=tagged
         --with-program_options
         --with-filesystem
