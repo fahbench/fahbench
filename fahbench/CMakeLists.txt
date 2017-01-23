@@ -1,26 +1,3 @@
-
-# Find cuda
-find_package(CUDA QUIET)
-if(CUDA_FOUND)
-    set(USE_CUDA ON
-        CACHE BOOL "Include CUDA")
-else()
-    set(USE_CUDA OFF
-        CACHE BOOL "Include CUDA")
-endif(CUDA_FOUND)
-
-# Find opencl
-find_package(OpenCL)
-mark_as_advanced(CLEAR OpenCL_INCLUDE_DIR OpenCL_LIBRARY)
-
-if(NOT ${OpenCL_FOUND})
-    message(STATUS "OpenCL wasn't found! Trying to trick it into using AMDAPPSDKROOT environment var")
-    find_library(OpenCL_LIBRARY OpenCL
-                 HINTS ENV AMDAPPSDKROOT
-                 PATH_SUFFIXES lib/x86_64)
-endif()
-find_package(OpenCL REQUIRED)
-
 # Configure version information
 configure_file(FAHBenchVersion.h FAHBenchVersion.h)
 
@@ -41,7 +18,6 @@ else()
 endif()
 
 add_library(fahbench SHARED ${fahbench_sources})
-add_dependencies(fahbench workunits)
 set_target_properties(fahbench PROPERTIES INSTALL_RPATH "$ORIGIN")
 target_include_directories(fahbench PUBLIC ${OpenCL_INCLUDE_DIRS})
 target_include_directories(fahbench INTERFACE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
@@ -56,6 +32,7 @@ target_link_libraries(fahbench
                       openmm
                       ${OpenCL_LIBRARIES}
                       )
+add_dependencies(fahbench openmm-opencl)
 
 # Make executables
 add_subdirectory(gui)

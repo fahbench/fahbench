@@ -19,6 +19,8 @@ fs::path getExecutablePath() {
     DWORD size = GetModuleFileNameW(NULL, buffer, MAX_PATH);
     if (size <= 0)
         throw std::runtime_error("Could not determine path of executable");
+	if (size == MAX_PATH && GetLastError() == ERROR_INSUFFICIENT_BUFFER) 
+		throw std::runtime_error("FAHBench is installed into a location with too long of a path");
     return fs::path(buffer);
 }
 

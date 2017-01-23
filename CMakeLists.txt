@@ -12,14 +12,42 @@ set(FAHBench_VERSION_MINOR 2)
 set(FAHBench_VERSION_REVIS 5)
 set(FAHBench_VERSION_ISRELEASE ON)
 
+if(${WIN32})
+	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bin/)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bin/)
+endif()
+
 # Configure compiler
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 include(Warnings)
 
+# Find cuda
+find_package(CUDA QUIET)
+if(CUDA_FOUND)
+    set(USE_CUDA ON
+        CACHE BOOL "Include CUDA")
+else()
+    set(USE_CUDA OFF
+        CACHE BOOL "Include CUDA")
+endif(CUDA_FOUND)
+
+# Find opencl
+find_package(OpenCL)
+mark_as_advanced(CLEAR OpenCL_INCLUDE_DIR OpenCL_LIBRARY)
+
+if(NOT ${OpenCL_FOUND})
+    message(STATUS "OpenCL wasn't found! Trying to trick it into using AMDAPPSDKROOT environment var")
+    find_library(OpenCL_LIBRARY OpenCL
+                 HINTS ENV AMDAPPSDKROOT
+                 PATH_SUFFIXES lib/x86_64)
+endif()
+find_package(OpenCL REQUIRED)
+
 add_subdirectory(boost)
 add_subdirectory(openmm)
-add_subdirectory(workunits)
 add_subdirectory(fahbench)
+add_subdirectory(workunits)
+add_dependencies(fahbench workunits)
 
 # build a CPack driven installer package
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")

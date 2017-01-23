@@ -6,7 +6,7 @@
 #include <boost/format.hpp>
 
 
-const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("../share/fahbench/workunits");
+const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("workunits");
 
 
 WorkUnit::WorkUnit(const fs::path & wu_path)
