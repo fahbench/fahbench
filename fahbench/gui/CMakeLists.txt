@@ -1,7 +1,7 @@
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5Widgets QUIET)
+find_package(Qt5 COMPONENTS Widgets)
 if(Qt5Widgets_DIR)
     set(MAKE_QT_GUI ON
         CACHE BOOL "Build a GUI using Qt5")
@@ -38,23 +38,27 @@ if(${MAKE_QT_GUI})
     # Windows requires Qt dll's to be installed alongside
     # the executable.
     if(${WIN32})
-        # Get path to install dll's
-        get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-        get_target_property(QtCore_location Qt5::Core LOCATION)
-        get_target_property(QtGui_location Qt5::Gui LOCATION)
-        get_filename_component(Qt_DLL_ROOT "${QtCore_location}" PATH)
+        
+		#get_target_property(FAHBENCH_OUTPUT_DIR fahbench RUNTIME_OUTPUT_DIRECTORY)
+		add_custom_command(TARGET FAHBench-gui POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				"$<TARGET_FILE:Qt5::Widgets>"
+				"$<TARGET_FILE:Qt5::Core>"
+				"$<TARGET_FILE:Qt5::Gui>"
+				"$<TARGET_FILE_DIR:fahbench>"
+			)
 
-        install(FILES
-                "${QtWidgets_location}"
-                "${QtCore_location}"
-                "${QtGui_location}"
+        #install(FILES
+        #        "${QtWidgets_location}"
+        #        "${QtCore_location}"
+        #        "${QtGui_location}"
                 #"${Qt_DLL_ROOT}/icudt54.dll"
                 #"${Qt_DLL_ROOT}/icuin54.dll"
                 #"${Qt_DLL_ROOT}/icuuc54.dll"
-                DESTINATION bin)
-        install(FILES
-                "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"
-                DESTINATION bin/platforms)
+        #        DESTINATION bin)
+        #install(FILES
+        #        "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"
+        #        DESTINATION bin/platforms)
     endif(${WIN32})
 
 endif()
