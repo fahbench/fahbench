@@ -6,7 +6,11 @@
 #include <boost/format.hpp>
 
 
+#if defined(_WIN32)
 const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("workunits");
+#elif defined(__linux__)
+const fs::path WorkUnit::_data_dir =  getExecutableDir() / fs::path("../share/fahbench/workunits");
+#endif
 
 
 WorkUnit::WorkUnit(const fs::path & wu_path)

@@ -1,9 +1,11 @@
 include(ExternalProject)
 
-# TODO: This probably only works on windows
 get_target_property(FAHBENCH_OUTPUT_DIR fahbench RUNTIME_OUTPUT_DIRECTORY)
-#set(WORKUNITS_DIR "$<TARGET_FILE_DIR:fahbench>/workunits")
-set(WORKUNITS_DIR "${FAHBENCH_OUTPUT_DIR}/$<CONFIG>/workunits")
+if(${WIN32})
+    set(WORKUNITS_DIR "${FAHBENCH_OUTPUT_DIR}/$<CONFIG>/workunits")
+else()
+    set(WORKUNITS_DIR "${FAHBENCH_OUTPUT_DIR}/../share/fahbench/workunits")
+endif()
 
 ExternalProject_Add(wu-dhfr
     URL "${CMAKE_CURRENT_SOURCE_DIR}/dhfr.tar.bz2"

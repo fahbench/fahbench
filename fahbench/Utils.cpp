@@ -27,10 +27,11 @@ fs::path getExecutablePath() {
 #elif defined(__linux__)
 
 #include <stdlib.h>
-const static string proc_self_exe = "/proc/self/exe";
 
 fs::path getExecutablePath() {
     char * buffer = realpath("/proc/self/exe", nullptr);
+    if(buffer == nullptr)
+        throw std::runtime_error("Couldn't figure out where FAHBench is installed");
     string path(buffer);
     free(buffer);
     return fs::path(path);

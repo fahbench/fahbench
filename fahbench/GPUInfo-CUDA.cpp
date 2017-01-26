@@ -2,6 +2,7 @@
 // Modified to use cuda runtime
 
 #include "GPUInfo.h"
+#include <stdexcept>
 
 #include <cuda.h>
 #include <cuda_runtime.h>
