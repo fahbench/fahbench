@@ -1,8 +1,5 @@
 /build/
 /cmake-build-debug/
-/dist/
 /.kdev4/
 /fahbench.kdev4
-.idea/
-.vagrant/
-AMD-APP-SDK-*.tar.bz2
+/.idea/

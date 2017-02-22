@@ -13,9 +13,9 @@ apt-get dist-upgrade -y
 apt-get autoremove -y
 
 # cmake
-cmake='cmake-3.4.3-Linux-x86_64.sh'
+cmake='cmake-3.6.3-Linux-x86_64.sh'
 if [ ! -e $cmake ]; then
-    wget -q --no-check-certificate https://cmake.org/files/v3.4/$cmake
+    wget -q --no-check-certificate https://cmake.org/files/v3.6/$cmake
 fi
 rm -rf cmake/
 mkdir cmake && bash $cmake --prefix=cmake --skip-license
@@ -30,6 +30,4 @@ tar -xf $amdtar
 amdsh=`find * -maxdepth 0 -name "AMD-APP-SDK-*.sh" | tail -1`
 bash $amdsh -- --silent --acceptEULA=yes > $amdsh.log
 ln -sf /opt/AMDAPPSDK-* .
-
-ln -sf /vagrant/packaging/vagrant/install-openmm.sh .
-ln -sf /vagrant/packaging/vagrant/install-fahbench.sh .
+ln -sf /vagrant/vagrant/install-fahbench.sh .
