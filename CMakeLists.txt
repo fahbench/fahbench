@@ -66,7 +66,7 @@ This package uses OpenMM to run GPU simulations of protein folding. \
 The reported speed can be used as a benchmark for evaluating Folding@Home hardware.\
 ")
 set(CPACK_PACKAGE_CONTACT "matthew.harrigan@outlook.com")
-set(CPACK_PACKAGE_EXECUTABLES "FAHBench-gui;FAHBench-cmd")
+set(CPACK_PACKAGE_EXECUTABLES "FAHBench-gui;FAHBench")
 
 # wix windows installer
 set(CPACK_WIX_UPGRADE_GUID "2BE18E2A-10A1-4C58-8880-CE6B8EF381F4")
