@@ -47,12 +47,15 @@ if(${MAKE_QT_GUI})
 				"$<TARGET_FILE:Qt5::Gui>"
 				"$<TARGET_FILE_DIR:fahbench>"
 		)
-
 		install(FILES
 				"$<TARGET_FILE:Qt5::Widgets>"
 				"$<TARGET_FILE:Qt5::Core>"
 				"$<TARGET_FILE:Qt5::Gui>"
 				DESTINATION .
+		)
+		install(FILES
+				"$<TARGET_FILE:Qt5::QWindowsIntegrationPlugin>"
+				DESTINATION platforms
 		)
     endif(${WIN32})
 
