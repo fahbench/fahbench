@@ -32,7 +32,7 @@ target_link_libraries(fahbench
                       openmm
                       ${OpenCL_LIBRARIES}
                       )
-add_dependencies(fahbench openmm-opencl)
+add_dependencies(fahbench openmm-opencl openmm-cpu)
 
 # Make executables
 add_subdirectory(gui)
