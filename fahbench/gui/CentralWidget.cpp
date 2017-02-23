@@ -2,12 +2,13 @@
 
 #include <QMessageBox>
 #include <QDebug>
+#include <QHeaderView>
 
 #include "CentralWidget.h"
 #include "FAHBenchVersion.h"
 
 QSize CentralWidget::sizeHint() const {
-    return QSize(850, 450);
+    return QSize(650, 350);
 }
 
 inline std::string getOpenMMVersion() {
@@ -36,6 +37,7 @@ CentralWidget::CentralWidget() : QWidget() {
     layout_form = new QFormLayout;
     device_wid = new QComboBox;
     device_wid->setModel(device_table_model);
+	device_table_view->setMinimumWidth(600);
     device_wid->setView(device_table_view);
     layout_form->addRow("Device", device_wid);
     openmm_platform_wid = new QComboBox;
@@ -50,7 +52,15 @@ CentralWidget::CentralWidget() : QWidget() {
     wu_wid = new QComboBox;
     wu_wid->setModel(wu_table_model);
     wu_wid->setView(wu_table_view);
+	wu_table_view->verticalHeader()->setVisible(false);
+	wu_table_view->horizontalHeader()->setStretchLastSection(true);
+	wu_table_view->hideColumn(WUTABLE_COLS::Description); 
+	wu_table_view->hideColumn(WUTABLE_COLS::StepChunk);
     layout_form->addRow("WU", wu_wid);
+	wudesc_wid = new QLabel;
+	wu_select_changed(0);
+	connect(wu_wid, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CentralWidget::wu_select_changed);
+	layout_form->addRow("WU Description", wudesc_wid);
     accuracy_check_wid = new QCheckBox("Enabled");
     accuracy_check_wid->setChecked(true);
     layout_form->addRow("Accuracy Check", accuracy_check_wid);
@@ -159,6 +169,15 @@ void CentralWidget::openmm_platform_changed(int index) {
             throw std::runtime_error("Unknown openmm platform selection");
     }
 
+}
+
+void CentralWidget::wu_select_changed(int index) {
+	qDebug() << "WU Selection changed";
+	if (index < 0)
+		return;
+	auto desc_index = wu_table_model->index(index, WUTABLE_COLS::Description);
+	auto desc = wu_table_model->data(desc_index, Qt::DisplayRole);
+	wudesc_wid->setText(desc.toString());
 }
 
 

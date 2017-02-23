@@ -58,6 +58,7 @@ private:
     QComboBox * openmm_platform_wid;
     QComboBox * precision_wid;
     QComboBox * wu_wid;
+	QLabel * wudesc_wid;
     QCheckBox * accuracy_check_wid;
     QSpinBox * nan_check_wid;
     QSpinBox * run_length_wid;
@@ -75,6 +76,7 @@ public slots:
 private slots:
 
     void openmm_platform_changed(int);
+	void wu_select_changed(int index);
 
 
 };
