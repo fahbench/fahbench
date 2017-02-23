@@ -61,31 +61,30 @@ custom work unit, copy these four files into a subdirectory of
 Building
 --------
 
-FAHBench is built with [CMake] and requires the following libraries:
+FAHBench is built with [CMake] and requires the following external libraries:
 
- - [Boost] - *automatically downloaded and built*
- - [OpenMM] ([source]) - molecular dynamics calculations.
  - OpenCL - linked to find OpenCL devices.
  - CUDA runtime - *optional* - linked to find CUDA devices.
  - [Qt5] - *optional* - for building the GUI.
+ 
+We also vendor [Boost] and [OpenMM] as submodules.
 
 [CMake]: http://www.cmake.org/
 [Boost]: http://www.boost.org/
 [Qt5]: http://qt-project.org/
 [OpenMM]: http://openmm.org/
-[source]: http://github.com/pandegroup/openmm/
 
 ### Linux
 
  1. Get the prerequisites
 
     ```bash
-    sudo apt-get install \
-        qt5-default \
-        nvidia-cuda-dev nvidia-opencl-dev # are there generic packages for opencl?
+    sudo apt-get install    \
+        build-essential     \
+        mesa-common-dev     \
+        fftw3-dev           \
+        qt5-default
     ```
-
- 1. Configure an OpenMM build with CMake.
 
  1. From a clean build directory
 
@@ -100,34 +99,27 @@ FAHBench is built with [CMake] and requires the following libraries:
 ### Windows
 
  1. Download and install 
-      - Visual Studio Community 2013
-      - Qt > 5.2
-      - CMake > 2.8.11
+      - Visual Studio Community 2015
+      - Qt > 5.6
+      - CMake > 3.6
       - AMD APP SDK
-      - (Optional) CUDA SDK = 6.5
+      - (Optional) CUDA SDK
 
     These all have nice GUI installers.
 
- 1. Download OpenMM and build with CMake. I don't think the provided
-    binaries (VC2010) will work. Build the release configuration. You can
-    disable building the python bindings (which may be a source of build
-    errors). Build the `INSTALL` project to install OpenMM.
-
  1. Run CMake on the fahbench source directory. Finagle it until it has
     found all of the dependencies you just spent so long getting in order.
-    Start by setting:
+    Some settings that may help:
      
-     - `CMAKE_PREFIX_PATH` to `.../Qt/5.4/msvc2013_64/`
-     - `OPENMM_xxx` to where you installed OpenMM.
+     - `CMAKE_PREFIX_PATH` to `.../Qt/5.6/msvc2015_64/`
 
- 1. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s to
-    the `bin/` install directory.
+ 1. Build and install! CMake will copy the relevant OpenMM and Qt `dll`s
 
 ### Vagrant
 
  1. Make sure your git submodules are initialized (openmm)
 
- 1. Download a `.tar.bz2` release of the AMDAPPSDK into this directory.
+ 1. Download a `.tar.bz2` release of the AMDAPPSDK into the packaging directory.
     The provisioning script can't download it because you have to accept
     a license agreement through a web browser. The file has to be of the form
     `AMD-APP-SDK-*.tar.bz2`
@@ -136,7 +128,7 @@ FAHBench is built with [CMake] and requires the following libraries:
 
  1. Enter the virtual machine with `vagrant ssh`
 
- 1. Run `install-openmm.sh`, then `install-fahbench.sh`. Build artifacts
-    will be copied to the `dist/` directory in this repository.
+ 1. Run `install-fahbench.sh`. Build artifacts
+    will be copied to the `dist/` directory in the packaging directory.
 
 
