@@ -31,34 +31,29 @@ if(${MAKE_QT_GUI})
     target_link_libraries(FAHBench-gui fahbench Qt5::Widgets)
     target_include_directories(FAHBench-gui PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-    install(TARGETS FAHBench-gui
-            RUNTIME DESTINATION bin
-            )
+	if(${WIN32})
+	install(TARGETS FAHBench-gui RUNTIME DESTINATION .)
+	else()
+	install(TARGETS FAHBench-gui RUNTIME DESTINATION bin)
+	endif()
 
     # Windows requires Qt dll's to be installed alongside
     # the executable.
-    if(${WIN32})
-        
-		#get_target_property(FAHBENCH_OUTPUT_DIR fahbench RUNTIME_OUTPUT_DIRECTORY)
+    if(${WIN32})        
 		add_custom_command(TARGET FAHBench-gui POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
 				"$<TARGET_FILE:Qt5::Widgets>"
 				"$<TARGET_FILE:Qt5::Core>"
 				"$<TARGET_FILE:Qt5::Gui>"
 				"$<TARGET_FILE_DIR:fahbench>"
-			)
+		)
 
-        #install(FILES
-        #        "${QtWidgets_location}"
-        #        "${QtCore_location}"
-        #        "${QtGui_location}"
-                #"${Qt_DLL_ROOT}/icudt54.dll"
-                #"${Qt_DLL_ROOT}/icuin54.dll"
-                #"${Qt_DLL_ROOT}/icuuc54.dll"
-        #        DESTINATION bin)
-        #install(FILES
-        #        "${Qt_DLL_ROOT}/../plugins/platforms/qwindows.dll"
-        #        DESTINATION bin/platforms)
+		install(FILES
+				"$<TARGET_FILE:Qt5::Widgets>"
+				"$<TARGET_FILE:Qt5::Core>"
+				"$<TARGET_FILE:Qt5::Gui>"
+				DESTINATION .
+		)
     endif(${WIN32})
 
 endif()

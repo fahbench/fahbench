@@ -37,6 +37,8 @@ add_custom_target(workunits DEPENDS
     wu-nav
 )
 
-# TODO: Install this better (?)
-install(DIRECTORY "${WORKUNITS_DIR}"
-    DESTINATION share/fahbench)
+if(${WIN32})
+install(DIRECTORY "${WORKUNITS_DIR}"  DESTINATION .)
+else()
+install(DIRECTORY "${WORKUNITS_DIR}"  DESTINATION share/fahbench)
+endif()

@@ -39,7 +39,8 @@ add_subdirectory(gui)
 add_subdirectory(cmd)
 
 # Install
-install(TARGETS fahbench
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        )
+if(${WIN32})
+install(TARGETS fahbench RUNTIME DESTINATION .)
+else()
+install(TARGETS fahbench RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
+endif()
