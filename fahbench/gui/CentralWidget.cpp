@@ -67,6 +67,7 @@ CentralWidget::CentralWidget() : QWidget() {
     nan_check_wid = new QSpinBox;
     nan_check_wid->setValue(0);
     nan_check_wid->setMinimum(0);
+	nan_check_wid->setMaximum(10'000);
     nan_check_wid->setSpecialValueText("0 - Disabled");
     nan_check_wid->setSingleStep(10);
     nan_check_wid->setSuffix(" steps");
