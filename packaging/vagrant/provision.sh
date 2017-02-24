@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
+add-apt-repository -y ppa:ubuntu-toolchain-r/test
 apt-get update
 # Install below packages for following reasons, resp.
 #   `make`, opengl headers not in amdappsdk,
-#   for pme cpu, for qt gui (resp)
+#   for pme cpu, for qt gui, for c++14 (resp)
 apt-get install -y      \
     build-essential     \
     mesa-common-dev     \
     fftw3-dev           \
-    qt5-default
+    qt5-default         \
+    g++-5
 apt-get dist-upgrade -y
 apt-get autoremove -y
 
