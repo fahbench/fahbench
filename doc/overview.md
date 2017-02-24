@@ -18,12 +18,11 @@ The Task
 
 The benchmark consists of a short molecular dynamics (MD) simulation of
 proteins. Molecular dynamics simulates how each atom moves over time. The
-score represents how much 'virtual' or simulated time your computer can
-manage in a given unit of 'real' or wallclock time.
+score represents how much simulated time your computer can process
+in a given unit of 'real' (wallclock) time. Higher is better.
 
-In the early days, molecular dynamics simulations were run on powerful
-supercomputers (on CPUs). Since there are many thousands of atoms that are
-only loosely coupled, molecular dynamics proved to benefit greatly from the
+Since there are many thousands of atoms being simulated,
+molecular dynamics benefits from the
 parallelism offered by commodity GPUs. Instead of rendering many triangles
 every second for a video game, these devices can compute the trajectories
 of many atoms quickly. A molecular dynamics computation fully exploits the

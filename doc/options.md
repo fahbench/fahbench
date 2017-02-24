@@ -7,9 +7,10 @@ footer: "Icon made by Freepik from www.flaticon.com "
 
 
  - **Device** - This lists all available OpenCL devices. If you don't see
-   your GPU listed, make sure you have updated graphics drivers. If you see
-   something unexpected listed (like a CPU), be aware that it [might not
-   work][opencl-on-cpu].
+   your GPU listed, make sure you have updated graphics drivers.
+   You might see your CPU listed as an OpenCL device. Folding@Home
+   never runs in this configuration, but you can try it with FAHBench.
+   Be aware that it [might not work][opencl-on-cpu].
 
  - **Compute** - This lets you select whether to use `OpenCL` (like
    Folding@Home) to benchmark your GPU or `CPU` to run a calculation on
@@ -19,7 +20,7 @@ footer: "Icon made by Freepik from www.flaticon.com "
    (e.g. when tracking the position or velocity of an atom). `single`
    precision uses more rounding for less accurate but higher speed results.
    `double` uses less rounding, which is more accurate, but slower.
-   Folding@Home uses single precision.
+   Folding@Home almost always uses single precision.
    [Details][precision]
 
  - **WU** (Work Unit) - This bit of Folding@Home terminology refers to a

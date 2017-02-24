@@ -13,10 +13,11 @@ standard Folding@Home work unit (WU):
 as well as a FAHBench-specific file named `wu.json`. This file encodes the
 number of steps to perform and other meta-information. 
 
-Workunits are installed uncompressed to
-`[prefix]/share/fahbench/workunits/[wuname]/{*.xml, *.json}`.
-To install your own workunit, put the four required files
-there.
+Workunits are installed to
+`[install dir]/workunits/` on Windows and 
+`[prefix]/share/fahbench/workunits` on Linux.
+The workunit files are installed in subdirectories `[wuname]/{*.xml, *.json}`.
+To make your own workunit, put the four required files in an analogous subdirectory.
 
 `wu.json` fields
 ----------------
