@@ -72,11 +72,12 @@ CentralWidget::CentralWidget() : QWidget() {
     nan_check_wid->setSuffix(" steps");
     layout_form->addRow("NaN Check", nan_check_wid);
     run_length_wid = new QSpinBox;
-    run_length_wid->setValue(60);
+    run_length_wid->setValue(1);
     run_length_wid->setMinimum(1);
-    run_length_wid->setMaximum(60 * 60);
-    run_length_wid->setSingleStep(10);
-    run_length_wid->setSuffix(" s");
+    run_length_wid->setMaximum(60 * 24);
+    run_length_wid->setSingleStep(1);
+    run_length_wid->setSuffix(" mins");
+	run_length_wid->setSpecialValueText("1 min");
     layout_form->addRow("Run length", run_length_wid);
     layout_leftright->addLayout(layout_form);
     layout_leftright->setStretchFactor(layout_form, Qt::MaximumSize);
@@ -139,7 +140,7 @@ void CentralWidget::configure_simulation(Simulation & sim) const {
     sim.verifyAccuracy = accuracy_check_wid->isChecked();
     sim.nan_check_freq = nan_check_wid->value();
 
-    sim.run_length = std::chrono::seconds(run_length_wid->value());
+    sim.run_length = std::chrono::minutes(run_length_wid->value());
 
     qDebug() << QString::fromStdString(sim.summary());
 }
