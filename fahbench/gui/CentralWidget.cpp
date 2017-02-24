@@ -96,8 +96,8 @@ CentralWidget::CentralWidget() : QWidget() {
 
     // Bottom panel
     layout_bot = new QHBoxLayout();
-    progress_bar = new QProgressBar();
-    layout_bot->addWidget(progress_bar);
+    progress_bar = new ProgressBar();
+    layout_bot->addWidget(progress_bar->widget());
     start_button = new QPushButton("Start");
     layout_bot->addWidget(start_button);
     cancel_button = new QPushButton("Cancel");

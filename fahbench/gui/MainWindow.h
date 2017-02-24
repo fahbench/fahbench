@@ -23,6 +23,9 @@ public:
     MainWindow();
     ~MainWindow();
 
+protected:
+	void showEvent(QShowEvent * event);
+
 private:
     CentralWidget * central_widget;
 

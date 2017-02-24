@@ -5,7 +5,6 @@
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QProgressBar>
 #include <QPushButton>
 #include <QFormLayout>
 #include <QComboBox>
@@ -16,6 +15,7 @@
 #include "WorkUnitTableModel.h"
 #include "QSimulation.h"
 #include "ResultsWidget.h"
+#include "ProgressBar.h"
 
 enum OPENMM_PLATFORMS {
     OpenCL = 0,
@@ -33,7 +33,7 @@ public:
 
     QLabel * status_bar;
 
-    QProgressBar * progress_bar;
+    ProgressBar * progress_bar;
     QPushButton * start_button;
     QPushButton * cancel_button;
 

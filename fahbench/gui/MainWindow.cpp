@@ -36,6 +36,11 @@ MainWindow::MainWindow() : QMainWindow() {
     thread.start();
 }
 
+void MainWindow::showEvent(QShowEvent * event) {
+	QMainWindow::showEvent(event);
+	central_widget->progress_bar->initialize(this->windowHandle());
+}
+
 MainWindow::~MainWindow() {
     interrupt_simulation();
     thread.quit();
@@ -71,6 +76,7 @@ void MainWindow::start_button_clicked() {
     worker->is_cancelled = false;
 
     pbar->reset();
+	pbar->setTaskbarVisible(true);
     // Show "busy" bar
     pbar->setMinimum(0);
     pbar->setMaximum(0);
@@ -86,6 +92,7 @@ void MainWindow::simulation_finished(const SimulationResult & score) {
     pbar->setMinimum(0);
     pbar->setMaximum(1);
     pbar->setValue(pbar->maximum());
+	pbar->setTaskbarVisible(false);
     sbut->setEnabled(true);
     cbut->setEnabled(false);
     cbut->setText("Cancel");
