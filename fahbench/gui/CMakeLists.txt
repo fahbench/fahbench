@@ -40,7 +40,7 @@ if(${MAKE_QT_GUI})
 
     add_executable(FAHBench-gui WIN32 ${SOURCE_FILES})
     set_target_properties(FAHBench-gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-    target_link_libraries(FAHBench-gui fahbench Qt5::Widgets Qt5::WinExtras)
+    target_link_libraries(FAHBench-gui fahbench Qt5::Widgets)
 	if(${WIN32})
 	target_link_libraries(FAHBench-gui fahbench Qt5::WinExtras)
 	endif()

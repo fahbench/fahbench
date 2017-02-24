@@ -20,9 +20,7 @@ else()
 endif()
 
 # Configure compiler
-if(${UNIX})
-	set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-endif()
+set(CMAKE_CXX_STANDARD 14)
 include(Warnings)
 
 # Find cuda
