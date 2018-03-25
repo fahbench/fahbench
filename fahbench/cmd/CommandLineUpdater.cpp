@@ -1,14 +1,8 @@
 #include <iostream>
 #include "CommandLineUpdater.h"
 
-char buffer[BUFSIZ];
-
 CommandLineUpdater::CommandLineUpdater() {
-    std::setbuf(stdout, buffer);
-}
-
-CommandLineUpdater::~CommandLineUpdater() {
-    std::setbuf(stdout, NULL);
+    std::setvbuf(stdout, NULL, _IOFBF, BUFSIZ);
 }
 
 void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) const {
