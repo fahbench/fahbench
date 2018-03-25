@@ -4,11 +4,11 @@
 char buffer[BUFSIZ];
 
 CommandLineUpdater::CommandLineUpdater() {
-	std::setbuf(stdout, buffer);
+    std::setbuf(stdout, buffer);
 }
 
 CommandLineUpdater::~CommandLineUpdater() {
-	std::setbuf(stdout, NULL);
+    std::setbuf(stdout, NULL);
 }
 
 void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) const {
@@ -27,7 +27,6 @@ void CommandLineUpdater::message(std::string s) const {
 
 void CommandLineUpdater::message(boost::format f) const {
     std::cout << f << std::endl << std::flush;
-
 }
 
 bool CommandLineUpdater::cancelled() const {
