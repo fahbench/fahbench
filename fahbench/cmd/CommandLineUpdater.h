@@ -6,7 +6,6 @@
 class CommandLineUpdater : public Updater {
 public:
     CommandLineUpdater();
-    ~CommandLineUpdater();
     
     void progress(int i, int numSteps, float ns_per_day) const;
 
