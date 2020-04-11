@@ -1,6 +1,10 @@
 #include <iostream>
 #include "CommandLineUpdater.h"
 
+CommandLineUpdater::CommandLineUpdater() {
+    std::setvbuf(stdout, NULL, _IOFBF, BUFSIZ);
+}
+
 void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) const {
     if (i == numSteps) {
         std::cout << std::string(80, ' ') << std::endl;
@@ -11,14 +15,12 @@ void CommandLineUpdater::progress(int i, int numSteps, float ns_per_day) const {
                  % percent % ns_per_day << "\r" << std::flush;
 }
 
-
 void CommandLineUpdater::message(std::string s) const {
     std::cout << s << std::endl << std::flush;
 }
 
 void CommandLineUpdater::message(boost::format f) const {
     std::cout << f << std::endl << std::flush;
-
 }
 
 bool CommandLineUpdater::cancelled() const {
