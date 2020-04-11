@@ -46,6 +46,7 @@ CentralWidget::CentralWidget() : QWidget() {
     connect(openmm_platform_wid, SIGNAL(currentIndexChanged(int)), this, SLOT(openmm_platform_changed(int)));
     layout_form->addRow("Compute", openmm_platform_wid);
     precision_wid = new QComboBox;
+    precision_wid->addItem("mixed");
     precision_wid->addItem("single");
     precision_wid->addItem("double");
     layout_form->addRow("Precision", precision_wid);
