@@ -29,7 +29,8 @@ vector<Device> GPUInfo::getOpenCLDevices() {
         cl_device_id devices[MAXDEVICES];
         cl_uint n_devices = 0;
         error = clGetDeviceIDs(platforms[j], CL_DEVICE_TYPE_ALL, MAXDEVICES, devices, &n_devices);
-        if (error)
+        // Presence of a platform that has 0 devices shouldn't prevent enumerating devices from other platforms.
+        if (error && error != CL_DEVICE_NOT_FOUND)
             throw std::runtime_error("OpenCL Error: Cannot get devices.");
 
         char plat_version_buffer[10240];
